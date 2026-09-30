@@ -31,16 +31,26 @@ Run `kipcb doctor`.
   `kipcb setup-router`, which downloads a ~65 MB jar from the official GitHub
   releases into `~/.cache/kipcb`. Java 21+ is required; 25+ gets the newest router.
 
-## 1. Requirements (brief)
+## 1. Requirements: always ask first
 
-Pin down only what changes the design. Use sensible defaults and ask (one
-AskUserQuestion round, at most 4 questions) about what you can't infer:
-- **Power**: USB-C 5 V, battery (chemistry, charging?), barrel jack, external rail. Current budget.
-- **Function**: the key parts (MCU, sensors, drivers, radios) and interfaces/connectors.
-- **Size/shape**: board dimensions or enclosure, mounting holes, connector edges.
-- **Build**: JLCPCB assembly (default; prefer LCSC basic parts, 0402/0603) vs hand soldering (0805+, fewer fine-pitch parts). Layer count (2 by default).
+Don't design from imagination. Before choosing any part, ask one short
+AskUserQuestion round (up to 4 questions, each with sensible options plus a
+recommended default). **Skip a question only if the user has already
+answered it.** Cover:
 
-Write down the assumptions you made; you will report them at the end.
+1. **Board size / shape**: fixed size (W×H mm), must fit an enclosure,
+   or "as small as practical". Mounting holes needed? (M2/M2.5/M3)
+2. **Power**: USB-C 5 V / battery (chemistry, charging?) / DC jack / external rail,
+   and the rough current the board draws.
+3. **I/O and connectors**: which connectors, and which board edges they go on.
+4. **Build and noise**: JLCPCB assembly (0402/0603, LCSC parts) or hand soldering
+   (0805+), and whether anything is noise-sensitive (analog sensors, audio,
+   ADC precision, RF). Noise-sensitive boards get 4 layers or strict separation.
+
+If the idea is vague about function ("a smart plant monitor"), confirm the
+key features in the same round. Record the answers in the spec's
+`requirements` block. Tell the user any assumptions you still had to make;
+you'll list them again at hand-off.
 
 ## 2. Architecture and part selection
 
@@ -85,12 +95,15 @@ runs ERC and a placement DRC, and renders previews into `<name>/out/`.
 - `out/schematic.png`: every part present, nets labelled sensibly.
 - `out/pcb_3d_top.png`: connectors on the right edges and facing out,
   decoupling caps beside their IC pins, crystal next to the MCU, regulator
-  near the power input, antenna at the board edge, sensible grouping.
+  near the power input, antenna at the board edge, sensible grouping, and
+  enough space between parts (labels readable, room for traces).
 
-Improve placement by editing `place` hints in the spec (`edge`, `near`, or
-fixed `x/y/rot`; see `layout-guidelines.md`). Current positions are in
-`out/placement.json`, so you can pin good ones and move bad ones. Rebuild after
-each change. Two or three iterations is normal.
+`kipcb build` also runs the placement noise checks (decoupling distance,
+crystal, switch-node loop). **Every FAIL must be fixed, and every WARN fixed or
+explained to the user.** Improve placement with `place` hints in the spec
+(`near`, `edge`, `away_from`, fixed `x/y/rot`) or `board.spacing`; see
+`layout-guidelines.md`. Current positions are in `out/placement.json`. Rebuild
+after each change. Two or three iterations is normal.
 
 ## 5. Route
 
@@ -98,9 +111,18 @@ each change. Two or three iterations is normal.
 kipcb route <name>
 ```
 
-Freerouting autoroutes, a ground pour is added on both layers with stitching
-vias, then DRC runs. Goal: **0 errors, 0 unconnected, 0 parity issues**.
-Silkscreen warnings are cosmetic.
+Freerouting autoroutes (several attempts: it first tries to keep signals off
+the bottom layer so that stays an unbroken ground plane, then keeps the best
+result and runs a completion pass). A ground pour goes on both layers with
+stitching vias, then DRC and the full noise check (`kipcb noise`) run.
+Goal: **0 DRC errors, 0 unconnected, 0 parity issues, 0 noise FAILs**, and
+each noise WARN either fixed or explained. Silkscreen warnings are cosmetic.
+
+Typical noise fixes: move a decoupling cap closer (`near` on the pin); give
+a crystal its own clear area; keep switching regulators and clocks
+`away_from` analog parts; more board room so routes stay on top; mark nets
+with `net_roles` if the automatic noisy/sensitive guess is wrong; switch to 4
+layers (solid inner ground) for anything noise-critical.
 
 If routing fails or DRC has errors: give crowded areas more room (bigger board
 or spread `near` groups), rotate parts so pins face each other, move to 4
@@ -123,7 +145,8 @@ Tell the user, briefly:
 - What was built (board size, layers, key parts) and where the files are.
 - Assumptions and design decisions, with anything they should confirm (e.g.
   current limits, part substitutions, LCSC numbers you could not verify).
-- Checks that passed (ERC, DRC, parity) and anything left for a human: review
+- Checks that passed (ERC, DRC, parity, noise) and any remaining noise
+  warnings, with what they mean. Anything left for a human: review
   critical layout (switching regulators, RF, high-speed), silkscreen tidy-up,
   JLCPCB rotation preview.
 - `open <name>/<name>.kicad_pro` opens it in KiCad for manual edits.

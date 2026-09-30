@@ -8,11 +8,17 @@ Placement hints per component (spec "place"):
   {"edge": "left", "at": 8, "rot"}  flush against a board edge (at = mm along edge)
   {"near": "U1"} / {"near": "U1.8"} pull strongly toward a part or pin
   {"rot": 0}                        restrict rotation only
+  {"away_from": ["L1", "U5"], "min_dist": 8}
+                                    keep this part at least min_dist mm (edge
+                                    to edge) from noisy/sensitive parts
+
+Spacing: every part carries a per-side margin (bigger for ICs, which need room
+to fan out their traces). A part pulled `near` another may sit closer to it.
 """
 
 import math
 
-GAP = 0.3          # min gap between courtyards (mm)
+GAP = 0.3          # legacy default gap, used for board-size estimates
 BIG_NET = 6        # nets with more pins than this (GND, rails) get lower weight
 
 
@@ -30,8 +36,10 @@ def rot_box(box, deg):
 
 
 class Part(object):
-    def __init__(self, ref, courtyard, pads, hint, npads):
+    def __init__(self, ref, courtyard, pads, hint, npads, margin=GAP / 2, rects=None):
         self.ref = ref
+        self.margin = margin
+        self.rects = rects or [courtyard]
         self.court = courtyard           # (x0,y0,x1,y1) rel. to origin, rot 0
         self.pads = pads                 # [(pad_number, x, y, net)]
         self.hint = hint or {}
@@ -46,6 +54,16 @@ class Part(object):
         rot = self.rot if rot is None else rot
         b = rot_box(self.court, rot)
         return (x + b[0], y + b[1], x + b[2], y + b[3])
+
+    def rect_boxes(self, x=None, y=None, rot=None):
+        x = self.x if x is None else x
+        y = self.y if y is None else y
+        rot = self.rot if rot is None else rot
+        out = []
+        for r in self.rects:
+            b = rot_box(r, rot)
+            out.append((x + b[0], y + b[1], x + b[2], y + b[3]))
+        return out
 
     def pad_abs(self, x, y, rot):
         out = []
@@ -81,19 +99,30 @@ class Placer(object):
         self.log = []
 
     # ---------------------------------------------------------- geometry
-    def _overlaps(self, box, skip):
+    def _pair_gap(self, p, q):
+        if _near_ref(p) == q.ref or _near_ref(q) == p.ref:
+            return 2 * min(p.margin, q.margin)
+        return p.margin + q.margin
+
+    def _overlaps(self, box, skip, rects=None):
+        """box: bounding box of the candidate; rects: its exact courtyard rectangles."""
+        rects = rects or [box]
         for b in self.obstacles:
-            if _intersect(box, b, GAP):
+            if any(_intersect(r, b, skip.margin) for r in rects):
                 return True
         for q in self.parts:
             if q is skip or q.x is None:
                 continue
-            if _intersect(box, q.box(), GAP):
+            gap = self._pair_gap(skip, q)
+            if not _intersect(box, q.box(), gap):
+                continue   # bounding boxes apart: no need for detail
+            qrects = q.rect_boxes()
+            if any(_intersect(r, s_, gap) for r in rects for s_ in qrects):
                 return True
         return False
 
     def _inside(self, box, part):
-        m = self.margin
+        m = max(self.margin, part.margin)
         edge = part.hint.get("edge")
         x0, y0, x1, y1 = box
         tol = 1e-6
@@ -115,9 +144,21 @@ class Placer(object):
         if pin:
             for num, x, y, net in q.pad_abs(q.x, q.y, q.rot):
                 if num == pin:
-                    return (x, y)
-            # pin may be a net-name style reference resolved upstream
-        return ((q.box()[0] + q.box()[2]) / 2, (q.box()[1] + q.box()[3]) / 2)
+                    return (x, y, net)
+        return ((q.box()[0] + q.box()[2]) / 2, (q.box()[1] + q.box()[3]) / 2, None)
+
+    @staticmethod
+    def _near_dist(part, x, y, rot, target):
+        """Distance from part to a near-target. When the target is a pin, measure
+        from this part's pad on the same net (e.g. a cap's supply pad to the IC's
+        VDD pin): that is the loop that matters for decoupling."""
+        tx, ty, net = target
+        if net:
+            ds = [math.hypot(px - tx, py - ty) for num, px, py, n in part.pad_abs(x, y, rot) if n == net]
+            if ds:
+                return min(ds)
+        b = part.box(x, y, rot)
+        return math.hypot((b[0] + b[2]) / 2 - tx, (b[1] + b[3]) / 2 - ty)
 
     def _placed_pads(self, skip):
         pads = {}
@@ -138,9 +179,41 @@ class Placer(object):
             w = 0.25 if self.net_sizes.get(net, 0) > BIG_NET else 1.0
             cost += w * d
         if near:
+            cost += 4.0 * self._near_dist(part, x, y, rot, near)
+        # parts that asked to sit near this one pull it back toward them
+        for q in self.parts:
+            if q is part or q.x is None or _near_ref(q) != part.ref:
+                continue
+            _, _, pin = q.hint["near"].partition(".")
+            tgt = None
+            for num, px, py, net in part.pad_abs(x, y, rot):
+                if pin and num == pin:
+                    tgt = (px, py, net)
+            if tgt is None:
+                b = part.box(x, y, rot)
+                tgt = ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2, None)
+            cost += 4.0 * self._near_dist(q, q.x, q.y, q.rot, tgt)
+        away = part.hint.get("away_from")
+        if away:
             b = part.box(x, y, rot)
-            cx, cy = (b[0] + b[2]) / 2, (b[1] + b[3]) / 2
-            cost += 4.0 * math.hypot(cx - near[0], cy - near[1])
+            need = float(part.hint.get("min_dist", 8.0))
+            for ref in ([away] if isinstance(away, str) else away):
+                q = self.by_ref.get(ref)
+                if q is None or q.x is None:
+                    continue
+                d = _box_dist(b, q.box())
+                if d < need:
+                    cost += 25.0 * (need - d)
+        # the reverse: parts that asked to stay away from this one
+        for q in self.parts:
+            if q is part or q.x is None:
+                continue
+            qa = q.hint.get("away_from")
+            if qa and part.ref in ([qa] if isinstance(qa, str) else qa):
+                need = float(q.hint.get("min_dist", 8.0))
+                d = _box_dist(part.box(x, y, rot), q.box())
+                if d < need:
+                    cost += 25.0 * (need - d)
         # mild pull toward the board centre keeps the layout compact
         cost += 0.02 * math.hypot(x - self.W / 2, y - self.H / 2)
         return cost
@@ -148,7 +221,7 @@ class Placer(object):
     def _target(self, part, placed_pads):
         near = self._near_target(part)
         if near:
-            return near
+            return near[:2]
         pts = []
         for num, px, py, net in part.pads:
             if net in placed_pads and self.net_sizes.get(net, 0) <= BIG_NET:
@@ -184,7 +257,7 @@ class Placer(object):
         for _, x, y in cands:
             for rot in self._rotations(part):
                 box = part.box(x, y, rot)
-                if not self._inside(box, part) or self._overlaps(box, part):
+                if not self._inside(box, part) or self._overlaps(box, part, part.rect_boxes(x, y, rot)):
                     continue
                 feasible += 1
                 c = self._cost(part, x, y, rot, placed_pads, near)
@@ -233,7 +306,7 @@ class Placer(object):
                 x = fixed_x if fixed_x is not None else s
                 y = fixed_y if fixed_y is not None else s
                 box = part.box(x, y, rot)
-                if not self._inside(box, part) or self._overlaps(box, part):
+                if not self._inside(box, part) or self._overlaps(box, part, part.rect_boxes(x, y, rot)):
                     continue
                 c = self._cost(part, x, y, rot, placed_pads, self._near_target(part))
                 c += 0.05 * abs(s - along / 2)  # prefer centred on the edge
@@ -260,7 +333,7 @@ class Placer(object):
         if not any(q.x is not None for q in self.parts) and remaining:
             first = max(remaining, key=lambda p: p.npads)
             first.x, first.y = self.W / 2, self.H / 2
-            if not self._inside(first.box(), first) or self._overlaps(first.box(), first):
+            if not self._inside(first.box(), first) or self._overlaps(first.box(), first, first.rect_boxes()):
                 first.x = None
             remaining = [p for p in remaining if p.x is None]
         while remaining:
@@ -268,9 +341,13 @@ class Placer(object):
             def score(p):
                 links = sum(1 for n, _, _, net in p.pads if net in placed_refs_pads
                             and self.net_sizes.get(net, 0) <= BIG_NET)
-                near_ready = 1 if self._near_target(p) else 0
+                tgt = self._near_target(p)
+                near_ready = 1 if tgt else 0
                 blocked = 1 if p.hint.get("near") and not near_ready else 0
-                return (-blocked, near_ready, links, p.npads)
+                # decoupling caps (pulled to a supply pin) claim their spot before
+                # pull-ups and other helpers compete for the same corner
+                decoupling = 1 if tgt and tgt[2] and self.net_sizes.get(tgt[2], 0) > BIG_NET else 0
+                return (-blocked, decoupling, near_ready, links, p.npads)
             nxt = max(remaining, key=score)
             remaining.remove(nxt)
             if not self._place_free(nxt, step):
@@ -291,6 +368,17 @@ class Placer(object):
                 if new_cost > old_cost:
                     p.x, p.y, p.rot = old
         return failed
+
+
+def _near_ref(p):
+    near = p.hint.get("near")
+    return near.split(".", 1)[0] if near else None
+
+
+def _box_dist(a, b):
+    dx = max(0.0, max(a[0], b[0]) - min(a[2], b[2]))
+    dy = max(0.0, max(a[1], b[1]) - min(a[3], b[3]))
+    return math.hypot(dx, dy)
 
 
 def _intersect(a, b, gap):

@@ -10,8 +10,10 @@
    Large nets (GND, rails) count less.
 4. Two refinement passes re-place each part knowing where all the others went.
 
-Placement keeps courtyards 0.3 mm apart, keeps parts `edge_clearance` from the
-outline, and keeps them clear of mounting holes. Parts that don't fit are
+Placement keeps parts apart according to `board.spacing` (normal: 1.0 mm
+between passives, ~1.6 mm around ICs). It uses each footprint's real courtyard
+shape (e.g. a module's wide antenna section doesn't block the pins beside it),
+keeps parts `edge_clearance` from the outline, and keeps them clear of mounting holes. Parts that don't fit are
 parked beside the board and reported: enlarge the board, or pin them.
 
 ## Good placement, and the hints that produce it
@@ -50,6 +52,23 @@ coverage routes comfortably on 2 layers.
 **Use 4 layers** for: fine-pitch QFN/BGA with many signals, more than about 60
 routed nets on a small board, RF or high-speed signals that need a solid
 reference plane, or boards where the 2-layer route looks like spaghetti.
+
+## Noise: what `kipcb noise` checks
+
+| check | pass criteria | typical fix |
+|---|---|---|
+| decoupling | each IC supply pin has a cap to ground ≤ 2.5 mm pad-to-pad (fail > 5 mm or none) | `near` on the exact pin; one small cap per pin; bulk cap `near` the small one |
+| ground plane | pours ≥ 80% of board on bottom, not split into islands | more room, fewer bottom routes, 4 layers |
+| bottom-layer routing | < 15 mm of signal on the bottom of 2-layer boards | spread parts, rotate ICs so pins face partners |
+| stitching | ≥ 0.4 ground vias per cm² | automatic; larger boards may need `kipcb route` again after changes |
+| noisy nets (clocks, SW nodes, PWM, USB) | short (< 60 mm), ≥ 1 mm from the board edge, ≤ 2 vias | place source and load together, keep off the edges |
+| crosstalk | sensitive nets (ADC, SENSE, FB, op-amp inputs) not run > 2 mm within 0.5 mm of noisy nets | `away_from`, separate groups, ground between |
+| crystal | crystal ≤ 6 mm from the MCU, load caps ≤ 4 mm, no other signals routed under it | `near` hints, keep the crystal area clear |
+| switcher loop | inductor ≤ 4 mm from the SW/LX pin | `near` on the SW pin |
+| diff pairs (USB D+/D−, *_P/*_N) | length mismatch ≤ 2 mm, equal via count | keep the connector and MCU close and aligned |
+| power width | supply tracks ≥ 0.4 mm | more room around fine-pitch pins, a `net_class`, or widen by hand |
+
+Net roles are guessed from net and pin names. Override them with `net_roles` in the spec.
 
 ## What the autorouter doesn't handle (flag these to the user)
 

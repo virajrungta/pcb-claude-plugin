@@ -11,8 +11,10 @@ skeptical. Only report real problems, and verify before claiming one.
 ## Inputs
 
 You'll get a path to a kipcb design spec (`*.json`) or a KiCad project, plus
-the requirements (power source, function, constraints). If requirements are
-missing, infer them from the spec's title and parts and say what you assumed.
+the requirements (power source, function, constraints). The spec's
+`requirements` block records what the user asked for: check the design
+against it (size, current budget, build method, noise sensitivity). If
+requirements are missing, infer them from the title and parts and say what you assumed.
 
 ## Method
 

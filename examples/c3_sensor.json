@@ -1,45 +1,320 @@
 {
   "name": "c3_sensor",
   "title": "ESP32-C3 sensor node",
-  "board": {"layers": 2, "corner_radius": 2, "mounting_holes": {"size": "M2"}, "ground_pour": "GND"},
-  "power_nets": ["GND", "VBUS", "+3V3"],
+  "requirements": {
+    "size": "as small as practical, 4x M2 holes",
+    "power": "USB-C 5 V, ~350 mA peak (WiFi TX)",
+    "io": "USB-C bottom edge, 4-pin sensor header right edge",
+    "build": "JLCPCB assembly, 0402/0805",
+    "noise": "two analog sensor inputs buffered by an op-amp: keep them away from the USB and LED data lines"
+  },
+  "board": {
+    "layers": 2,
+    "corner_radius": 2,
+    "mounting_holes": {
+      "size": "M2"
+    },
+    "ground_pour": "GND"
+  },
+  "power_nets": [
+    "GND",
+    "VBUS",
+    "+3V3"
+  ],
   "components": [
-    {"ref": "J1", "symbol": "Connector:USB_C_Receptacle_USB2.0_16P", "footprint": "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12", "value": "USB-C", "lcsc": "C165948", "group": "usb", "place": {"edge": "bottom"}},
-    {"ref": "R1", "symbol": "Device:R", "footprint": "Resistor_SMD:R_0402_1005Metric", "value": "5.1k", "group": "usb", "place": {"near": "J1.A5"}},
-    {"ref": "R2", "symbol": "Device:R", "footprint": "Resistor_SMD:R_0402_1005Metric", "value": "5.1k", "group": "usb", "place": {"near": "J1.B5"}},
-    {"ref": "U3", "symbol": "Power_Protection:USBLC6-2SC6", "value": "USBLC6-2SC6", "group": "usb", "place": {"near": "J1"}},
-    {"ref": "U1", "symbol": "Regulator_Linear:AMS1117-3.3", "value": "AMS1117-3.3", "group": "power", "lcsc": "C6186"},
-    {"ref": "C1", "symbol": "Device:C", "footprint": "Capacitor_SMD:C_0805_2012Metric", "value": "10uF", "group": "power", "place": {"near": "U1.VI"}},
-    {"ref": "C2", "symbol": "Device:C", "footprint": "Capacitor_SMD:C_0805_2012Metric", "value": "22uF", "group": "power", "place": {"near": "U1.VO"}},
-    {"ref": "U2", "symbol": "RF_Module:ESP32-C3-WROOM-02", "value": "ESP32-C3-WROOM-02", "group": "mcu", "lcsc": "C2934560", "place": {"edge": "top"}},
-    {"ref": "C3", "symbol": "Device:C", "footprint": "Capacitor_SMD:C_0402_1005Metric", "value": "100nF", "group": "mcu", "place": {"near": "U2.1"}},
-    {"ref": "C4", "symbol": "Device:C", "footprint": "Capacitor_SMD:C_0805_2012Metric", "value": "10uF", "group": "mcu", "place": {"near": "U2.1"}},
-    {"ref": "R3", "symbol": "Device:R", "footprint": "Resistor_SMD:R_0402_1005Metric", "value": "10k", "group": "mcu", "place": {"near": "U2.EN"}},
-    {"ref": "C5", "symbol": "Device:C", "footprint": "Capacitor_SMD:C_0402_1005Metric", "value": "1uF", "group": "mcu", "place": {"near": "U2.EN"}},
-    {"ref": "SW1", "symbol": "Switch:SW_Push", "footprint": "Button_Switch_SMD:SW_SPST_PTS810", "value": "RESET", "group": "mcu"},
-    {"ref": "SW2", "symbol": "Switch:SW_Push", "footprint": "Button_Switch_SMD:SW_SPST_PTS810", "value": "BOOT", "group": "mcu"},
-    {"ref": "R4", "symbol": "Device:R", "footprint": "Resistor_SMD:R_0402_1005Metric", "value": "10k", "group": "mcu", "place": {"near": "U2.IO9"}},
-    {"ref": "D1", "symbol": "LED:WS2812B-2020", "value": "WS2812B-2020", "group": "io"},
-    {"ref": "C6", "symbol": "Device:C", "footprint": "Capacitor_SMD:C_0402_1005Metric", "value": "100nF", "group": "io", "place": {"near": "D1"}},
-    {"ref": "U4", "symbol": "Amplifier_Operational:LM358", "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", "value": "LM358", "group": "analog"},
-    {"ref": "C7", "symbol": "Device:C", "footprint": "Capacitor_SMD:C_0402_1005Metric", "value": "100nF", "group": "analog", "place": {"near": "U4.8"}},
-    {"ref": "J2", "symbol": "Connector_Generic:Conn_01x04", "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical", "value": "SENSOR", "group": "analog", "place": {"edge": "right"}}
+    {
+      "ref": "J1",
+      "symbol": "Connector:USB_C_Receptacle_USB2.0_16P",
+      "footprint": "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12",
+      "value": "USB-C",
+      "lcsc": "C165948",
+      "group": "usb",
+      "place": {
+        "edge": "bottom"
+      }
+    },
+    {
+      "ref": "R1",
+      "symbol": "Device:R",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "value": "5.1k",
+      "group": "usb",
+      "place": {
+        "near": "J1.A5"
+      }
+    },
+    {
+      "ref": "R2",
+      "symbol": "Device:R",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "value": "5.1k",
+      "group": "usb",
+      "place": {
+        "near": "J1.B5"
+      }
+    },
+    {
+      "ref": "U3",
+      "symbol": "Power_Protection:USBLC6-2SC6",
+      "value": "USBLC6-2SC6",
+      "group": "usb",
+      "place": {
+        "near": "J1"
+      }
+    },
+    {
+      "ref": "U1",
+      "symbol": "Regulator_Linear:AMS1117-3.3",
+      "value": "AMS1117-3.3",
+      "group": "power",
+      "lcsc": "C6186"
+    },
+    {
+      "ref": "C1",
+      "symbol": "Device:C",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "value": "10uF",
+      "group": "power",
+      "place": {
+        "near": "U1.VI"
+      }
+    },
+    {
+      "ref": "C2",
+      "symbol": "Device:C",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "value": "22uF",
+      "group": "power",
+      "place": {
+        "near": "U1.VO"
+      }
+    },
+    {
+      "ref": "U2",
+      "symbol": "RF_Module:ESP32-C3-WROOM-02",
+      "value": "ESP32-C3-WROOM-02",
+      "group": "mcu",
+      "lcsc": "C2934560",
+      "place": {
+        "edge": "top"
+      }
+    },
+    {
+      "ref": "C3",
+      "symbol": "Device:C",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "value": "100nF",
+      "group": "mcu",
+      "place": {
+        "near": "U2.1"
+      }
+    },
+    {
+      "ref": "C4",
+      "symbol": "Device:C",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "value": "10uF",
+      "group": "mcu",
+      "place": {
+        "near": "C3"
+      }
+    },
+    {
+      "ref": "R3",
+      "symbol": "Device:R",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "value": "10k",
+      "group": "mcu",
+      "place": {
+        "near": "U2.EN"
+      }
+    },
+    {
+      "ref": "C5",
+      "symbol": "Device:C",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "value": "1uF",
+      "group": "mcu",
+      "place": {
+        "near": "U2.EN"
+      }
+    },
+    {
+      "ref": "SW1",
+      "symbol": "Switch:SW_Push",
+      "footprint": "Button_Switch_SMD:SW_SPST_PTS810",
+      "value": "RESET",
+      "group": "mcu"
+    },
+    {
+      "ref": "SW2",
+      "symbol": "Switch:SW_Push",
+      "footprint": "Button_Switch_SMD:SW_SPST_PTS810",
+      "value": "BOOT",
+      "group": "mcu"
+    },
+    {
+      "ref": "R4",
+      "symbol": "Device:R",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "value": "10k",
+      "group": "mcu",
+      "place": {
+        "near": "U2.IO9"
+      }
+    },
+    {
+      "ref": "D1",
+      "symbol": "LED:WS2812B-2020",
+      "value": "WS2812B-2020",
+      "group": "io"
+    },
+    {
+      "ref": "C6",
+      "symbol": "Device:C",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "value": "100nF",
+      "group": "io",
+      "place": {
+        "near": "D1"
+      }
+    },
+    {
+      "ref": "U4",
+      "symbol": "Amplifier_Operational:LM358",
+      "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+      "value": "LM358",
+      "group": "analog"
+    },
+    {
+      "ref": "C7",
+      "symbol": "Device:C",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "value": "100nF",
+      "group": "analog",
+      "place": {
+        "near": "U4.8"
+      }
+    },
+    {
+      "ref": "J2",
+      "symbol": "Connector_Generic:Conn_01x04",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical",
+      "value": "SENSOR",
+      "group": "analog",
+      "place": {
+        "edge": "right"
+      }
+    }
   ],
   "nets": {
-    "VBUS": ["J1.VBUS", "U3.VBUS", "U1.VI", "C1.1"],
-    "GND": ["J1.GND", "J1.SHIELD", "R1.2", "R2.2", "U3.GND", "U1.GND", "C1.2", "C2.2", "U2.GND", "C3.2", "C4.2", "C5.2", "SW1.2", "SW2.2", "D1.VSS", "C6.2", "U4.4", "C7.2", "J2.4"],
-    "+3V3": ["U1.VO", "C2.1", "U2.3V3", "C3.1", "C4.1", "R3.1", "R4.1", "D1.VDD", "C6.1", "U4.8", "C7.1", "J2.3"],
-    "CC1": ["J1.CC1", "R1.1"],
-    "CC2": ["J1.CC2", "R2.1"],
-    "USB_DP": ["J1.D+", "U3.1", "U2.IO19"],
-    "USB_DN": ["J1.D-", "U3.3", "U2.IO18"],
-    "EN": ["U2.EN", "R3.2", "C5.1", "SW1.1"],
-    "BOOT": ["U2.IO9", "R4.2", "SW2.1"],
-    "LED_DIN": ["U2.IO8", "D1.DIN"],
-    "SENSE_IN": ["J2.1", "U4.3"],
-    "SENSE_OUT": ["U4.1", "U4.2", "U2.IO1"],
-    "SENSE2_IN": ["J2.2", "U4.5"],
-    "SENSE2_OUT": ["U4.7", "U4.6", "U2.IO2"]
+    "VBUS": [
+      "J1.VBUS",
+      "U3.VBUS",
+      "U1.VI",
+      "C1.1"
+    ],
+    "GND": [
+      "J1.GND",
+      "J1.SHIELD",
+      "R1.2",
+      "R2.2",
+      "U3.GND",
+      "U1.GND",
+      "C1.2",
+      "C2.2",
+      "U2.GND",
+      "C3.2",
+      "C4.2",
+      "C5.2",
+      "SW1.2",
+      "SW2.2",
+      "D1.VSS",
+      "C6.2",
+      "U4.4",
+      "C7.2",
+      "J2.4"
+    ],
+    "+3V3": [
+      "U1.VO",
+      "C2.1",
+      "U2.3V3",
+      "C3.1",
+      "C4.1",
+      "R3.1",
+      "R4.1",
+      "D1.VDD",
+      "C6.1",
+      "U4.8",
+      "C7.1",
+      "J2.3"
+    ],
+    "CC1": [
+      "J1.CC1",
+      "R1.1"
+    ],
+    "CC2": [
+      "J1.CC2",
+      "R2.1"
+    ],
+    "USB_DP": [
+      "J1.D+",
+      "U3.1",
+      "U2.IO19"
+    ],
+    "USB_DN": [
+      "J1.D-",
+      "U3.3",
+      "U2.IO18"
+    ],
+    "EN": [
+      "U2.EN",
+      "R3.2",
+      "C5.1",
+      "SW1.1"
+    ],
+    "BOOT": [
+      "U2.IO9",
+      "R4.2",
+      "SW2.1"
+    ],
+    "LED_DIN": [
+      "U2.IO8",
+      "D1.DIN"
+    ],
+    "SENSE_IN": [
+      "J2.1",
+      "U4.3"
+    ],
+    "SENSE_OUT": [
+      "U4.1",
+      "U4.2",
+      "U2.IO1"
+    ],
+    "SENSE2_IN": [
+      "J2.2",
+      "U4.5"
+    ],
+    "SENSE2_OUT": [
+      "U4.7",
+      "U4.6",
+      "U2.IO2"
+    ]
   },
-  "no_connect": ["J1.SBU1", "J1.SBU2", "U3.4", "U3.6", "D1.DOUT", "U2.IO4", "U2.IO5", "U2.IO6", "U2.IO7", "U2.IO10", "U2.IO20", "U2.IO21", "U2.IO3", "U2.IO0"]
+  "no_connect": [
+    "J1.SBU1",
+    "J1.SBU2",
+    "U3.4",
+    "U3.6",
+    "D1.DOUT",
+    "U2.IO4",
+    "U2.IO5",
+    "U2.IO6",
+    "U2.IO7",
+    "U2.IO10",
+    "U2.IO20",
+    "U2.IO21",
+    "U2.IO3",
+    "U2.IO0"
+  ]
 }

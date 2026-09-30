@@ -92,6 +92,7 @@ class Footprint(object):
         self.courtyard = self._bbox(("F.CrtYd", "B.CrtYd"))
         if self.courtyard is None:
             self.courtyard = self._pad_bbox(0.5)
+        self.court_rects = self._court_rects(("F.CrtYd", "B.CrtYd")) or [self.courtyard]
 
     @property
     def smd(self):
@@ -130,6 +131,65 @@ class Footprint(object):
         if not xs:
             return None
         return (min(xs), min(ys), max(xs), max(ys))
+
+
+    def _court_rects(self, layer_names):
+        """Courtyard as a list of rectangles (exact for rectilinear outlines).
+
+        Module footprints often have T/L-shaped courtyards (e.g. an antenna
+        keep-out wider than the pins); a single bounding box would block the
+        spots right next to the pins where decoupling caps belong."""
+        segs = []
+        for g in self.node:
+            if not isinstance(g, list) or not g or str(sexp.value(g, "layer", "")) not in layer_names:
+                continue
+            kind = str(g[0])
+            if kind in ("fp_arc", "fp_circle", "fp_curve"):
+                return None
+            if kind == "fp_line":
+                a, b = sexp.find(g, "start"), sexp.find(g, "end")
+                segs.append(((float(a[1]), float(a[2])), (float(b[1]), float(b[2]))))
+            elif kind == "fp_rect":
+                a, b = sexp.find(g, "start"), sexp.find(g, "end")
+                x0, y0, x1, y1 = float(a[1]), float(a[2]), float(b[1]), float(b[2])
+                segs += [((x0, y0), (x1, y0)), ((x1, y0), (x1, y1)), ((x1, y1), (x0, y1)), ((x0, y1), (x0, y0))]
+            elif kind == "fp_poly":
+                pts = [(float(xy[1]), float(xy[2])) for xy in sexp.find_all(sexp.find(g, "pts") or [], "xy")]
+                segs += [(pts[i], pts[(i + 1) % len(pts)]) for i in range(len(pts))]
+        if not segs or any(abs(a[0] - b[0]) > 1e-6 and abs(a[1] - b[1]) > 1e-6 for a, b in segs):
+            return None   # empty or not rectilinear
+        xs = sorted({round(p[0], 4) for sg in segs for p in sg})
+        ys = sorted({round(p[1], 4) for sg in segs for p in sg})
+        if len(xs) > 40 or len(ys) > 40:
+            return None
+
+        def inside(px, py):
+            hit = False
+            for (x0, y0), (x1, y1) in segs:
+                if abs(x0 - x1) < 1e-6 and (y0 > py) != (y1 > py) and px < x0:
+                    hit = not hit
+            return hit
+
+        rows = []
+        for j in range(len(ys) - 1):
+            cy = (ys[j] + ys[j + 1]) / 2
+            run = None
+            for i in range(len(xs) - 1):
+                if inside((xs[i] + xs[i + 1]) / 2, cy):
+                    run = [xs[i], ys[j], xs[i + 1], ys[j + 1]] if run is None else [run[0], ys[j], xs[i + 1], ys[j + 1]]
+                elif run is not None:
+                    rows.append(run); run = None
+            if run is not None:
+                rows.append(run)
+        merged = []
+        for r in rows:   # stack rows with identical x-extent
+            for m in merged:
+                if abs(m[0] - r[0]) < 1e-6 and abs(m[2] - r[2]) < 1e-6 and abs(m[3] - r[1]) < 1e-6:
+                    m[3] = r[3]
+                    break
+            else:
+                merged.append(list(r))
+        return [tuple(m) for m in merged] or None
 
 
 def _natkey(s):

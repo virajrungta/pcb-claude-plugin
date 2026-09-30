@@ -10,6 +10,11 @@ One JSON file describes the whole board. `kipcb check` validates it, and
   "revision": "A",
   "author": "Your Name",
 
+  "requirements": {
+    "size": "max 30x22 mm", "power": "USB-C 5 V, <100 mA",
+    "build": "JLCPCB assembly", "noise": "none critical"
+  },
+
   "board": {
     "width": 30, "height": 22,
     "layers": 2,
@@ -56,7 +61,9 @@ One JSON file describes the whole board. `kipcb check` validates it, and
 |---|---|---|
 | `name` | yes | Project/file name: letters, digits, `_`, `-` |
 | `title`, `revision`, `author` | no | Title block |
+| `requirements` | recommended | Free-form record of what the user asked for (size, power, current, build, noise). Tools ignore it; the reviewer agent checks the design against it |
 | `board` | no | See below. Omit width/height to auto-size from the parts |
+| `net_roles` | no | Override the noise checker's guess: `{"SENSE_IN": "sensitive", "MOTOR_PWM": "noisy", "LED_DIN": "quiet"}` |
 | `rules` | no | Design rules in mm; defaults shown above (JLCPCB-safe) |
 | `power_nets` | recommended | Supply/ground nets. They get the wider `power_track` (ground is routed thin and poured instead), power symbols in the schematic, and PWR_FLAGs when nothing on the board drives them (e.g. a connector input) |
 | `net_classes` | no | Extra classes: `name`, `track`, `clearance`, `via_diameter`, `via_drill`, `nets` |
@@ -73,6 +80,9 @@ One JSON file describes the whole board. `kipcb check` validates it, and
 - `mounting_holes`: `"M3"`, or `{"size": "M2|M2.5|M3|M4", "inset": 3.5}`
   (four corners), or `{"size": "M3", "positions": [[x, y], ...]}`. Parts are kept clear of them.
 - `ground_pour`: net to pour on both copper layers (default: GND if present). `null` disables it.
+- `spacing`: `"compact"`, `"normal"` (default) or `"roomy"`. Sets the clearance
+  between parts; ICs get extra room to fan out their traces. Use roomy for
+  hand soldering or noise-sensitive boards, and compact only when size is critical.
 
 Coordinates are mm from the board's **top-left** corner, with X right and Y down.
 
@@ -99,9 +109,15 @@ Coordinates are mm from the board's **top-left** corner, with X right and Y down
   specific pin. Use this for decoupling caps, crystals, pull-ups and ESD parts.
 - `{"x": 10, "y": 5, "rot": 90}`: fixed position of the footprint origin (mm), rotation CCW in degrees.
 - `{"rot": 0}`: constrain rotation only.
+- `{"away_from": ["L1", "U5"], "min_dist": 8}`: keep at least `min_dist` mm
+  (edge to edge) from those parts. Use it to separate noisy parts (switching
+  regulators, inductors, clocks, motor drivers) from sensitive ones (analog
+  front-ends, ADC inputs, antennas). Can be combined with `near`.
 - `{"side": "bottom"}`: with fixed x/y, put the part on the back.
 
 Anything without hints is placed by connectivity, with the biggest parts first.
+Decoupling caps (a `near` hint on a supply pin) are placed before other helpers,
+so they win the spot next to the pin.
 
 ## Pins in `nets` / `no_connect`
 

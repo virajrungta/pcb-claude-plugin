@@ -49,8 +49,9 @@ def board_size(design):
     area = 0.0
     for c in design.components:
         x0, y0, x1, y1 = c.fp.courtyard
-        area += (x1 - x0 + place.GAP) * (y1 - y0 + place.GAP)
-    area *= float(b.get("density_factor", 2.0))
+        m = 2 * part_margin(design, c)
+        area += (x1 - x0 + m) * (y1 - y0 + m)
+    area *= float(b.get("density_factor", 1.8))
     if b.get("mounting_holes"):
         area += 4 * 7.0 * 7.0
     w = math.ceil(math.sqrt(area * 1.4)) + 4
@@ -82,6 +83,20 @@ def _resolve_near(design, hint):
     return hint
 
 
+SPACING = {  # per-side courtyard margin (mm): passives, extra for ICs/fine-pitch parts
+    "compact": (0.2, 0.2),
+    "normal": (0.5, 0.6),
+    "roomy": (0.9, 1.0),
+}
+
+
+def part_margin(design, comp):
+    base, ic_extra = SPACING.get(design.board.get("spacing", "normal"), SPACING["normal"])
+    npads = len({p["number"] for p in comp.fp.pads if p["number"]})
+    is_ic = comp.ref.rstrip("0123456789") in ("U", "IC") and npads >= 6
+    return base + (ic_extra if is_ic else 0.0)
+
+
 def compute_placement(design, sch_builder, W, H, holes):
     parts = []
     net_sizes = {n: len(p) for n, p in design.nets.items()}
@@ -89,7 +104,7 @@ def compute_placement(design, sch_builder, W, H, holes):
         pads = [(p["number"], p["x"], p["y"], design.pin_net.get((c.ref, p["number"])))
                 for p in c.fp.pads]
         parts.append(place.Part(c.ref, c.fp.courtyard, pads, _resolve_near(design, c.place),
-                                len(c.fp.pads)))
+                                len(c.fp.pads), part_margin(design, c), c.fp.court_rects))
     obstacles = []
     for (x, y), r in holes:
         obstacles.append((x - r, y - r, x + r, y + r))
@@ -239,8 +254,13 @@ def build(design, sch_builder, pcb_path, placement=None):
         ref = fp.Reference()
         ref.SetTextSize(pn.VECTOR2I(mm(0.8), mm(0.8)))
         ref.SetTextThickness(mm(0.12))
+        pin_info = {p["number"]: p for p in c.sym.pins}
         for pad in fp.Pads():
             key = (c.ref, pad.GetNumber())
+            info = pin_info.get(pad.GetNumber())
+            if info:
+                pad.SetPinFunction(info["name"] if info["name"] != "~" else "")
+                pad.SetPinType(info["type"])
             net = design.pin_net.get(key)
             if net:
                 pad.SetNet(netinfo[net])

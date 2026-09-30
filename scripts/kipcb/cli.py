@@ -170,6 +170,12 @@ def cmd_render(a):
     return 0
 
 
+def cmd_noise(a):
+    from . import noise
+    pdir, name = _project_paths(a.target)
+    return noise.run(pdir, name, quiet=a.quiet)
+
+
 def cmd_netlist(a):
     from . import sexp
     pdir, name = _project_paths(a.target)
@@ -242,7 +248,7 @@ def main(argv=None):
     p.add_argument("--passes", type=int, default=100)
     p.add_argument("--timeout", type=int, default=600, help="seconds")
     p.add_argument("--no-pour", action="store_true")
-    p.add_argument("--attempts", type=int, default=3, help="router attempts; best result is kept")
+    p.add_argument("--attempts", type=int, default=4, help="router attempts; best result is kept")
     p.set_defaults(fn=cmd_route)
     p = sp.add_parser("setup-router", help="download the Freerouting autorouter jar")
     p.add_argument("--version", default=None); p.set_defaults(fn=cmd_setup_router)
@@ -252,6 +258,9 @@ def main(argv=None):
     p = sp.add_parser("render", help="render PNG previews (schematic, 2D layers, 3D)")
     p.add_argument("target"); p.add_argument("--what", default="all", choices=["all", "sch", "pcb", "3d"])
     p.set_defaults(fn=cmd_render)
+    p = sp.add_parser("noise", help="basic noise / signal-integrity checks on the board")
+    p.add_argument("target"); p.add_argument("-q", "--quiet", action="store_true", help="only show problems")
+    p.set_defaults(fn=cmd_noise)
     p = sp.add_parser("netlist", help="print components and nets of a schematic (for review)")
     p.add_argument("target"); p.set_defaults(fn=cmd_netlist)
     p = sp.add_parser("fab", help="export Gerbers, drill, BOM, pick-and-place and a zip")

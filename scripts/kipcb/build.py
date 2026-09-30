@@ -59,6 +59,9 @@ def build(spec_path, out=None, render=True, placement=None):
     print("DRC placement issues: %d, schematic-parity issues: %d" % (len(placement_issues), len(parity)))
     for line in checks.summarize(placement_issues + parity, 20)[1]:
         print(line)
+    from . import noise
+    print("\nPlacement noise checks (decoupling, crystals, switch nodes):")
+    noise.run(pdir, d.name, quiet=True, save=False)
     if render:
         for p in rendermod.render(pdir, d.name):
             if p.endswith(".png"):

@@ -68,6 +68,7 @@ kipcb fp-search <words>           find footprints             kipcb fp-info Lib:
 kipcb check spec.json             validate a design spec
 kipcb build spec.json             schematic + placed board + ERC + previews
 kipcb route <project>             Freerouting + ground pour + stitching vias + DRC
+kipcb noise <project>             basic noise / signal-integrity checks
 kipcb erc|drc|netlist|render <project>
 kipcb fab <project>               Gerbers/drill zip, BOM, CPL
 kipcb setup-router                download Freerouting
@@ -103,8 +104,10 @@ bin/kipcb fab examples/usb_blinker
 5. **Routing**: Specctra DSN → Freerouting → SES import, with automatic retry
    at narrower power widths, healing of near-miss track ends, GND pours on both
    layers, and stitching vias.
-6. **Checks and outputs**: KiCad ERC/DRC with schematic parity, 3D renders
-   for visual review, and fab files referenced to the board corner.
+6. **Checks and outputs**: KiCad ERC/DRC with schematic parity, noise
+   checks (decoupling distance, ground plane integrity, crosstalk, crystals,
+   switch-node loops, differential pairs), 3D renders for visual review, and fab
+   files referenced to the board corner.
 
 ## Limits
 

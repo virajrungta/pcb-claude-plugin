@@ -191,17 +191,43 @@ def add_stitching_vias(board, net_name, pitch=5.0, drill=0.3, dia=0.6):
     return added
 
 
-def _freeroute(pn, board, jar, dsn, ses, out, passes, timeout):
+def _rules_file(board, path, bottom_cost):
+    """Freerouting autoroute settings. Making the bottom layer expensive keeps
+    signals on top so the bottom stays an unbroken ground plane (less noise)."""
+    pn = pcbnew()
+    names = [board.GetLayerName(l) for l in board.GetEnabledLayers().CuStack()]
+    lines = ["(rules PCB board", "  (snap_angle fortyfive_degree)", "  (autoroute_settings",
+             "    (fanout off) (autoroute on) (postroute on) (vias on)",
+             "    (via_costs 50) (plane_via_costs 5) (start_ripup_costs 100) (start_pass_no 1)"]
+    for i, n in enumerate(names):
+        bottom = (i == len(names) - 1)
+        pref, against = (bottom_cost, bottom_cost * 1.5) if bottom else (1.0, 2.0)
+        lines.append("    (layer_rule %s (active on) (preferred_direction %s)"
+                     " (preferred_direction_trace_costs %.2f) (against_preferred_direction_trace_costs %.2f))"
+                     % (n, "horizontal" if i % 2 == 0 else "vertical", pref, against))
+    lines += ["  )", ")"]
+    with open(path, "w") as f:
+        f.write("\n".join(lines) + "\n")
+
+
+def _freeroute(pn, board, jar, dsn, ses, out, passes, timeout, bottom_cost=None):
     """Export DSN, run Freerouting, return the number of unrouted connections."""
     if not pn.ExportSpecctraDSN(board, dsn):
         raise RuntimeError("DSN export failed")
+    rules = dsn[:-4] + ".rules"
+    if os.path.exists(rules):
+        os.remove(rules)
+    extra = []
+    if bottom_cost:
+        _rules_file(board, rules, bottom_cost)
+        extra = ["-dr", rules]
     if os.path.exists(ses):
         os.remove(ses)
     budget = max(30, timeout - 30)
-    cmd = ["java", "-jar", jar, "-de", dsn, "-do", ses, "-mp", str(passes),
+    cmd = ["java", "-jar", jar, "-de", dsn, "-do", ses] + extra + ["-mp", str(passes),
            "--router.max_passes=%d" % passes,
            "--router.job_timeout=%02d:%02d:%02d" % (budget // 3600, budget % 3600 // 60, budget % 60),
-           "--gui.enabled=false", "--logging.file.enabled=false"]
+           "--gui.enabled=false"]
     print("routing with %s (max %d passes, time budget %ds)..." % (os.path.basename(jar), passes, budget))
     t0 = time.time()
     log_path = os.path.join(out, "freerouting.log")
@@ -219,6 +245,17 @@ def _freeroute(pn, board, jar, dsn, ses, out, passes, timeout):
         raise RuntimeError("Freerouting produced no session file")
     m = re.findall(r'"incomplete_count":\s*(\d+)', text) or re.findall(r"\((\d+) unrouted\)", text)
     return int(m[-1]) if m else 0
+
+
+BOTTOM_COST = 3.0
+
+
+def bottom_signal_length(board, ground=None):
+    """mm of non-ground track on the bottom copper layer (each mm slices the ground plane)."""
+    pn = pcbnew()
+    gnd = ground or _guess_ground(board)
+    return sum(t.GetLength() for t in board.GetTracks()
+               if t.GetClass() == "PCB_TRACK" and t.GetLayer() == pn.B_Cu and t.GetNetname() != gnd) / 1e6
 
 
 def heal_dangling(board, max_gap=1.5):
@@ -306,7 +343,7 @@ def heal_dangling(board, max_gap=1.5):
     return healed
 
 
-def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=3):
+def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=4):
     pn = pcbnew()
     jar = find_jar()
     if not jar:
@@ -333,45 +370,62 @@ def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=3):
         if hasattr(board, "SynchronizeNetsAndNetClasses"):
             board.SynchronizeNetsAndNetClasses(False)
 
-    # Freerouting is randomized: judge each attempt by KiCad's own connectivity
-    # and keep the best. Later attempts narrow power tracks so they fit fine-pitch pads.
-    attempts = [base_w, signal_w, signal_w][:max(1, attempts_max)]
+    # Freerouting is randomized, so judge each attempt by KiCad's own connectivity
+    # and keep the best. Early attempts make the bottom layer expensive so it stays
+    # an unbroken ground plane (lower noise); later ones trade that for completion.
+    plan = [(base_w, BOTTOM_COST), (signal_w, BOTTOM_COST), (base_w, None), (signal_w, None)]
+    plan = plan[:max(1, attempts_max)]
     best = None
-    for i, width in enumerate(attempts):
-        if i and width != attempts[i - 1] and power is not None:
-            print("retrying with power tracks at signal width")
-        elif i:
-            print("retrying (router is randomized)")
+    for i, (width, bcost) in enumerate(plan):
+        if i:
+            print("retrying: %s, %s" % ("power tracks at signal width" if width == signal_w and power is not None
+                                        else "normal power tracks",
+                                        "signals kept off bottom layer" if bcost else "both layers free"))
         set_power_width(width)
-        _freeroute(pn, board, jar, dsn, ses, out, passes, timeout)
+        per_attempt = max(60, timeout // (len(plan) + 1))
+        _freeroute(pn, board, jar, dsn, ses, out, passes, per_attempt, bottom_cost=bcost)
         if not pn.ImportSpecctraSES(board, ses):
             raise RuntimeError("SES import failed")
         heal_dangling(board)
         board.BuildConnectivity()
         missing = board.GetConnectivity().GetUnconnectedCount(True)
-        print("attempt %d: %d unconnected" % (i + 1, missing))
+        bottom = bottom_signal_length(board)
+        print("attempt %d: %d unconnected, %.0f mm of signal on the bottom layer" % (i + 1, missing, bottom))
         kept = os.path.join(out, "%s.attempt%d.ses" % (name, i + 1))
         shutil.copyfile(ses, kept)
-        if best is None or missing < best[0]:
-            best = (missing, kept, width)
+        score = (missing, bottom)
+        if best is None or score < best[0]:
+            best = (score, kept, width)
         if missing == 0:
-            break
+            break          # attempts run from most to least plane-friendly
         for t in list(board.GetTracks()):
             _delete(board, t)
 
-    if best[1] != kept or best[0] != 0:
+    if best[1] != kept or best[0][0] != 0:
         for t in list(board.GetTracks()):
             _delete(board, t)
         set_power_width(best[2])
         pn.ImportSpecctraSES(board, best[1])
     healed = heal_dangling(board)
+    board.BuildConnectivity()
+    if board.GetConnectivity().GetUnconnectedCount(True):
+        # completion pass: the DSN export carries the existing tracks, so the
+        # router keeps them and only has to finish the few missing connections
+        print("completion pass for %d missing connection(s)..." % board.GetConnectivity().GetUnconnectedCount(True))
+        _freeroute(pn, board, jar, dsn, ses, out, passes, max(60, timeout // 5))
+        for t in list(board.GetTracks()):
+            _delete(board, t)
+        pn.ImportSpecctraSES(board, ses)
+        healed += heal_dangling(board)
+        board.BuildConnectivity()
+        print("after completion: %d unconnected" % board.GetConnectivity().GetUnconnectedCount(True))
     set_power_width(base_w)   # tracks keep their routed width; the project keeps the intended class
     for f in glob.glob(os.path.join(out, "%s.attempt*.ses" % name)):
         os.remove(f)
     ntracks = sum(1 for t in board.GetTracks() if t.GetClass() == "PCB_TRACK")
     nvias = sum(1 for t in board.GetTracks() if t.GetClass() == "PCB_VIA")
     print("using best attempt: %d unconnected, %d track segments, %d vias%s" % (
-        best[0], ntracks, nvias, (", %d bridged" % healed) if healed else ""))
+        best[0][0], ntracks, nvias, (", %d bridged" % healed) if healed else ""))
 
     if pour:
         spec_pour = _spec_pour_net(pdir, name, board)
@@ -382,6 +436,9 @@ def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=3):
             print("poured %s on top and bottom, %d stitching vias" % (gnd, n))
     pn.SaveBoard(pcb, board)
     rc = checks.drc(pdir, name)
+    from . import noise
+    print()
+    noise.run(pdir, name, quiet=True)
     for p in rendermod.render(pdir, name, "pcb"):
         if p.endswith(".png"):
             print("preview:   %s" % p)

@@ -16,6 +16,7 @@ hand. `kipcb` is on PATH (fallback `${CLAUDE_PLUGIN_ROOT}/bin/kipcb`).
    - `kipcb erc <project dir>`
    - `kipcb drc <project dir>` (includes schematic ↔ PCB parity)
    - `kipcb netlist <project dir>` for the parts list and every net with pin functions
+   - `kipcb noise <project dir>` for decoupling distance, ground plane, crosstalk, crystal, switcher loop, diff pairs
    - `kipcb render <project dir>`, then Read `out/schematic.png`, `out/pcb_3d_top.png` and `out/pcb_3d_bottom.png`
 3. For each IC, get its datasheet's application circuit (WebFetch the
    Datasheet field URL, or search) when the check needs it. Datasheets are
