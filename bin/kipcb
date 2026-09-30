@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# kipcb: KiCad automation for the pcb plugin. Runs under KiCad's bundled
+# Python so the pcbnew module is available.
+set -euo pipefail
+
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPTS="$(cd "$HERE/../scripts" && pwd)"
+
+find_python() {
+  if [[ -n "${KIPCB_PYTHON:-}" ]]; then echo "$KIPCB_PYTHON"; return; fi
+  local candidates=(
+    "/Applications/KiCad/KiCad.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3"
+    "$HOME/Applications/KiCad/KiCad.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3"
+    "/usr/bin/python3"
+    "/usr/local/bin/python3"
+  )
+  for py in "${candidates[@]}"; do
+    if [[ -x "$py" ]] && "$py" -c "import pcbnew" >/dev/null 2>&1; then echo "$py"; return; fi
+  done
+  if command -v python3 >/dev/null && python3 -c "import pcbnew" >/dev/null 2>&1; then command -v python3; return; fi
+  echo ""
+}
+
+PY="$(find_python)"
+if [[ -z "$PY" ]]; then
+  echo "kipcb: could not find a Python with KiCad's pcbnew module." >&2
+  echo "Install KiCad 9 (https://www.kicad.org/download/) or set KIPCB_PYTHON." >&2
+  exit 2
+fi
+
+export PYTHONPATH="$SCRIPTS${PYTHONPATH:+:$PYTHONPATH}"
+export PYTHONDONTWRITEBYTECODE=1
+# drop harmless noise KiCad's libraries print when used headless
+exec "$PY" -m kipcb "$@" 2> >(grep -v -e 'create wxApp before calling this' -e '^Fontconfig error' -e 'Debug: Adding duplicate image handler' -e 'swig/python detected a memory leak' >&2)

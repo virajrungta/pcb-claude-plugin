@@ -1,0 +1,16 @@
+{
+  "name": "pcb-plugin",
+  "owner": {
+    "name": "Viraj Rungta"
+  },
+  "metadata": {
+    "description": "PCB design tools for Claude Code"
+  },
+  "plugins": [
+    {
+      "name": "pcb",
+      "source": "./",
+      "description": "Idea-to-PCB design with KiCad: schematic, placement, autorouting, checks and fab outputs."
+    }
+  ]
+}
