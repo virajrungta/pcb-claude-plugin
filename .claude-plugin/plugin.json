@@ -1,7 +1,7 @@
 {
   "name": "pcb",
   "displayName": "PCB Design",
-  "version": "1.4",
+  "version": "1.5",
   "description": "Go from a circuit idea to a manufacturable KiCad PCB: requirements, part selection, schematic, placement, autorouting, ERC/DRC and fab outputs (Gerbers, BOM, pick-and-place).",
   "author": {
     "name": "Viraj Rungta"

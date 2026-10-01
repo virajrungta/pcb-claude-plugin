@@ -118,8 +118,12 @@ def part_margin(design, comp):
     base, ic_extra = SPACING.get(design.board.get("spacing", "normal"), SPACING["normal"])
     npads = len({p["number"] for p in comp.fp.pads if p["number"]})
     is_ic = comp.ref.rstrip("0123456789") in ("U", "IC") and npads >= 6
+    escape = 0.0
+    if is_ic and npads >= 16:
+        pitch = comp.fp.pitch() or 9.0
+        escape = 0.8 if pitch <= 0.42 else 0.5 if pitch <= 0.52 else 0.0   # room to fan tracks out
     from . import learn   # footprints that caused unrouted connections before get more room
-    return base + (ic_extra if is_ic else 0.0) + learn.extra_margin(comp.footprint_id)
+    return base + (ic_extra if is_ic else 0.0) + escape + learn.extra_margin(comp.footprint_id)
 
 
 def compute_placement(design, sch_builder, W, H, holes, quiet=False, step=None, refine=2):
@@ -146,8 +150,11 @@ def _set_rules(board, design):
     pn = pcbnew()
     r = design.rules
     ds = board.GetDesignSettings()
-    ds.m_MinClearance = mm(r["clearance"])
-    ds.m_TrackMinWidth = mm(min(r["track"], 0.15))
+    classes = design.raw.get("net_classes", []) + getattr(design, "auto_classes", [])
+    # board-wide minimums must not be stricter than any class, or every legitimately
+    # close track in that class becomes a DRC error
+    ds.m_MinClearance = mm(min([r["clearance"]] + [c.get("clearance", r["clearance"]) for c in classes]))
+    ds.m_TrackMinWidth = mm(min([r["track"], 0.15] + [c.get("track", r["track"]) for c in classes]))
     ds.m_CopperEdgeClearance = mm(r["edge_clearance"])
     # allow the smallest hole a chosen footprint actually uses (e.g. module thermal vias)
     holes = [r["via_drill"], 0.3]
@@ -159,6 +166,10 @@ def _set_rules(board, design):
     ds.m_HoleClearance = mm(0.25)
     ds.SetBoardThickness(mm(float(design.board.get("thickness", 1.6))))
     ns = ds.m_NetSettings
+    # NewBoard reloads an existing .kicad_pro: drop the previous build's classes and assignments,
+    # or stale ones merge with the new (e.g. "Power,PowerFine" with the wrong width)
+    ns.ClearNetclassPatternAssignments()
+    ns.ClearNetclasses()
     dflt = ns.GetDefaultNetclass()
     dflt.SetClearance(mm(r["clearance"]))
     dflt.SetTrackWidth(mm(r["track"]))
@@ -176,7 +187,7 @@ def _set_rules(board, design):
     ground.SetViaDiameter(mm(r["via_diameter"]))
     ground.SetViaDrill(mm(r["via_drill"]))
     ns.SetNetclass("Ground", ground)
-    for extra in design.raw.get("net_classes", []):
+    for extra in design.raw.get("net_classes", []) + getattr(design, "auto_classes", []):
         nc = pn.NETCLASS(extra["name"])
         nc.SetClearance(mm(extra.get("clearance", r["clearance"])))
         nc.SetTrackWidth(mm(extra.get("track", r["track"])))
@@ -275,17 +286,24 @@ def build(design, sch_builder, pcb_path, placement=None):
 
     names = {}
     netinfo = {}
+    classed = {n for extra in design.raw.get("net_classes", []) + getattr(design, "auto_classes", [])
+               for n in extra.get("nets", [])}
     for net in sorted(design.nets):
         name = pcb_net_name(design, net, sch_builder)
         names[net] = name
         ni = pn.NETINFO_ITEM(board, name)
         board.Add(ni)
         netinfo[net] = ni
+        if net in classed:
+            continue        # one class per net: KiCad merges several into one with the wrong width
         if net == design.board.get("ground_pour", "GND"):
             ns.SetNetclassPatternAssignment(name, "Ground")
         elif net in design.power_nets:
             ns.SetNetclassPatternAssignment(name, "Power")
-    for extra in design.raw.get("net_classes", []):
+    for extra in getattr(design, "auto_classes", []):
+        for pat in extra.get("patterns", []):
+            ns.SetNetclassPatternAssignment(pat, extra["name"])
+    for extra in design.raw.get("net_classes", []) + getattr(design, "auto_classes", []):
         for net in extra.get("nets", []):
             if net in names:
                 ns.SetNetclassPatternAssignment(names[net], extra["name"])

@@ -106,9 +106,16 @@ def board_features(board):
     area = max(1.0, bb.GetWidth() / 1e6 * bb.GetHeight() / 1e6)
     pads = sum(len(list(fp.Pads())) for fp in board.GetFootprints())
     nets = board.GetNetCount()
+    per_net = {}
+    for fp in board.GetFootprints():
+        for p in fp.Pads():
+            if p.GetNetCode() > 0:
+                per_net[p.GetNetCode()] = per_net.get(p.GetNetCode(), 0) + 1
+    conns = sum(n - 1 for n in per_net.values() if n > 1)
     return {"pads": pads, "parts": len(list(board.GetFootprints())), "nets": nets,
             "area_mm2": round(area, 1), "layers": board.GetCopperLayerCount(),
-            "pad_density": round(pads / (area / 100.0), 3)}   # pads per cm²
+            "pad_density": round(pads / (area / 100.0), 3),     # pads per cm²
+            "conn_density": round(conns / (area / 100.0), 3)}   # connections per cm²
 
 
 def _similarity(f, g):
@@ -157,6 +164,23 @@ def arm_label(arm):
 
 
 # ------------------------------------------------------------------ 2. board sizing
+
+def routability(layers, conn_density):
+    """How boards of about this density fared in the router before: {"ok", "n", "p_ok"}, or None.
+    Uses final routing results (untainted) within +-25% density on the same layer count;
+    boards at a *higher* density that routed completely count as evidence it's possible."""
+    rows = [r for r in history("route_final")
+            if r.get("features", {}).get("layers") == layers and r["features"].get("conn_density")]
+    if not rows or not conn_density:
+        return None
+    near = [r for r in rows if abs(math.log(r["features"]["conn_density"] / conn_density)) < 0.22]
+    denser_ok = [r for r in rows if r["features"]["conn_density"] >= conn_density and r.get("unconnected") == 0]
+    ok = sum(1 for r in near if r.get("unconnected") == 0) + len([r for r in denser_ok if r not in near])
+    n = len(near) + len([r for r in denser_ok if r not in near])
+    if n == 0:
+        return None
+    return {"ok": ok, "n": n, "p_ok": ok / float(n)}
+
 
 def _sizing_samples(layers, pads):
     """(successes, failures) as area-per-pad values for similar auto-sized boards."""

@@ -16,8 +16,10 @@ argument-hint: "[project dir or .kicad_pro]"
 3. Run `kipcb fab <project>`. The output format follows the user's manufacturer
    setting (see `kipcb settings`); pass `--fab jlcpcb` or `--fab generic` to override.
 4. Read `fab/<name>-bom.csv`. Flag parts without an LCSC number when the user
-   wants JLCPCB assembly, and never make one up. Suggest they match those in
-   JLCPCB's BOM tool, or hand-solder / mark them DNP.
+   wants JLCPCB assembly, and never make one up: find candidates with
+   `kipcb lcsc -s "<part> <package>"` (live stock, basic parts first) and let the
+   user confirm, or suggest JLCPCB's BOM tool, hand-soldering or DNP. `kipcb fab`
+   also warns about BOM parts that are out of stock at JLCPCB; relay those.
 5. Show `previews/review.png` (render it with `kipcb render <project> --what review`
    if it's missing) so the user sees what they're ordering. `kipcb report <project>`
    prints the summary with the project location and file list.

@@ -9,6 +9,87 @@ release and publishes it on GitHub.
 
 _Nothing yet._
 
+## V1.5 - 2026-10-01
+
+- **Preflight before routing**: a new step between build and route
+  (`kipcb preflight`, automatic in `kipcb run`) checks in under a second
+  whether the placed board can route cleanly:
+  - every pad is reachable at its net's track width given the pin pitch;
+  - each net has exactly one netclass;
+  - track, clearance, via, drill and edge sizes are within the manufacturer's
+    standard limits;
+  - no pads too near the edge, no overlapping parts, no parts off the board;
+  - decoupling and crystal parts are close to their pins;
+  - fine-pitch chips have room to fan their tracks out;
+  - routing density compared with real routed boards and your own history.
+
+  Failures stop the run before the slow routing step and print the fix.
+- **Fine-pitch chips route**: nets on 0.4-0.5 mm pitch parts (RP2040's
+  QFN-56, STM32's LQFP-48, ...) automatically get the track width and
+  clearance real boards use at that pitch (0.2 / 0.15 mm at 0.4 mm). Before,
+  0.25 mm tracks physically couldn't reach those pins. Fine-pitch chips also
+  get extra room around them for escape routing.
+- **Fixes**:
+  - A net could end up in two netclasses, which KiCad merged with the wrong
+    width.
+  - Rebuilds kept the previous build's netclass assignments.
+  - The autorouter didn't respect the copper-to-edge clearance.
+  - Board-wide minimum clearance and track width could be stricter than a
+    netclass, which turned that class's legitimate tracks into DRC errors.
+  - Stale routing and manufacturing results survived a rebuild.
+- **Much bigger parts catalog**:
+  - JLCPCB part numbers for 265 resistor and capacitor values (0402-1206,
+    from JLCPCB's basic library, no extra assembly fee). Capacitors use the
+    highest voltage rating stocked, and `kipcb check` warns when a capacitor
+    sits on a rail too close to its rating.
+  - About 50 new named parts with verified part numbers: transistors and
+    MOSFETs, diodes, TVS, polyfuse, regulators, crystals, ferrite beads,
+    inductor, op-amps, logic, interface chips, sensors, MCUs, microSD socket,
+    relay, barrel jack, buzzer.
+  - LED colours pick the part (`"part": "LED0805", "value": "green"`).
+- **28 new blocks (43 total)**:
+  - MCUs and USB: `rp2040_minimal`, `stm32f103c8_core`, `esp32_wroom32e`,
+    `ch340c_usb_uart`, `esp_autoprogram`.
+  - Power: `buck_ap63203_3v3`, `ldo_ams1117_5v0`, `ldo_xc6206_3v3`,
+    `lipo_charger_tp4056`, `input_protection_5v`, `reverse_polarity_pfet`,
+    `dc_jack_input`.
+  - Drivers: `drv8833_motor`, `relay_5v`, `buzzer_driver`.
+  - Sensors and peripherals: `bme280_i2c`, `sht31_i2c`, `mpu6050_i2c`,
+    `ina219_current`, `ads1115_adc`, `ds3231_rtc`, `micro_sd_spi`.
+  - Buses and headers: `rs485_transceiver`, `can_sn65hvd230`,
+    `level_shifter_bss138`, `swd_header`, `uart_header`, `oled_i2c_header`.
+  - Values come from datasheets and real open-source boards.
+  - `rp2040_minimal` and `stm32f103c8_core` are marked advanced: on 2 layers
+    autorouting may leave a few connections near the chip (4 layers or a quick
+    hand-route finishes them). Automatic fan-out for such chips is planned.
+- **Block options**: `"omit": ["R1"]` drops a part from a block. Bus ports
+  (USB, SWD, reset) join a same-named net automatically. `kipcb blocks i2c`
+  filters the list, and `kipcb blocks a b` shows several blocks.
+- **Live JLCPCB data**: `kipcb lcsc C25804` shows stock, price and
+  basic/extended for a part, and `kipcb lcsc -s "SHT31 | 10uF 0805"` searches
+  JLCPCB's library. Manufacturing export warns about out-of-stock BOM parts.
+- **Learning**:
+  - The knowledge base now includes design rules mined from 417 real boards:
+    track widths and clearances at each pin pitch, and the routing density
+    real 2- and 4-layer boards reach.
+  - Preflight and routing results feed a local routability estimate.
+- **Time checkpoints**: before a run, Claude tells you the approximate time
+  of each step (check, build, preflight, route, files) and why a step is
+  long. For example, boards with 0.4 mm-pitch chips need 5-8 minutes of
+  autorouting. `kipcb run` prints the same plan, and `kipcb estimate` shows it
+  on its own. Estimates switch to your own measured timings once similar boards
+  have run.
+- **README**: installation and updating are now step-by-step terminal
+  commands, including the update commands.
+- **Says what's possible before designing**: after the requirements
+  questions, Claude sorts the features into automatic, advanced (may need
+  4 layers or a little hand routing, e.g. the RP2040) and not supported (BGA,
+  custom RF, high-speed links, mains), and offers easier alternatives before
+  any work starts. Blocks carry a support level, `kipcb blocks` marks advanced
+  ones, `kipcb check` prints `SUPPORT:` lines, and `kipcb guide capabilities`
+  has the full list.
+- `usb_blinker.json` now uses an in-stock ATtiny85.
+
 ## V1.4 - 2026-09-30
 
 - **Prebuilt circuit blocks**: 15 verified sub-circuits that drop into a design

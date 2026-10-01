@@ -69,6 +69,7 @@ def export(pdir, name, fab="jlcpcb", force=False):
             rows = list(csv.reader(f))
         os.remove(raw)
         missing = []
+        codes = {}
         with open(bom, "w", newline="") as f:
             w = csv.writer(f)
             for i, r in enumerate(rows):
@@ -76,15 +77,25 @@ def export(pdir, name, fab="jlcpcb", force=False):
                     r[2] = r[2].split(":", 1)[-1]          # drop the library nickname
                     if fab == "jlcpcb" and not r[3]:
                         missing.append(r[1])
+                    elif r[3]:
+                        codes[r[3].strip()] = r[1]
                 w.writerow(r)
     else:
-        missing = []
+        missing, codes = [], {}
+
+    stock = []
+    if fab == "jlcpcb" and codes and os.environ.get("KIPCB_OFFLINE") != "1":
+        from . import lcsc                                   # live JLCPCB stock; silent when offline
+        try:
+            stock = ["%s (%s): %s" % (codes[c], c, msg) for c, msg in lcsc.check_bom(list(codes))]
+        except Exception:
+            stock = []
 
     import json
     from . import paths
     with open(os.path.join(paths.reports(pdir), "fab.json"), "w") as f:
         json.dump({"format": fab, "files": [os.path.relpath(p, pdir) for p in (zpath, bom, cpl) if os.path.exists(p)],
-                   "missing_lcsc": missing, "parity_issues": len(parity)}, f, indent=1)
+                   "missing_lcsc": missing, "stock_issues": stock, "parity_issues": len(parity)}, f, indent=1)
     ui.say("fab outputs in %s" % fdir)
     ui.say("  %s   <- upload to the PCB order page" % os.path.relpath(zpath, pdir))
     ui.say("  %s" % os.path.relpath(bom, pdir))
@@ -92,6 +103,8 @@ def export(pdir, name, fab="jlcpcb", force=False):
     if missing:
         ui.say("NOTE: no LCSC part number for %s. Add \"lcsc\" to those components for JLCPCB assembly "
               "(or hand-solder / source them)." % ", ".join(missing))
+    for line in stock:
+        ui.say("WARNING: %s; pick another part (`kipcb lcsc -s \"<value> <package>\"`)" % line)
     if fab == "jlcpcb":
         ui.say("NOTE: check part rotations in JLCPCB's assembly preview; some footprints need a "
               "rotation offset (a known KiCad/JLC convention difference).")

@@ -94,26 +94,39 @@ Every design is a normal **KiCad 9 project** (`.kicad_pro`, `.kicad_sch`, `.kica
 
 ## Installation
 
-<table>
-  <tr>
-    <td valign="top" width="34%"><b>1 · Requirements</b><br><br>
-      <a href="https://claude.com/claude-code">Claude Code</a><br>
-      <a href="https://www.kicad.org/download/">KiCad 9</a><br>
-      Java 21+ for the autorouter<br><sub>macOS: <code>brew install --cask temurin</code></sub>
-    </td>
-    <td valign="top" width="33%"><b>2 · Install</b><br><br>
-      In Claude Code, run:<br><br>
-      <code>/plugin install pcb --marketplace virajrungta/pcb-claude-plugin</code><br><br>
-      <sub>Confirm the marketplace, then choose <b>Install for you</b>.</sub>
-    </td>
-    <td valign="top" width="33%"><b>3 · Turn on auto-update</b><br><br>
-      <code>/plugin</code> → <b>Marketplaces</b> → <b>pcb-claude-plugin</b> → <b>Enable auto-update</b><br><br>
-      <sub>Weekly versions then arrive on their own.</sub>
-    </td>
-  </tr>
-</table>
+### 1. Requirements
 
-**Setup dialog.** Installing from `/plugin` opens a short setup form. You can change any of these later:
+[Claude Code](https://claude.com/claude-code), [KiCad 9](https://www.kicad.org/download/) and Java 21+ (for the autorouter). On macOS with Homebrew:
+
+```bash
+brew install --cask kicad
+```
+
+```bash
+brew install --cask temurin
+```
+
+### 2. Add the marketplace
+
+```bash
+claude plugin marketplace add virajrungta/pcb-claude-plugin
+```
+
+### 3. Install the plugin
+
+```bash
+claude plugin install pcb@pcb-claude-plugin
+```
+
+Or, inside Claude Code, run `/plugin install pcb --marketplace virajrungta/pcb-claude-plugin` instead of steps 2 and 3. That opens a short setup form (below).
+
+### 4. Set your defaults (optional)
+
+Inside Claude Code, open the settings form with `/plugin configure pcb@pcb-claude-plugin`. From a terminal, pass them when installing instead:
+
+```bash
+claude plugin install pcb@pcb-claude-plugin --config fab_house=JLCPCB --config layers=2
+```
 
 | Setting | Options | What it changes |
 |---|---|---|
@@ -122,7 +135,19 @@ Every design is a normal **KiCad 9 project** (`.kicad_pro`, `.kicad_sch`, `.kica
 | Default layer count | 2 · 4 | Starting layer count for new boards |
 | Learn from my boards | on · off | Whether kipcb remembers what worked (stored only on your computer) |
 
-**First run.** Start a new session. The plugin welcomes you and checks that KiCad, Java and the autorouter are in place, and only speaks up again if something is missing. Then try:
+### 5. Check the setup
+
+Start a new Claude Code session. The plugin welcomes you and checks KiCad, Java and the autorouter, and only speaks up again if something is missing. You can also check by hand:
+
+```bash
+claude plugin list
+```
+
+```bash
+kipcb doctor
+```
+
+### 6. Design your first board
 
 ```text
 /pcb:design a 30 x 20 mm USB-C LED blinker with an ATtiny85 and an ISP header
@@ -136,40 +161,42 @@ marketplace `virajrungta/pcb-claude-plugin`, select **PCB Design**, and choose a
 
 </details>
 
-<details>
-<summary><b>Install from a terminal instead</b></summary>
-
-The shell commands skip the setup dialog. Pass settings with `--config`, or run `/plugin configure pcb@pcb-claude-plugin` later in Claude Code.
-
-```bash
-claude plugin marketplace add virajrungta/pcb-claude-plugin
-```
-
-```bash
-claude plugin install pcb@pcb-claude-plugin --config fab_house=JLCPCB --config layers=2
-```
-
-</details>
-
-Check your setup any time with `kipcb doctor`, and see your defaults with `kipcb settings`.
 The [getting started guide](docs/getting-started.md) walks through a first board end to end.
 
 ## Updating
 
-A new version ships every week (see the [changelog](CHANGELOG.md) and [releases](https://github.com/virajrungta/pcb-claude-plugin/releases)).
+A new version ships every week (see the [changelog](CHANGELOG.md) and [releases](https://github.com/virajrungta/pcb-claude-plugin/releases)). Third-party plugins don't update on their own unless you turn auto-update on, so update when a new version is out:
 
-- **Automatically:** turn on auto-update once (`/plugin` → **Marketplaces** → **pcb-claude-plugin** → **Enable auto-update**). New versions download in the background, and the next session uses them.
-- **In Claude Code:** `/plugin` → **Installed** → **PCB Design** → **Update now**
-- **From a terminal:**
+### 1. Refresh the marketplace
+
+```bash
+claude plugin marketplace update pcb-claude-plugin
+```
+
+### 2. Update the plugin
 
 ```bash
 claude plugin update pcb@pcb-claude-plugin
 ```
 
-After an update, the next session tells you which version you're on and links to what's new.
+### 3. Check the version
 
-**Change your settings:** `/plugin configure pcb@pcb-claude-plugin`
-<br>**Uninstall:** `/plugin uninstall pcb@pcb-claude-plugin` (your designs and local learning data stay on disk)
+```bash
+claude plugin list
+```
+
+Then restart Claude Code; the next session tells you which version you're on and links to what's new.
+
+**Inside Claude Code:** `/plugin` → **Installed** → **PCB Design** → **Update now**.
+<br>**Auto-update:** `/plugin` → **Marketplaces** → **pcb-claude-plugin** → **Enable auto-update**; new versions then download in the background.
+
+### Uninstall
+
+```bash
+claude plugin uninstall pcb@pcb-claude-plugin
+```
+
+Your designs and local learning data stay on disk.
 
 ## Examples
 

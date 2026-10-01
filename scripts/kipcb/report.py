@@ -39,8 +39,12 @@ def collect(pdir, name, timings=None):
         blockers.append("parts left off the board: %s" % ", ".join(build["placement_failed"]))
     if erc_err:
         blockers.append("%d ERC error(s) (reports/erc.json)" % erc_err)
+    pre = _load(pdir, "preflight.json") or {}
+    pre_fail = [i for i in pre.get("items", []) if i["level"] == "FAIL"]
+    for i in pre_fail:
+        blockers.append("preflight %s: %s%s" % (i["check"], i["message"], (" (fix: %s)" % i["fix"]) if i.get("fix") else ""))
     if route is None:
-        blockers.append("not routed yet")
+        blockers.append("not routed: fix the preflight problems first" if pre_fail else "not routed yet")
     else:
         if drc_err:
             blockers.append("%d DRC error(s) (reports/drc.json)" % len(drc_err))
@@ -53,6 +57,9 @@ def collect(pdir, name, timings=None):
     if route is not None and fab is None and not blockers:
         blockers.append("manufacturing files not exported yet (kipcb fab)")
 
+    if route is None:      # before routing the placement checks live in preflight
+        attention += ["preflight %s: %s" % (i["check"], i["message"]) for i in pre.get("items", [])
+                      if i["level"] == "WARN"]
     attention += ["noise: %s" % i["message"] for i in nz["WARN"]]
     attention += build.get("spec_warnings", [])
     attention += build.get("notes", [])
@@ -60,6 +67,8 @@ def collect(pdir, name, timings=None):
         refs = [r for line in fab["missing_lcsc"] for r in line.split(",")]
         shown = ", ".join(refs[:6]) + (" and %d more" % (len(refs) - 6) if len(refs) > 6 else "")
         attention.append("%d part(s) have no LCSC number (needed for JLCPCB assembly): %s" % (len(refs), shown))
+    for line in (fab or {}).get("stock_issues", []):
+        attention.append("JLCPCB stock: %s (find another with `kipcb lcsc -s`)" % line)
 
     return {
         "name": name, "title": build.get("title", name), "project_dir": pdir,

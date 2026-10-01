@@ -235,14 +235,17 @@ def _export_dsn(pn, board, dsn):
     # Freerouting rounds coordinates differently from KiCad, which can leave a
     # trace a few microns inside the clearance. Ask it for 0.01 mm extra.
     ns = board.GetDesignSettings().m_NetSettings
-    classes = [ns.GetDefaultNetclass()] + [ns.GetNetClassByName(n) for n in ("Power", "Ground")
-                                           if ns.HasNetclass(n)]
+    classes = [ns.GetDefaultNetclass()] + [ns.GetNetClassByName(n) for n in _class_names(ns)]
     saved = [(nc, nc.GetClearance()) for nc in classes]
     for nc, clr in saved:
         nc.SetClearance(clr + mm(0.01))
     ns.ClearAllCaches()
     try:
         ok = pn.ExportSpecctraDSN(board, dsn)
+        if ok:
+            ds = board.GetDesignSettings()
+            inset = (ds.m_CopperEdgeClearance - ns.GetDefaultNetclass().GetClearance()) / 1e3 - 10
+            _inset_boundary(dsn, inset)
     finally:
         for pad, layers in hidden:
             pad.SetLayerSet(layers)
@@ -644,3 +647,57 @@ def _spec_pour_net(pdir, name, board):
             names = [str(n) for n in board.GetNetsByName().keys()]
             return gp if gp in names else ("/" + gp if "/" + gp in names else None)
     return None
+
+
+def _class_names(ns):
+    """Names of all non-default netclasses (Power, Ground, Fine, the spec's own...)."""
+    try:
+        return [str(k) for k in ns.GetNetclasses().keys()]
+    except Exception:
+        return [n for n in ("Power", "Ground", "Fine", "PowerFine") if ns.HasNetclass(n)]
+
+
+def _inset_boundary(dsn, inset_um):
+    """Freerouting keeps only the normal clearance to the board outline, so copper ends up
+    closer to the edge than the edge-clearance rule (DRC errors). Shrink the outline it sees by
+    the difference. Only for convex outlines (kipcb's rounded rectangles)."""
+    import math
+    import re
+    if inset_um <= 0:
+        return
+    with open(dsn) as f:
+        text = f.read()
+    m = re.search(r"\(boundary\s*\(path pcb 0\s+([-\d.\s]+)\)", text)
+    if not m:
+        return
+    nums = [float(x) for x in m.group(1).split()]
+    pts = list(zip(nums[0::2], nums[1::2]))
+    if len(pts) > 1 and pts[0] == pts[-1]:
+        pts = pts[:-1]
+    n = len(pts)
+    if n < 3:
+        return
+    area = sum(pts[i][0] * pts[(i + 1) % n][1] - pts[(i + 1) % n][0] * pts[i][1] for i in range(n)) / 2
+    sign = 1 if area > 0 else -1                 # counter-clockwise: inward normal is on the left
+    crosses = []
+    for i in range(n):
+        (ax, ay), (bx, by), (cx, cy) = pts[i - 1], pts[i], pts[(i + 1) % n]
+        crosses.append((bx - ax) * (cy - by) - (by - ay) * (cx - bx))
+    if any(c * sign < -1e-6 for c in crosses):
+        return                                   # not convex: leave it alone
+    out = []
+    for i in range(n):
+        (ax, ay), (bx, by), (cx, cy) = pts[i - 1], pts[i], pts[(i + 1) % n]
+        def normal(px, py, qx, qy):
+            l = math.hypot(qx - px, qy - py) or 1.0
+            return (-(qy - py) / l * sign, (qx - px) / l * sign)
+        n1, n2 = normal(ax, ay, bx, by), normal(bx, by, cx, cy)
+        k = 1.0 + n1[0] * n2[0] + n1[1] * n2[1]
+        if k < 1e-6:
+            return
+        out.append((bx + inset_um * (n1[0] + n2[0]) / k, by + inset_um * (n1[1] + n2[1]) / k))
+    out.append(out[0])
+    path = "  ".join("%.1f %.1f" % p for p in out)
+    text = text[:m.start(1)] + path + text[m.end(1):]
+    with open(dsn, "w") as f:
+        f.write(text)

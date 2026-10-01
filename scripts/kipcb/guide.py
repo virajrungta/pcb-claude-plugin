@@ -50,6 +50,13 @@ def show(topic):
         for fn, titles in by_file.items():
             print("%s: %s" % (fn[:-3], "; ".join(t[:40] for t in titles)))
         return 0
+    stem = _norm(topic).strip().replace(" ", "-")
+    if os.path.exists(os.path.join(REF_DIR, stem + ".md")):        # a whole reference file by name
+        with open(os.path.join(REF_DIR, stem + ".md")) as f:
+            text = f.read().strip()
+        if len(text) < 6000:
+            print(text)
+            return 0
     words = _norm(topic).split()
     scored = []
     for s in secs:

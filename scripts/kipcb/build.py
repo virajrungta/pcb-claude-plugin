@@ -4,7 +4,7 @@ import json
 import os
 
 from . import checks, pcbgen, render as rendermod, schgen
-from . import ui
+from . import paths, ui
 from .spec import Design, SpecError
 
 
@@ -36,6 +36,11 @@ def build(spec_path, out=None, render=True, placement=None, design=None):
     if d is None:
         return 1
     pdir = _outdir(d, out)
+    for stale in ("route.json", "fab.json", "preflight.json", "noise.json"):   # they describe the old board
+        try:
+            os.remove(os.path.join(paths.reports(pdir), stale))
+        except OSError:
+            pass
     sch_path = os.path.join(pdir, d.name + ".kicad_sch")
     pcb_path = os.path.join(pdir, d.name + ".kicad_pcb")
 

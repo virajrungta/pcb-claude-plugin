@@ -1,0 +1,3516 @@
+{
+"fetched": "2026-10-01",
+"source": "JLCPCB basic parts library",
+"parts": [
+{
+"code": "C105432",
+"mpn": "S8550(RANGE:120-200)",
+"package": "SOT-23",
+"category": "Bipolar (BJT)",
+"brand": "Jiangsu Changjing Electronics Technology Co., Ltd.",
+"describe": "-55℃~+150℃ 1 PNP 100nA 120 150MHz 25V 300mW 500mA 5V 600mV PNP SOT-23 Bipolar (BJT) ROHS",
+"stock": 254398,
+"class": "basic"
+},
+{
+"code": "C20526",
+"mpn": "MMBT3904(RANGE:100-300)",
+"package": "SOT-23",
+"category": "Bipolar (BJT)",
+"brand": "Jiangsu Changjing Electronics Technology Co., Ltd.",
+"describe": "-55℃~+150℃ 1 NPN 100 100nA 200mA 200mW 300MHz 300mV 40V 6V NPN SOT-23 Bipolar (BJT) ROHS",
+"stock": 249225,
+"class": "basic"
+},
+{
+"code": "C2145",
+"mpn": "MMBT5551(RANGE:200-300)",
+"package": "SOT-23",
+"category": "Bipolar (BJT)",
+"brand": "Jiangsu Changjing Electronics Technology Co., Ltd.",
+"describe": "-55℃~+150℃ 1 NPN 160V 200 200mV 300MHz 300mW 50nA 600mA 6V NPN SOT-23 Bipolar (BJT) ROHS",
+"stock": 2259915,
+"class": "basic"
+},
+{
+"code": "C2146",
+"mpn": "S8050 J3Y(RANGE:200-350)",
+"package": "SOT-23",
+"category": "Bipolar (BJT)",
+"brand": "Jiangsu Changjing Electronics Technology Co., Ltd.",
+"describe": "-55℃~+150℃ 1 NPN 100nA 150MHz 200 25V 300mW 500mA 5V 600mV NPN SOT-23 Bipolar (BJT) ROHS",
+"stock": 1342223,
+"class": "basic"
+},
+{
+"code": "C2150",
+"mpn": "SS8050(RANGE:200-350)",
+"package": "SOT-23",
+"category": "Bipolar (BJT)",
+"brand": "Jiangsu Changjing Electronics Technology Co., Ltd.",
+"describe": "-55℃~+150℃ 1 NPN 1.5A 100MHz 100nA 200 25V 300mW 500mV 5V NPN SOT-23 Bipolar (BJT) ROHS",
+"stock": 1853855,
+"class": "basic"
+},
+{
+"code": "C6749",
+"mpn": "S9013 J3(RANGE:200-350)",
+"package": "SOT-23",
+"category": "Bipolar (BJT)",
+"brand": "Jiangsu Changjing Electronics Technology Co., Ltd.",
+"describe": "-55℃~+150℃ 1 NPN 100nA 120 150MHz 25V 300mW 500mA 5V 600mV NPN SOT-23 Bipolar (BJT) ROHS",
+"stock": 874087,
+"class": "basic"
+},
+{
+"code": "C8326",
+"mpn": "MMBT5401(RANGE:200-300)",
+"package": "SOT-23",
+"category": "Bipolar (BJT)",
+"brand": "Jiangsu Changjing Electronics Technology Co., Ltd.",
+"describe": "-55℃~+150℃ 1 PNP 100MHz 100nA 150V 300 300mW 500mV 5V 600mA PNP SOT-23 Bipolar (BJT) ROHS",
+"stock": 765395,
+"class": "basic"
+},
+{
+"code": "C8512",
+"mpn": "MMBT2222A 1P",
+"package": "SOT-23",
+"category": "Bipolar (BJT)",
+"brand": "Jiangsu Changjing Electronics Technology Co., Ltd.",
+"describe": "-55℃~+150℃ 1 NPN 100 10nA 300MHz 300mW 40V 600mA 6V NPN SOT-23 Bipolar (BJT) ROHS",
+"stock": 597714,
+"class": "basic"
+},
+{
+"code": "C8542",
+"mpn": "SS8550 Y2(RANGE:200-350)",
+"package": "SOT-23",
+"category": "Bipolar (BJT)",
+"brand": "Jiangsu Changjing Electronics Technology Co., Ltd.",
+"describe": "-55℃~+150℃ 1 PNP 1.5A 100MHz 100nA 200 25V 300mW 500mV 5V PNP SOT-23 Bipolar (BJT) ROHS",
+"stock": 1051980,
+"class": "basic"
+},
+{
+"code": "C8543",
+"mpn": "S9012 2T1(RANGE:200-350)",
+"package": "SOT-23",
+"category": "Bipolar (BJT)",
+"brand": "Jiangsu Changjing Electronics Technology Co., Ltd.",
+"describe": "-55℃~+150℃ 1 PNP 100nA 120 150MHz 25V 300mW 500mA 5V 600mV PNP SOT-23 Bipolar (BJT) ROHS",
+"stock": 260973,
+"class": "basic"
+},
+{
+"code": "C9634",
+"mpn": "D882(RANGE:160-320)",
+"package": "SOT-89-3L",
+"category": "Bipolar (BJT)",
+"brand": "Jiangsu Changjing Electronics Technology Co., Ltd.",
+"describe": "-55℃~+150℃ 1 NPN 160 1uA 30V 3A 500mV 500mW 50MHz 6V NPN SOT-89-3L Bipolar (BJT) ROHS",
+"stock": 159150,
+"class": "basic"
+},
+{
+"code": "C2488",
+"mpn": "MB10S-50MIL",
+"package": "MBS",
+"category": "Bridge Rectifiers",
+"brand": "MDD(Microdiode Semiconductor)",
+"describe": "-55℃~+150℃ 1.1V@400mA 1A 1kV 35A 5uA@1kV Single-Phase Rectifier MBS Bridge Rectifiers ROHS",
+"stock": 675103,
+"class": "basic"
+},
+{
+"code": "C11702",
+"mpn": "0402WGF1001TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 1kΩ 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 7225146,
+"class": "basic"
+},
+{
+"code": "C13167",
+"mpn": "0603WAF2701T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 2.7kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1234374,
+"class": "basic"
+},
+{
+"code": "C149504",
+"mpn": "0805W8F1003T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100kΩ 125mW 150V Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 4225177,
+"class": "basic"
+},
+{
+"code": "C17168",
+"mpn": "0402WGF0000TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 0Ω 50V 62.5mW Thick Film Resistor ±1% ±800ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 9302316,
+"class": "basic"
+},
+{
+"code": "C17379",
+"mpn": "0805W8F1201T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 1.2kΩ 125mW 150V Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 1710662,
+"class": "basic"
+},
+{
+"code": "C17408",
+"mpn": "0805W8F1000T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100Ω 125mW 150V Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 9393814,
+"class": "basic"
+},
+{
+"code": "C17414",
+"mpn": "0805W8F1002T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 10kΩ 125mW 150V Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 60334605,
+"class": "basic"
+},
+{
+"code": "C17415",
+"mpn": "0805W8F100JT5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 10Ω 125mW 150V Thick Film Resistor ±1% ±200ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 6880530,
+"class": "basic"
+},
+{
+"code": "C17437",
+"mpn": "0805W8F1200T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 120Ω 125mW 150V Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 1652903,
+"class": "basic"
+},
+{
+"code": "C17444",
+"mpn": "0805W8F1202T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 12kΩ 150V Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 338804,
+"class": "basic"
+},
+{
+"code": "C17470",
+"mpn": "0805W8F1503T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 150kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 1013678,
+"class": "basic"
+},
+{
+"code": "C17471",
+"mpn": "0805W8F1500T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 150Ω Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 501728,
+"class": "basic"
+},
+{
+"code": "C17475",
+"mpn": "0805W8F1502T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 15kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 729688,
+"class": "basic"
+},
+{
+"code": "C17477",
+"mpn": "0805W8F0000T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 0Ω 125mW 150V Thick Film Resistor ±1% ±800ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 6858742,
+"class": "basic"
+},
+{
+"code": "C17513",
+"mpn": "0805W8F1001T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 1kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 31207425,
+"class": "basic"
+},
+{
+"code": "C17514",
+"mpn": "0805W8F1004T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 1MΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 2421571,
+"class": "basic"
+},
+{
+"code": "C17520",
+"mpn": "0805W8F2201T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 2.2kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 3637195,
+"class": "basic"
+},
+{
+"code": "C17521",
+"mpn": "0805W8F220KT5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 2.2Ω Thick Film Resistor ±1% ±200ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 306462,
+"class": "basic"
+},
+{
+"code": "C17526",
+"mpn": "0805W8F2401T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 2.4kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 300060,
+"class": "basic"
+},
+{
+"code": "C17530",
+"mpn": "0805W8F2701T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 2.7kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 1840507,
+"class": "basic"
+},
+{
+"code": "C17539",
+"mpn": "0805W8F2003T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 200kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 670907,
+"class": "basic"
+},
+{
+"code": "C17540",
+"mpn": "0805W8F2000T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 200Ω Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 1302301,
+"class": "basic"
+},
+{
+"code": "C17544",
+"mpn": "0805W8F200JT5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 20Ω Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 1950366,
+"class": "basic"
+},
+{
+"code": "C17556",
+"mpn": "0805W8F2203T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 220kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 267843,
+"class": "basic"
+},
+{
+"code": "C17557",
+"mpn": "0805W8F2200T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 220Ω Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 899702,
+"class": "basic"
+},
+{
+"code": "C17560",
+"mpn": "0805W8F2202T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 22kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 1745864,
+"class": "basic"
+},
+{
+"code": "C17561",
+"mpn": "0805W8F220JT5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 22Ω Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 1714494,
+"class": "basic"
+},
+{
+"code": "C17575",
+"mpn": "0805W8F2402T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 24kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 455690,
+"class": "basic"
+},
+{
+"code": "C17593",
+"mpn": "0805W8F2702T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 27kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 176871,
+"class": "basic"
+},
+{
+"code": "C17604",
+"mpn": "0805W8F2001T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 2kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 5566058,
+"class": "basic"
+},
+{
+"code": "C17614",
+"mpn": "0805W8F3901T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 3.9kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 119737,
+"class": "basic"
+},
+{
+"code": "C17617",
+"mpn": "0805W8F3000T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 300Ω Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 679914,
+"class": "basic"
+},
+{
+"code": "C17621",
+"mpn": "0805W8F3002T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 30kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 894994,
+"class": "basic"
+},
+{
+"code": "C17630",
+"mpn": "0805W8F3300T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 330Ω Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 2181220,
+"class": "basic"
+},
+{
+"code": "C17633",
+"mpn": "0805W8F3302T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 33kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 477608,
+"class": "basic"
+},
+{
+"code": "C17634",
+"mpn": "0805W8F330JT5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 33Ω Thick Film Resistor ±1% ±200ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 1574486,
+"class": "basic"
+},
+{
+"code": "C17655",
+"mpn": "0805W8F3900T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 390Ω Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 1451364,
+"class": "basic"
+},
+{
+"code": "C17661",
+"mpn": "0805W8F3001T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 3kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 1674485,
+"class": "basic"
+},
+{
+"code": "C17673",
+"mpn": "0805W8F4701T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 4.7kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 5068239,
+"class": "basic"
+},
+{
+"code": "C17675",
+"mpn": "0805W8F470KT5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 4.7Ω Thick Film Resistor ±1% ±200ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 82286,
+"class": "basic"
+},
+{
+"code": "C17709",
+"mpn": "0805W8F4703T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 470kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 414220,
+"class": "basic"
+},
+{
+"code": "C17710",
+"mpn": "0805W8F4700T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 470Ω Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 2778384,
+"class": "basic"
+},
+{
+"code": "C17713",
+"mpn": "0805W8F4702T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 47kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 1859787,
+"class": "basic"
+},
+{
+"code": "C17714",
+"mpn": "0805W8F470JT5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 47Ω Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 445444,
+"class": "basic"
+},
+{
+"code": "C17720",
+"mpn": "0805W8F499JT5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 49.9Ω Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 635521,
+"class": "basic"
+},
+{
+"code": "C17724",
+"mpn": "0805W8F510KT5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 5.1Ω Thick Film Resistor ±1% ±200ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 418343,
+"class": "basic"
+},
+{
+"code": "C17734",
+"mpn": "0805W8F5100T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 510Ω Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 2852127,
+"class": "basic"
+},
+{
+"code": "C17737",
+"mpn": "0805W8F5102T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 51kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 835831,
+"class": "basic"
+},
+{
+"code": "C17738",
+"mpn": "0805W8F510JT5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 51Ω Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 855494,
+"class": "basic"
+},
+{
+"code": "C17772",
+"mpn": "0805W8F6801T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 6.8kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 300704,
+"class": "basic"
+},
+{
+"code": "C17798",
+"mpn": "0805W8F6800T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 680Ω Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 1353164,
+"class": "basic"
+},
+{
+"code": "C17801",
+"mpn": "0805W8F6802T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 68kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 301583,
+"class": "basic"
+},
+{
+"code": "C17828",
+"mpn": "0805W8F8201T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 8.2kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 217028,
+"class": "basic"
+},
+{
+"code": "C17887",
+"mpn": "1206W4F3000T5E",
+"package": "1206",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 200V 250mW 300Ω Thick Film Resistor ±1% ±100ppm/℃ 1206 Chip Resistor - Surface Mount ROHS",
+"stock": 514162,
+"class": "basic"
+},
+{
+"code": "C17888",
+"mpn": "1206W4F0000T5E",
+"package": "1206",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 0Ω 200V 250mW Thick Film Resistor ±1% ±800ppm/℃ 1206 Chip Resistor - Surface Mount ROHS",
+"stock": 2628623,
+"class": "basic"
+},
+{
+"code": "C17900",
+"mpn": "1206W4F1003T5E",
+"package": "1206",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100kΩ 200V 250mW Thick Film Resistor ±1% ±100ppm/℃ 1206 Chip Resistor - Surface Mount ROHS",
+"stock": 1368583,
+"class": "basic"
+},
+{
+"code": "C17901",
+"mpn": "1206W4F1000T5E",
+"package": "1206",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100Ω 200V 250mW Thick Film Resistor ±1% ±100ppm/℃ 1206 Chip Resistor - Surface Mount ROHS",
+"stock": 3132833,
+"class": "basic"
+},
+{
+"code": "C17902",
+"mpn": "1206W4F1002T5E",
+"package": "1206",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 10kΩ 200V 250mW Thick Film Resistor ±1% ±100ppm/℃ 1206 Chip Resistor - Surface Mount ROHS",
+"stock": 3079619,
+"class": "basic"
+},
+{
+"code": "C17903",
+"mpn": "1206W4F100JT5E",
+"package": "1206",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 10Ω 200V 250mW Thick Film Resistor ±1% ±400ppm/℃ 1206 Chip Resistor - Surface Mount ROHS",
+"stock": 913446,
+"class": "basic"
+},
+{
+"code": "C17909",
+"mpn": "1206W4F1200T5E",
+"package": "1206",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 120Ω 200V 250mW Thick Film Resistor ±1% ±100ppm/℃ 1206 Chip Resistor - Surface Mount ROHS",
+"stock": 536801,
+"class": "basic"
+},
+{
+"code": "C17927",
+"mpn": "1206W4F1004T5E",
+"package": "1206",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 1MΩ 200V 250mW Thick Film Resistor ±1% ±100ppm/℃ 1206 Chip Resistor - Surface Mount ROHS",
+"stock": 4554903,
+"class": "basic"
+},
+{
+"code": "C17928",
+"mpn": "1206W4F100KT5E",
+"package": "1206",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 1Ω 200V 250mW Thick Film Resistor ±1% ±200ppm/℃ 1206 Chip Resistor - Surface Mount ROHS",
+"stock": 197002,
+"class": "basic"
+},
+{
+"code": "C17936",
+"mpn": "1206W4F4701T5E",
+"package": "1206",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 200V 250mW 4.7kΩ Thick Film Resistor ±1% ±100ppm/℃ 1206 Chip Resistor - Surface Mount ROHS",
+"stock": 3304193,
+"class": "basic"
+},
+{
+"code": "C17944",
+"mpn": "1206W4F2001T5E",
+"package": "1206",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 200V 250mW 2kΩ Thick Film Resistor ±1% ±100ppm/℃ 1206 Chip Resistor - Surface Mount ROHS",
+"stock": 2097078,
+"class": "basic"
+},
+{
+"code": "C17955",
+"mpn": "1206W4F200JT5E",
+"package": "1206",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 200V 20Ω 250mW Thick Film Resistor ±1% ±100ppm/℃ 1206 Chip Resistor - Surface Mount ROHS",
+"stock": 452193,
+"class": "basic"
+},
+{
+"code": "C17958",
+"mpn": "1206W4F220JT5E",
+"package": "1206",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 200V 22Ω 250mW Thick Film Resistor ±1% ±100ppm/℃ 1206 Chip Resistor - Surface Mount ROHS",
+"stock": 870804,
+"class": "basic"
+},
+{
+"code": "C21189",
+"mpn": "0603WAF0000T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 0Ω 100mW 75V Thick Film Resistor ±1% 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 23766350,
+"class": "basic"
+},
+{
+"code": "C21190",
+"mpn": "0603WAF1001T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 1kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 21673304,
+"class": "basic"
+},
+{
+"code": "C22765",
+"mpn": "0603WAF1201T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 1.2kΩ 100mW 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 2721923,
+"class": "basic"
+},
+{
+"code": "C22775",
+"mpn": "0603WAF1000T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 100Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 11577443,
+"class": "basic"
+},
+{
+"code": "C22787",
+"mpn": "0603WAF1200T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 120Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1700508,
+"class": "basic"
+},
+{
+"code": "C22790",
+"mpn": "0603WAF1202T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 12kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1195585,
+"class": "basic"
+},
+{
+"code": "C22797",
+"mpn": "0603WAF1302T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 13kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 402923,
+"class": "basic"
+},
+{
+"code": "C22807",
+"mpn": "0603WAF1503T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 150kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 612269,
+"class": "basic"
+},
+{
+"code": "C22808",
+"mpn": "0603WAF1500T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 150Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 873034,
+"class": "basic"
+},
+{
+"code": "C22809",
+"mpn": "0603WAF1502T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 15kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 4588391,
+"class": "basic"
+},
+{
+"code": "C22843",
+"mpn": "0603WAF1501T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 1.5kΩ 100mW 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 4822364,
+"class": "basic"
+},
+{
+"code": "C22859",
+"mpn": "0603WAF100JT5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 10Ω 75V Thick Film Resistor ±1% ±400ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 8040838,
+"class": "basic"
+},
+{
+"code": "C22935",
+"mpn": "0603WAF1004T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 1MΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 6613454,
+"class": "basic"
+},
+{
+"code": "C22936",
+"mpn": "0603WAF100KT5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 1Ω 75V Thick Film Resistor ±1% ±400ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 256114,
+"class": "basic"
+},
+{
+"code": "C22939",
+"mpn": "0603WAF220KT5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 2.2Ω 75V Thick Film Resistor ±1% ±400ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 229768,
+"class": "basic"
+},
+{
+"code": "C22940",
+"mpn": "0603WAF2401T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 2.4kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1575423,
+"class": "basic"
+},
+{
+"code": "C22950",
+"mpn": "0603WAF200JT5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 20Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1760816,
+"class": "basic"
+},
+{
+"code": "C22961",
+"mpn": "0603WAF2203T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 220kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1443010,
+"class": "basic"
+},
+{
+"code": "C22962",
+"mpn": "0603WAF2200T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 220Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1904956,
+"class": "basic"
+},
+{
+"code": "C22966",
+"mpn": "0603WAF2700T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 270Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 725915,
+"class": "basic"
+},
+{
+"code": "C22967",
+"mpn": "0603WAF2702T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 27kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 702944,
+"class": "basic"
+},
+{
+"code": "C22975",
+"mpn": "0603WAF2001T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 2kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 13573115,
+"class": "basic"
+},
+{
+"code": "C22976",
+"mpn": "0603WAF2004T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 2MΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1189412,
+"class": "basic"
+},
+{
+"code": "C22977",
+"mpn": "0603WAF200KT5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 2Ω 75V Thick Film Resistor ±1% ±200ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1218475,
+"class": "basic"
+},
+{
+"code": "C22978",
+"mpn": "0603WAF3301T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 3.3kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 5695251,
+"class": "basic"
+},
+{
+"code": "C22980",
+"mpn": "0603WAF3601T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 3.6kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 941809,
+"class": "basic"
+},
+{
+"code": "C22984",
+"mpn": "0603WAF3002T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 30kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1932041,
+"class": "basic"
+},
+{
+"code": "C23018",
+"mpn": "0603WAF3901T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 3.9kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 859353,
+"class": "basic"
+},
+{
+"code": "C23024",
+"mpn": "0603WAF3003T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 300kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 563362,
+"class": "basic"
+},
+{
+"code": "C23025",
+"mpn": "0603WAF3000T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 300Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1577614,
+"class": "basic"
+},
+{
+"code": "C23046",
+"mpn": "0603WAF4991T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 4.99kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1526792,
+"class": "basic"
+},
+{
+"code": "C23137",
+"mpn": "0603WAF3303T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 330kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 732840,
+"class": "basic"
+},
+{
+"code": "C23138",
+"mpn": "0603WAF3300T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 330Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 3279127,
+"class": "basic"
+},
+{
+"code": "C23140",
+"mpn": "0603WAF330JT5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 33Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 5638938,
+"class": "basic"
+},
+{
+"code": "C23151",
+"mpn": "0603WAF3900T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 390Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 848591,
+"class": "basic"
+},
+{
+"code": "C23153",
+"mpn": "0603WAF3902T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 39kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 458952,
+"class": "basic"
+},
+{
+"code": "C23162",
+"mpn": "0603WAF4701T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 4.7kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 22501839,
+"class": "basic"
+},
+{
+"code": "C23164",
+"mpn": "0603WAF470KT5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 4.7Ω 75V Thick Film Resistor ±1% ±400ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 672926,
+"class": "basic"
+},
+{
+"code": "C23178",
+"mpn": "0603WAF4703T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 470kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1460584,
+"class": "basic"
+},
+{
+"code": "C23179",
+"mpn": "0603WAF4700T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 470Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 6397509,
+"class": "basic"
+},
+{
+"code": "C23182",
+"mpn": "0603WAF470JT5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 47Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1216591,
+"class": "basic"
+},
+{
+"code": "C23184",
+"mpn": "0603WAF4992T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 49.9kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1782457,
+"class": "basic"
+},
+{
+"code": "C23185",
+"mpn": "0603WAF499JT5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 49.9Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 2230594,
+"class": "basic"
+},
+{
+"code": "C23186",
+"mpn": "0603WAF5101T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 5.1kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 25284572,
+"class": "basic"
+},
+{
+"code": "C23189",
+"mpn": "0603WAF5601T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 5.6kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1156628,
+"class": "basic"
+},
+{
+"code": "C23192",
+"mpn": "0603WAF5103T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 510kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 894342,
+"class": "basic"
+},
+{
+"code": "C23193",
+"mpn": "0603WAF5100T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 510Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 4127941,
+"class": "basic"
+},
+{
+"code": "C23196",
+"mpn": "0603WAF5102T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 51kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 2943339,
+"class": "basic"
+},
+{
+"code": "C23197",
+"mpn": "0603WAF510JT5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 51Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1186816,
+"class": "basic"
+},
+{
+"code": "C23204",
+"mpn": "0603WAF5600T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 560Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 2965124,
+"class": "basic"
+},
+{
+"code": "C23206",
+"mpn": "0603WAF5602T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 56kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1026811,
+"class": "basic"
+},
+{
+"code": "C23212",
+"mpn": "0603WAF6801T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 6.8kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1803205,
+"class": "basic"
+},
+{
+"code": "C23228",
+"mpn": "0603WAF6800T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 680Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 2390790,
+"class": "basic"
+},
+{
+"code": "C23231",
+"mpn": "0603WAF6802T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 68kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1014732,
+"class": "basic"
+},
+{
+"code": "C23234",
+"mpn": "0603WAF7501T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 7.5kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1323831,
+"class": "basic"
+},
+{
+"code": "C23242",
+"mpn": "0603WAF7502T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 75V 75kΩ Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 756416,
+"class": "basic"
+},
+{
+"code": "C23253",
+"mpn": "0603WAF8200T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 75V 820Ω Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1092728,
+"class": "basic"
+},
+{
+"code": "C23254",
+"mpn": "0603WAF8202T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 75V 82kΩ Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1318410,
+"class": "basic"
+},
+{
+"code": "C23260",
+"mpn": "0603WAF9101T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 75V 9.1kΩ Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 756151,
+"class": "basic"
+},
+{
+"code": "C23345",
+"mpn": "0603WAF220JT5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 22Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 9037549,
+"class": "basic"
+},
+{
+"code": "C23352",
+"mpn": "0603WAF2402T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 24kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 965049,
+"class": "basic"
+},
+{
+"code": "C25076",
+"mpn": "0402WGF1000TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100Ω 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 4098444,
+"class": "basic"
+},
+{
+"code": "C25077",
+"mpn": "0402WGF100JTCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 10Ω 50V 62.5mW Thick Film Resistor ±1% ±200ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 1752797,
+"class": "basic"
+},
+{
+"code": "C25079",
+"mpn": "0402WGF1200TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 120Ω 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 787896,
+"class": "basic"
+},
+{
+"code": "C25087",
+"mpn": "0402WGF2000TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 200Ω 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 2617238,
+"class": "basic"
+},
+{
+"code": "C25091",
+"mpn": "0402WGF2200TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 220Ω 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 1425482,
+"class": "basic"
+},
+{
+"code": "C25092",
+"mpn": "0402WGF220JTCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 22Ω 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 4623646,
+"class": "basic"
+},
+{
+"code": "C25104",
+"mpn": "0402WGF3300TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 330Ω 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 1203556,
+"class": "basic"
+},
+{
+"code": "C25105",
+"mpn": "0402WGF330JTCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 33Ω 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 1834858,
+"class": "basic"
+},
+{
+"code": "C25117",
+"mpn": "0402WGF4700TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 470Ω 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 865149,
+"class": "basic"
+},
+{
+"code": "C25120",
+"mpn": "0402WGF499JTCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 49.9Ω 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 1404720,
+"class": "basic"
+},
+{
+"code": "C25123",
+"mpn": "0402WGF5100TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 50V 510Ω 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 1971677,
+"class": "basic"
+},
+{
+"code": "C25197",
+"mpn": "0603WAF510KT5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 5.1Ω 75V Thick Film Resistor ±1% ±200ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 237621,
+"class": "basic"
+},
+{
+"code": "C25271",
+"mpn": "0805W8F100KT5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 1Ω Thick Film Resistor ±1% ±200ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 461829,
+"class": "basic"
+},
+{
+"code": "C25334",
+"mpn": "1206W4F100LT5E",
+"package": "1206",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mΩ 200V 250mW Thick Film Resistor ±1% ±800ppm/℃ 1206 Chip Resistor - Surface Mount ROHS",
+"stock": 121425,
+"class": "basic"
+},
+{
+"code": "C25741",
+"mpn": "0402WGF1003TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100kΩ 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 8275124,
+"class": "basic"
+},
+{
+"code": "C25744",
+"mpn": "0402WGF1002TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 10kΩ 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 21809972,
+"class": "basic"
+},
+{
+"code": "C25752",
+"mpn": "0402WGF1202TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 12kΩ 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 1126499,
+"class": "basic"
+},
+{
+"code": "C25756",
+"mpn": "0402WGF1502TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 15kΩ 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 1135914,
+"class": "basic"
+},
+{
+"code": "C25764",
+"mpn": "0402WGF2003TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 200kΩ 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 2307615,
+"class": "basic"
+},
+{
+"code": "C25765",
+"mpn": "0402WGF2002TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 20kΩ 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 3022316,
+"class": "basic"
+},
+{
+"code": "C25768",
+"mpn": "0402WGF2202TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 22kΩ 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 827576,
+"class": "basic"
+},
+{
+"code": "C25779",
+"mpn": "0402WGF3302TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 33kΩ 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 1214020,
+"class": "basic"
+},
+{
+"code": "C25792",
+"mpn": "0402WGF4702TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 47kΩ 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 5568620,
+"class": "basic"
+},
+{
+"code": "C25794",
+"mpn": "0402WGF5102TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 50V 51kΩ 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 1932784,
+"class": "basic"
+},
+{
+"code": "C25803",
+"mpn": "0603WAF1003T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100kΩ 100mW 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 22172453,
+"class": "basic"
+},
+{
+"code": "C25804",
+"mpn": "0603WAF1002T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 10kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 23104471,
+"class": "basic"
+},
+{
+"code": "C25808",
+"mpn": "0603WAF1203T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 120kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1007524,
+"class": "basic"
+},
+{
+"code": "C25810",
+"mpn": "0603WAF1802T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 18kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 833567,
+"class": "basic"
+},
+{
+"code": "C25811",
+"mpn": "0603WAF2003T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 200kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 2474394,
+"class": "basic"
+},
+{
+"code": "C25819",
+"mpn": "0603WAF4702T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 47kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1884712,
+"class": "basic"
+},
+{
+"code": "C25867",
+"mpn": "0402WGF1501TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 1.5kΩ 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 2147755,
+"class": "basic"
+},
+{
+"code": "C25879",
+"mpn": "0402WGF2201TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 2.2kΩ 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 2241232,
+"class": "basic"
+},
+{
+"code": "C25890",
+"mpn": "0402WGF3301TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 3.3kΩ 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 2085834,
+"class": "basic"
+},
+{
+"code": "C25900",
+"mpn": "0402WGF4701TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 4.7kΩ 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 15518700,
+"class": "basic"
+},
+{
+"code": "C25905",
+"mpn": "0402WGF5101TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 5.1kΩ 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 6037595,
+"class": "basic"
+},
+{
+"code": "C25981",
+"mpn": "0603WAF8201T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 75V 8.2kΩ Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 985683,
+"class": "basic"
+},
+{
+"code": "C26010",
+"mpn": "0805W8F3301T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 3.3kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 2140725,
+"class": "basic"
+},
+{
+"code": "C26083",
+"mpn": "0402WGF1004TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 1MΩ 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 2498906,
+"class": "basic"
+},
+{
+"code": "C27834",
+"mpn": "0805W8F5101T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 5.1kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 3428608,
+"class": "basic"
+},
+{
+"code": "C28636",
+"mpn": "0805W8F5600T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 560Ω Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 124624,
+"class": "basic"
+},
+{
+"code": "C31850",
+"mpn": "0603WAF2202T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 22kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 3707022,
+"class": "basic"
+},
+{
+"code": "C4109",
+"mpn": "0402WGF2001TCE",
+"package": "0402",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 2kΩ 50V 62.5mW Thick Film Resistor ±1% ±100ppm/℃ 0402 Chip Resistor - Surface Mount ROHS",
+"stock": 8127235,
+"class": "basic"
+},
+{
+"code": "C4177",
+"mpn": "0603WAF1801T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 1.8kΩ 100mW 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 398078,
+"class": "basic"
+},
+{
+"code": "C4184",
+"mpn": "0603WAF2002T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 20kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 8044982,
+"class": "basic"
+},
+{
+"code": "C4190",
+"mpn": "0603WAF2201T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 2.2kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 7616536,
+"class": "basic"
+},
+{
+"code": "C4211",
+"mpn": "0603WAF3001T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 3kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 8121532,
+"class": "basic"
+},
+{
+"code": "C4216",
+"mpn": "0603WAF3302T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 33kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 3254138,
+"class": "basic"
+},
+{
+"code": "C4260",
+"mpn": "0603WAF6201T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 6.2kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 985673,
+"class": "basic"
+},
+{
+"code": "C4275",
+"mpn": "0603WAF750JT5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 75V 75Ω Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 1762451,
+"class": "basic"
+},
+{
+"code": "C4310",
+"mpn": "0805W8F1501T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 1.5kΩ 125mW 150V Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 758400,
+"class": "basic"
+},
+{
+"code": "C4328",
+"mpn": "0805W8F2002T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 20kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 2469782,
+"class": "basic"
+},
+{
+"code": "C4382",
+"mpn": "0805W8F5601T5E",
+"package": "0805",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 125mW 150V 5.6kΩ Thick Film Resistor ±1% ±100ppm/℃ 0805 Chip Resistor - Surface Mount ROHS",
+"stock": 629885,
+"class": "basic"
+},
+{
+"code": "C4410",
+"mpn": "1206W4F1001T5E",
+"package": "1206",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 1kΩ 200V 250mW Thick Film Resistor ±1% ±100ppm/℃ 1206 Chip Resistor - Surface Mount ROHS",
+"stock": 2473998,
+"class": "basic"
+},
+{
+"code": "C7250",
+"mpn": "0603WAF1005T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 10MΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 297207,
+"class": "basic"
+},
+{
+"code": "C8218",
+"mpn": "0603WAF2000T5E",
+"package": "0603",
+"category": "Chip Resistor - Surface Mount",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "-55℃~+155℃ 100mW 200Ω 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS",
+"stock": 2629834,
+"class": "basic"
+},
+{
+"code": "C7955",
+"mpn": "LM393DR2G",
+"package": "SOIC-8",
+"category": "Comparators",
+"brand": "onsemi",
+"describe": "-18V~-1V、1V~18V 0℃~+70℃ 1.3us 2 25nA 2V~36V 300ns 36V 400uA 5mV 5nA ESD protection TTL、CMOS SOIC-8 Comparators ROHS",
+"stock": 234423,
+"class": "basic"
+},
+{
+"code": "C115962",
+"mpn": "X50328MSB2GI",
+"package": "SMD5032-2P",
+"category": "Crystals",
+"brand": "YXC Crystal Oscillators",
+"describe": "-40℃~+85℃ 20pF 80Ω 8MHz Crystal Oscillator ±10ppm ±20ppm SMD5032-2P Crystals ROHS",
+"stock": 167282,
+"class": "basic"
+},
+{
+"code": "C12674",
+"mpn": "X49SM8MSD2SC",
+"package": "HC-49S-SMD",
+"category": "Crystals",
+"brand": "YXC Crystal Oscillators",
+"describe": "-20℃~+70℃ 20pF 70Ω 8MHz Crystal Oscillator ±20ppm ±30ppm HC-49S-SMD Crystals ROHS",
+"stock": 116847,
+"class": "basic"
+},
+{
+"code": "C13738",
+"mpn": "X322516MLB4SI",
+"package": "SMD3225-4P",
+"category": "Crystals",
+"brand": "YXC Crystal Oscillators",
+"describe": "-40℃~+85℃ 16MHz 50Ω 9pF Crystal Oscillator ±10ppm ±20ppm SMD3225-4P Crystals ROHS",
+"stock": 143754,
+"class": "basic"
+},
+{
+"code": "C32346",
+"mpn": "Q13FC13500004",
+"package": "SMD3215-2P",
+"category": "Crystals",
+"brand": "Seiko Epson",
+"describe": "-40℃~+85℃ 12.5pF 32.768kHz 70kΩ Crystal Oscillator ±20ppm SMD3215-2P Crystals ROHS",
+"stock": 462938,
+"class": "basic"
+},
+{
+"code": "C9002",
+"mpn": "X322512MSB4SI",
+"package": "SMD3225-4P",
+"category": "Crystals",
+"brand": "YXC Crystal Oscillators",
+"describe": "-40℃~+85℃ 12MHz 20pF 80Ω Crystal Oscillator ±10ppm ±20ppm SMD3225-4P Crystals ROHS",
+"stock": 113928,
+"class": "basic"
+},
+{
+"code": "C9006",
+"mpn": "X322525MOB4SI",
+"package": "SMD3225-4P",
+"category": "Crystals",
+"brand": "YXC Crystal Oscillators",
+"describe": "-40℃~+85℃ 12pF 25MHz 50Ω Crystal Oscillator ±10ppm ±20ppm SMD3225-4P Crystals ROHS",
+"stock": 166421,
+"class": "basic"
+},
+{
+"code": "C61063",
+"mpn": "XL1509-5.0E1",
+"package": "SOIC-8",
+"category": "DC-DC Converters",
+"brand": "XLSEMI",
+"describe": "-40℃~+85℃ 1 150kHz 2A 2mA 4.5V~40V 5V Buck Buck Built-in Fixed No SOIC-8 DC-DC Converters ROHS",
+"stock": 458360,
+"class": "basic"
+},
+{
+"code": "C9864",
+"mpn": "TPS5430DDAR",
+"package": "SOIC-8-EP",
+"category": "DC-DC Converters",
+"brand": "Texas Instruments",
+"describe": "-40℃~+125℃@(TJ) 1 1.221V~32.04V 3A 4.4mA 5.5V~36V 500kHz Adjustable Buck Buck Built-in No SOIC-8-EP DC-DC Converters ROHS",
+"stock": 340154,
+"class": "basic"
+},
+{
+"code": "C7512",
+"mpn": "ULN2003ADR",
+"package": "SOIC-16",
+"category": "Darlington Transistor Arrays",
+"brand": "Texas Instruments",
+"describe": "1.7V 15pF 30V 500mA 50V 50uA 50uA Seven channels SOIC-16 Darlington Transistor Arrays ROHS",
+"stock": 353191,
+"class": "basic"
+},
+{
+"code": "C64898",
+"mpn": "SM4007PL",
+"package": "SOD-123FL",
+"category": "Diodes - General Purpose",
+"brand": "MDD(Microdiode Semiconductor)",
+"describe": "-55℃~+150℃ 1.1V@1A 10uA@1kV 1A 1kV 25A Independent SOD-123FL Diodes - General Purpose ROHS",
+"stock": 5535172,
+"class": "basic"
+},
+{
+"code": "C95872",
+"mpn": "M7",
+"package": "SMA(DO-214AC)",
+"category": "Diodes - General Purpose",
+"brand": "MDD(Microdiode Semiconductor)",
+"describe": "-55℃~+150℃ 1.1V@1A 1A 1kV 30A 5uA@1kV Independent SMA(DO-214AC) Diodes - General Purpose ROHS",
+"stock": 2969036,
+"class": "basic"
+},
+{
+"code": "C32677",
+"mpn": "PSM712-LF-T7",
+"package": "SOT-23",
+"category": "ESD and Surge Protection (TVS/ESD)",
+"brand": "ProTek Devices",
+"describe": "-55℃~+150℃ 12V 13.3V 19V 1uA、20uA 30A@8/20us、34A@8/20us 600W@8/20us 75pF IEC 61000-4-2、IEC 61000-4-5、IEC 61000-4-4 TVS Unidirectional SOT-23 ESD and Surge Prote",
+"stock": 132509,
+"class": "basic"
+},
+{
+"code": "C7420377",
+"mpn": "SMBJ6.5CA",
+"package": "DO-214AA(SMB)",
+"category": "ESD and Surge Protection (TVS/ESD)",
+"brand": "hongjiacheng",
+"describe": "-55℃~+150℃ 1 11.2V 500uA 53.57A 6.5V 600W 7.22V Bidirectional IEC 61000-4-2 TVS DO-214AA(SMB) ESD and Surge Protection (TVS/ESD) ROHS",
+"stock": 1359415,
+"class": "basic"
+},
+{
+"code": "C78395",
+"mpn": "P6SMB6.8CA/TR13",
+"package": "SMB(DO-214AA)",
+"category": "ESD and Surge Protection (TVS/ESD)",
+"brand": "Brightking",
+"describe": "10.5V 1uA 5.8V 58.1A 6.45V 600W Bidirectional TVS SMB(DO-214AA) ESD and Surge Protection (TVS/ESD) ROHS",
+"stock": 210426,
+"class": "basic"
+},
+{
+"code": "C6961",
+"mpn": "TL072CDT",
+"package": "SO-8",
+"category": "FET Input Amplifiers",
+"brand": "STMicroelectronics",
+"describe": "0℃~+70℃ 1.4mA 10uV/℃ 15nV/√Hz@1kHz 16V/us 2 20pA 3mV 40mA 4MHz 5pA 6V~36V 86dB Short-Circuit  Protection、Built-in compensation、Latch-up suppression SO-8 FET Inp",
+"stock": 89085,
+"class": "basic"
+},
+{
+"code": "C412437",
+"mpn": "US1M",
+"package": "SMA",
+"category": "Fast Recovery / High Efficiency Diodes",
+"brand": "MDD(Microdiode Semiconductor)",
+"describe": "-55℃~+150℃ 1 Independent 1.65V@1A 1A 1kV 30A 5uA@1kV 75ns SMA Fast Recovery / High Efficiency Diodes ROHS",
+"stock": 2812908,
+"class": "basic"
+},
+{
+"code": "C1002",
+"mpn": "GZ1608D601TF",
+"package": "0603",
+"category": "Ferrite Beads",
+"brand": "Sunlord",
+"describe": "-55℃~+125℃ 1 200mA 450mΩ 600Ω@100MHz ±25% 0603 Ferrite Beads ROHS",
+"stock": 652420,
+"class": "basic"
+},
+{
+"code": "C1015",
+"mpn": "GZ2012D101TF",
+"package": "0805",
+"category": "Ferrite Beads",
+"brand": "Sunlord",
+"describe": "1 100Ω@100MHz 150mΩ 800mA ±25% 0805 Ferrite Beads ROHS",
+"stock": 2342997,
+"class": "basic"
+},
+{
+"code": "C1017",
+"mpn": "GZ2012D601TF",
+"package": "0805",
+"category": "Ferrite Beads",
+"brand": "Sunlord",
+"describe": "-55℃~+125℃ 1 300mΩ 500mA 600Ω@100MHz ±25% 0805 Ferrite Beads ROHS",
+"stock": 369897,
+"class": "basic"
+},
+{
+"code": "C14709",
+"mpn": "BLM18PG121SN1D",
+"package": "0603",
+"category": "Ferrite Beads",
+"brand": "Murata Electronics",
+"describe": "-55℃~+125℃ 1 120Ω@100MHz 2A 50mΩ ±25% 0603 Ferrite Beads ROHS",
+"stock": 1912493,
+"class": "basic"
+},
+{
+"code": "C1035",
+"mpn": "SDFL1608S100KTF",
+"package": "0603",
+"category": "Inductors (SMD)",
+"brand": "Sunlord",
+"describe": "1.85Ω 10uH 17MHz 30@2MHz 3mA ±10% 0603 Inductors (SMD) ROHS",
+"stock": 794558,
+"class": "basic"
+},
+{
+"code": "C1046",
+"mpn": "SDFL2012S100KTF",
+"package": "0805",
+"category": "Inductors (SMD)",
+"brand": "Sunlord",
+"describe": "1.15Ω 10uH 15mA 24MHz 50@2MHz Multilayer inductor ±10% 0805 Inductors (SMD) ROHS",
+"stock": 120667,
+"class": "basic"
+},
+{
+"code": "C5605",
+"mpn": "74HC14D,653",
+"package": "SOIC-14",
+"category": "Inverters",
+"brand": "Nexperia",
+"describe": "-40℃~+125℃ 1 1.5V~4.2V 21ns@6V,50pF 2V~6V 2uA 300mV~1.2V 5.2mA 5.2mA 6 74HC Schmitt trigger SOIC-14 Inverters ROHS",
+"stock": 206567,
+"class": "basic"
+},
+{
+"code": "C2286",
+"mpn": "KT-0603R",
+"package": "0603",
+"category": "LED Indication - Discrete",
+"brand": "Hubei KENTO Elec",
+"describe": "-40℃~+85℃ 1.6mm x 0.8mm square LED 1.8V~2.4V 120° 20mA 300mcd 40mW 615nm~630nm 645nm Discrete Diode Red Water Clear 0603 LED Indication - Discrete ROHS",
+"stock": 4841214,
+"class": "basic"
+},
+{
+"code": "C2290",
+"mpn": "KT-0603W",
+"package": "0603",
+"category": "LED Indication - Discrete",
+"brand": "Hubei KENTO Elec",
+"describe": "-40℃~+85℃ 100mW 120° 2.6V~3.1V 360mcd 5mA Discrete Diode Top-mount White Yellow Lens 0603 LED Indication - Discrete ROHS",
+"stock": 2129912,
+"class": "basic"
+},
+{
+"code": "C2296",
+"mpn": "KT-0805Y",
+"package": "0805",
+"category": "LED Indication - Discrete",
+"brand": "Hubei KENTO Elec",
+"describe": "-40℃~+85℃ 1.8V~2.4V 120° 175mcd 40mW 584nm~594nm 596nm Discrete Diode Water Clear Yellow 0805 LED Indication - Discrete ROHS",
+"stock": 390746,
+"class": "basic"
+},
+{
+"code": "C2297",
+"mpn": "KT-0805G",
+"package": "0805",
+"category": "LED Indication - Discrete",
+"brand": "Hubei KENTO Elec",
+"describe": "-40℃~+85℃ 100mW 120° 2.6V~3.1V 430mcd 513nm~528nm 525nm 5mA Discrete Diode Emerald Green Water Clear 0805 LED Indication - Discrete ROHS",
+"stock": 3137096,
+"class": "basic"
+},
+{
+"code": "C34499",
+"mpn": "KT-0805W",
+"package": "0805",
+"category": "LED Indication - Discrete",
+"brand": "Hubei KENTO Elec",
+"describe": "-30℃~+85℃ 120° 13172K~100000K 2.6V~3.2V 25mA 350mcd 80mW Discrete Diode Top-mount White Yellow Lens 0805 LED Indication - Discrete ROHS",
+"stock": 528518,
+"class": "basic"
+},
+{
+"code": "C84256",
+"mpn": "NCD0805R1",
+"package": "0805",
+"category": "LED Indication - Discrete",
+"brand": "Foshan NationStar Optoelectronics",
+"describe": "-30℃~+85℃ 1.6V~2.6V 130° 195mcd 25mA 615nm~630nm 630nm 65mW Discrete Diode Red 0805 LED Indication - Discrete ROHS",
+"stock": 4817908,
+"class": "basic"
+},
+{
+"code": "C10487",
+"mpn": "SI2301CDS-T1-GE3",
+"package": "SOT-23",
+"category": "MOSFETs",
+"brand": "Vishay Intertech",
+"describe": "-55℃~+150℃ 1 P-Channel 1.6W 10nC@4.5V 142mΩ@2.5V 1V 20V 3.1A 405pF 55pF 75pF P-Channel SOT-23 MOSFETs ROHS",
+"stock": 206557,
+"class": "basic"
+},
+{
+"code": "C15127",
+"mpn": "AO3401A",
+"package": "SOT-23",
+"category": "MOSFETs",
+"brand": "Alpha & Omega Semicon",
+"describe": "1 P-Channel 14nC@10V 30V 47mΩ@10V、60mΩ@4.5V、85mΩ@2.5V 4A 55pF 645pF 80pF 900mV SOT-23 MOSFETs ROHS",
+"stock": 781175,
+"class": "basic"
+},
+{
+"code": "C20917",
+"mpn": "AO3400A",
+"package": "SOT-23",
+"category": "MOSFETs",
+"brand": "Alpha & Omega Semicon",
+"describe": "-55℃~+150℃ 1 N-channel 1.45V 1.4W 30V 48mΩ@2.5V 5.7A 50pF 630pF 75pF 7nC@10V N-Channel SOT-23 MOSFETs ROHS",
+"stock": 964384,
+"class": "basic"
+},
+{
+"code": "C8545",
+"mpn": "2N7002",
+"package": "SOT-23",
+"category": "MOSFETs",
+"brand": "Jiangsu Changjing Electronics Technology Co., Ltd.",
+"describe": "1 N-channel 115mA 2.5V 225mW 25pF 50pF 5pF 5Ω@10V 60V N-Channel ±20V SOT-23 MOSFETs ROHS",
+"stock": 1643920,
+"class": "basic"
+},
+{
+"code": "C107145",
+"mpn": "CC0805KRX7R9BB221",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "YAGEO",
+"describe": "220pF 50V X7R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 1620341,
+"class": "basic"
+},
+{
+"code": "C12530",
+"mpn": "CL05A225MQ5NSNC",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "2.2uF 6.3V X5R ±20% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 5064787,
+"class": "basic"
+},
+{
+"code": "C12891",
+"mpn": "CL31A226KAHNNNE",
+"package": "1206",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "22uF 25V X5R ±10% 1206 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 584397,
+"class": "basic"
+},
+{
+"code": "C1322360",
+"mpn": "0603B822K500NT",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "50V 8.2nF X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 66655,
+"class": "basic"
+},
+{
+"code": "C13585",
+"mpn": "CL31A106KBHNNNE",
+"package": "1206",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "10uF 50V X5R ±10% 1206 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 2398028,
+"class": "basic"
+},
+{
+"code": "C13967",
+"mpn": "CL21B474KBFNNNE",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "470nF 50V X7R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 445117,
+"class": "basic"
+},
+{
+"code": "C14663",
+"mpn": "CC0603KRX7R9BB104",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "YAGEO",
+"describe": "100nF 50V X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 54435534,
+"class": "basic"
+},
+{
+"code": "C14857",
+"mpn": "CL21C470JBANNNC",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "47pF 50V C0G ±5% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 109775,
+"class": "basic"
+},
+{
+"code": "C14858",
+"mpn": "CL10C101JB8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "100pF 50V C0G ±5% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 3912120,
+"class": "basic"
+},
+{
+"code": "C15008",
+"mpn": "CL31A107MQHNNNE",
+"package": "1206",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "100uF 6.3V X5R ±20% 1206 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 1947129,
+"class": "basic"
+},
+{
+"code": "C15195",
+"mpn": "CL05B103KB5NNNC",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "10nF 50V X7R ±10% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 4062673,
+"class": "basic"
+},
+{
+"code": "C1523",
+"mpn": "0402B102K500NT",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "1nF 50V X7R ±10% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 3311872,
+"class": "basic"
+},
+{
+"code": "C1525",
+"mpn": "CL05B104KO5NNNC",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "100nF 16V X7R ±10% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 21711205,
+"class": "basic"
+},
+{
+"code": "C1530",
+"mpn": "0402B221K500NT",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "220pF 50V X7R ±10% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 726312,
+"class": "basic"
+},
+{
+"code": "C1532",
+"mpn": "0402B223K500NT",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "22nF 50V X7R ±10% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 611964,
+"class": "basic"
+},
+{
+"code": "C1538",
+"mpn": "0402B472K500NT",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "4.7nF 50V X7R ±10% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 1358406,
+"class": "basic"
+},
+{
+"code": "C1546",
+"mpn": "0402CG101J500NT",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "100pF 50V C0G ±5% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 3214590,
+"class": "basic"
+},
+{
+"code": "C1547",
+"mpn": "0402CG120J500NT",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "12pF 50V C0G ±5% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 1980524,
+"class": "basic"
+},
+{
+"code": "C1548",
+"mpn": "0402CG150J500NT",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "15pF 50V C0G ±5% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 1432481,
+"class": "basic"
+},
+{
+"code": "C1549",
+"mpn": "0402CG180J500NT",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "18pF 50V C0G ±5% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 545127,
+"class": "basic"
+},
+{
+"code": "C15525",
+"mpn": "CL05A106MQ5NUNC",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "10uF 6.3V X5R ±20% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 9517061,
+"class": "basic"
+},
+{
+"code": "C1554",
+"mpn": "0402CG200J500NT",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "20pF 50V C0G ±5% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 658436,
+"class": "basic"
+},
+{
+"code": "C1555",
+"mpn": "0402CG220J500NT",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "22pF 50V C0G ±5% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 1581025,
+"class": "basic"
+},
+{
+"code": "C1562",
+"mpn": "0402CG330J500NT",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "33pF 50V C0G ±5% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 1322243,
+"class": "basic"
+},
+{
+"code": "C1567",
+"mpn": "0402CG470J500NT",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "47pF 50V C0G ±5% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 707791,
+"class": "basic"
+},
+{
+"code": "C15849",
+"mpn": "CL10A105KB8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "1uF 50V X5R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 6284674,
+"class": "basic"
+},
+{
+"code": "C15850",
+"mpn": "CL21A106KAYNNNE",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "10uF 25V X5R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 5003625,
+"class": "basic"
+},
+{
+"code": "C1588",
+"mpn": "CL10B102KB8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "1nF 50V X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 7814954,
+"class": "basic"
+},
+{
+"code": "C1594",
+"mpn": "0603B151K500NT",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "150pF 50V X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 225016,
+"class": "basic"
+},
+{
+"code": "C1603",
+"mpn": "CL10B221KB8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "220pF 50V X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 760090,
+"class": "basic"
+},
+{
+"code": "C1604",
+"mpn": "0603B222K500NT",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "2.2nF 50V X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 1147722,
+"class": "basic"
+},
+{
+"code": "C1613",
+"mpn": "CL10B332KB8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "3.3nF 50V X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 222239,
+"class": "basic"
+},
+{
+"code": "C1620",
+"mpn": "0603B471K500NT",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "470pF 50V X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 909114,
+"class": "basic"
+},
+{
+"code": "C1622",
+"mpn": "CL10B473KB8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "47nF 50V X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 829733,
+"class": "basic"
+},
+{
+"code": "C1623",
+"mpn": "CL10B474KA8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "25V 470nF X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 933631,
+"class": "basic"
+},
+{
+"code": "C1631",
+"mpn": "0603B682K500NT",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "50V 6.8nF X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 255144,
+"class": "basic"
+},
+{
+"code": "C1634",
+"mpn": "CL10C100JB8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "10pF 50V C0G ±5% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 1268197,
+"class": "basic"
+},
+{
+"code": "C1644",
+"mpn": "CL10C150JB8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "15pF 50V C0G ±5% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 1044101,
+"class": "basic"
+},
+{
+"code": "C1647",
+"mpn": "CL10C180JB8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "18pF 50V C0G ±5% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 422672,
+"class": "basic"
+},
+{
+"code": "C1648",
+"mpn": "CL10C200JB8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "20pF 50V C0G ±5% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 2285326,
+"class": "basic"
+},
+{
+"code": "C1653",
+"mpn": "CL10C220JB8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "22pF 50V C0G ±5% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 2978727,
+"class": "basic"
+},
+{
+"code": "C1658",
+"mpn": "0603CG300J500NT",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "30pF 50V C0G ±5% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 379561,
+"class": "basic"
+},
+{
+"code": "C1663",
+"mpn": "CL10C330JB8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "33pF 50V C0G ±5% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 1035736,
+"class": "basic"
+},
+{
+"code": "C1664",
+"mpn": "CL10C331JB8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "330pF 50V C0G ±5% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 914967,
+"class": "basic"
+},
+{
+"code": "C1671",
+"mpn": "CL10C470JB8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "47pF 50V C0G ±5% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 677834,
+"class": "basic"
+},
+{
+"code": "C16772",
+"mpn": "CL05B224KO5NNNC",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "16V 220nF X7R ±10% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 2358871,
+"class": "basic"
+},
+{
+"code": "C16780",
+"mpn": "CL21A476MQYNNNE",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "47uF 6.3V X5R ±20% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 1198230,
+"class": "basic"
+},
+{
+"code": "C1710",
+"mpn": "CL21B103KBANNNC",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "10nF 50V X7R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 2274036,
+"class": "basic"
+},
+{
+"code": "C1729",
+"mpn": "CL21B223KBANNNC",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "22nF 50V X7R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 234906,
+"class": "basic"
+},
+{
+"code": "C1739",
+"mpn": "0805B333K500NT",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "33nF 50V X7R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 61921,
+"class": "basic"
+},
+{
+"code": "C1743",
+"mpn": "0805B471K500NT",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "470pF 50V X7R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 297394,
+"class": "basic"
+},
+{
+"code": "C1744",
+"mpn": "0805B472K500NT",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "4.7nF 50V X7R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 424668,
+"class": "basic"
+},
+{
+"code": "C1779",
+"mpn": "CL21A475KAQNNNE",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "25V 4.7uF X5R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 3058884,
+"class": "basic"
+},
+{
+"code": "C1790",
+"mpn": "CL21C101JBANNNC",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "100pF 50V C0G ±5% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 587499,
+"class": "basic"
+},
+{
+"code": "C1798",
+"mpn": "CL21C200JBANNNC",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "20pF 50V C0G ±5% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 218915,
+"class": "basic"
+},
+{
+"code": "C1804",
+"mpn": "CL21C220JBANNNC",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "22pF 50V C0G ±5% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 799685,
+"class": "basic"
+},
+{
+"code": "C1846",
+"mpn": "1206B103K500NT",
+"package": "1206",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "10nF 50V X7R ±10% 1206 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 230883,
+"class": "basic"
+},
+{
+"code": "C1848",
+"mpn": "CL31B105KBHNNNE",
+"package": "1206",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "1uF 50V X7R ±10% 1206 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 517439,
+"class": "basic"
+},
+{
+"code": "C19666",
+"mpn": "CL10A475KO8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "16V 4.7uF X5R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 2544638,
+"class": "basic"
+},
+{
+"code": "C19702",
+"mpn": "CL10A106KP8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "10V 10uF X5R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 10404143,
+"class": "basic"
+},
+{
+"code": "C21117",
+"mpn": "CL10B333KB8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "33nF 50V X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 1053186,
+"class": "basic"
+},
+{
+"code": "C21120",
+"mpn": "CL10B224KA8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "220nF 25V X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 706375,
+"class": "basic"
+},
+{
+"code": "C21122",
+"mpn": "CL10B223KB8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "22nF 50V X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 885147,
+"class": "basic"
+},
+{
+"code": "C23630",
+"mpn": "CL10A225KO8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "16V 2.2uF X5R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 2647424,
+"class": "basic"
+},
+{
+"code": "C23733",
+"mpn": "CL05A475MP5NRNC",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "10V 4.7uF X5R ±20% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 2378717,
+"class": "basic"
+},
+{
+"code": "C24497",
+"mpn": "CL31B104KBCNNNC",
+"package": "1206",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "100nF 50V X7R ±10% 1206 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 979308,
+"class": "basic"
+},
+{
+"code": "C28233",
+"mpn": "CL21B104KCFNNNE",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "100V 100nF X7R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 1258732,
+"class": "basic"
+},
+{
+"code": "C28260",
+"mpn": "CL21C222JBFNNNE",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "2.2nF 50V C0G ±5% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 122141,
+"class": "basic"
+},
+{
+"code": "C28323",
+"mpn": "CL21B105KBFNNNE",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "1uF 50V X7R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 2291015,
+"class": "basic"
+},
+{
+"code": "C29823",
+"mpn": "1206B475K500NT",
+"package": "1206",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "4.7uF 50V X7R ±10% 1206 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 598185,
+"class": "basic"
+},
+{
+"code": "C307331",
+"mpn": "CL05B104KB54PNC",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "100nF 50V X7R ±10% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 12513553,
+"class": "basic"
+},
+{
+"code": "C32949",
+"mpn": "CL05C100JB5NNNC",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "10pF 50V C0G ±5% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 1205026,
+"class": "basic"
+},
+{
+"code": "C377773",
+"mpn": "CL21A225KBQNNNE",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "2.2uF 50V X5R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 623628,
+"class": "basic"
+},
+{
+"code": "C38523",
+"mpn": "CL10C120JB8NNNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "12pF 50V C0G ±5% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 589711,
+"class": "basic"
+},
+{
+"code": "C440198",
+"mpn": "GRM21BR61H106KE43L",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Murata Electronics",
+"describe": "10uF 50V X5R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 1720873,
+"class": "basic"
+},
+{
+"code": "C45783",
+"mpn": "CL21A226MAQNNNE",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "22uF 25V X5R ±20% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 4007645,
+"class": "basic"
+},
+{
+"code": "C46653",
+"mpn": "CL21B102KBCNNNC",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "1nF 50V X7R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 1543130,
+"class": "basic"
+},
+{
+"code": "C49678",
+"mpn": "CC0805KRX7R9BB104",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "YAGEO",
+"describe": "100nF 50V X7R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 19249228,
+"class": "basic"
+},
+{
+"code": "C50254",
+"mpn": "CL31B225KBHNNNE",
+"package": "1206",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "2.2uF 50V X7R ±10% 1206 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 388783,
+"class": "basic"
+},
+{
+"code": "C52923",
+"mpn": "CL05A105KA5NQNC",
+"package": "0402",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "1uF 25V X5R ±10% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 5638631,
+"class": "basic"
+},
+{
+"code": "C53134",
+"mpn": "CL21B473KBCNNNC",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "47nF 50V X7R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 201759,
+"class": "basic"
+},
+{
+"code": "C5378",
+"mpn": "CL21B224KBFNNNE",
+"package": "0805",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "220nF 50V X7R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 627568,
+"class": "basic"
+},
+{
+"code": "C53987",
+"mpn": "0603B472K500NT",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "4.7nF 50V X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 891676,
+"class": "basic"
+},
+{
+"code": "C57112",
+"mpn": "0603B103K500NT",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "10nF 50V X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 6816829,
+"class": "basic"
+},
+{
+"code": "C59461",
+"mpn": "CL10A226MQ8NRNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "22uF 6.3V X5R ±20% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 8059422,
+"class": "basic"
+},
+{
+"code": "C9196",
+"mpn": "1206B102K202NT",
+"package": "1206",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "FH (Guangdong Fenghua Advanced Tech)",
+"describe": "1nF 2kV X7R ±10% 1206 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 2839985,
+"class": "basic"
+},
+{
+"code": "C96123",
+"mpn": "CL31A476MPHNNNE",
+"package": "1206",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "10V 47uF X5R ±20% 1206 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 303398,
+"class": "basic"
+},
+{
+"code": "C96446",
+"mpn": "CL10A106MA8NRNC",
+"package": "0603",
+"category": "Multilayer Ceramic Capacitors MLCC - SMD/SMT",
+"brand": "Samsung Electro-Mechanics",
+"describe": "10uF 25V X5R ±20% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+"stock": 3360186,
+"class": "basic"
+},
+{
+"code": "C97521",
+"mpn": "W25Q128JVSIQ",
+"package": "SOIC-8-208mil",
+"category": "NOR FLASH",
+"brand": "Winbond Elec",
+"describe": "-40℃~+85℃ 100,000 cycles 120ms@(32KB) 128Mbit 133MHz 1uA 2.7V~3.6V 20 Years 3ms Power-on reset、Hardware write protection、Software write protection、Write enable ",
+"stock": 51178,
+"class": "basic"
+},
+{
+"code": "C71035",
+"mpn": "LM324DT",
+"package": "SOIC-14",
+"category": "Operational Amplifier",
+"brand": "STMicroelectronics",
+"describe": "-15V~-1.5V、1.5V~15V 0℃~+70℃ 1.2mA 1.3MHz 20nA 300nA 30uV/℃ 3V~30V 4 400V/ms 40nV/√Hz@1kHz 5mV 70mA 80dB Built-in compensation SOIC-14 Operational Amplifier ROHS",
+"stock": 213431,
+"class": "basic"
+},
+{
+"code": "C7426",
+"mpn": "NE5532DR",
+"package": "SOIC-8",
+"category": "Operational Amplifier",
+"brand": "Texas Instruments",
+"describe": "-15V~15V 0℃~+70℃ 100dB 10MHz 10nA 16mA 1uA 2 38mA 500uV 5nV/√Hz@1kHz 5uV/℃ 9V/us Built-in compensation SOIC-8 Operational Amplifier ROHS",
+"stock": 221664,
+"class": "basic"
+},
+{
+"code": "C7950",
+"mpn": "LM358DR2G",
+"package": "SOIC-8",
+"category": "Operational Amplifier",
+"brand": "onsemi",
+"describe": "-16V~16V 0℃~+70℃ 2 3V~32V 40mA 45nA 5nA 700uA 70dB 7mV 7uV/℃ Built-in compensation、ESD protection SOIC-8 Operational Amplifier ROHS",
+"stock": 800124,
+"class": "basic"
+},
+{
+"code": "C7433",
+"mpn": "OP07CDR",
+"package": "SOIC-8",
+"category": "Precision Op Amps",
+"brand": "Texas Instruments",
+"describe": "-18V~-3V、3V~18V 0.3V/us 0℃~+70℃ 1 1.8nA 10.5nV/√Hz@10Hz 120dB 400kHz 500nV/℃ 60uV 800pA Built-in compensation SOIC-8 Precision Op Amps ROHS",
+"stock": 236199,
+"class": "basic"
+},
+{
+"code": "C6855",
+"mpn": "SP485EEN-L/TR",
+"package": "SOIC-8",
+"category": "RS-485 / RS-422 ICs",
+"brand": "MaxLinear",
+"describe": "-40℃~+85℃ 1 1 10Mbps 4.75V~5.25V 900uA Half-Duplex Transceiver ±15kV SOIC-8 RS-485 / RS-422 ICs ROHS",
+"stock": 232382,
+"class": "basic"
+},
+{
+"code": "C8963",
+"mpn": "SP3485EN-L/TR",
+"package": "SOIC-8",
+"category": "RS-485 / RS-422 ICs",
+"brand": "MaxLinear",
+"describe": "-40℃~+85℃ 1 1 10Mbps 2mA 3.3V 32 Half-Duplex Transceiver SOIC-8 RS-485 / RS-422 ICs ROHS",
+"stock": 314199,
+"class": "basic"
+},
+{
+"code": "C13482",
+"mpn": "SP3232EEY-L/TR",
+"package": "TSSOP-16",
+"category": "RS232 ICs",
+"brand": "MaxLinear",
+"describe": "-40℃~+85℃ 2 2 235Kbps 3V~5.5V Transceiver Yes ±15kV TSSOP-16 RS232 ICs ROHS",
+"stock": 154828,
+"class": "basic"
+},
+{
+"code": "C1980",
+"mpn": "4D03WGJ0472T5E",
+"package": "0603x4",
+"category": "Resistor Networks, Arrays",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "4 4.7kΩ 62.5mW 8 ±200ppm/℃ ±5% 0603x4 Resistor Networks, Arrays ROHS",
+"stock": 2009830,
+"class": "basic"
+},
+{
+"code": "C20197",
+"mpn": "4D03WGJ0102T5E",
+"package": "0603x4",
+"category": "Resistor Networks, Arrays",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "1kΩ 4 62.5mW 8 ±200ppm/℃ ±5% 0603x4 Resistor Networks, Arrays ROHS",
+"stock": 454561,
+"class": "basic"
+},
+{
+"code": "C29718",
+"mpn": "4D03WGJ0103T5E",
+"package": "0603x4",
+"category": "Resistor Networks, Arrays",
+"brand": "UNI-ROYAL(Uniroyal Elec)",
+"describe": "10kΩ 4 62.5mW 8 ±200ppm/℃ ±5% 0603x4 Resistor Networks, Arrays ROHS",
+"stock": 2300968,
+"class": "basic"
+},
+{
+"code": "C14996",
+"mpn": "SS210",
+"package": "SMA(DO-214AC)",
+"category": "Schottky Diodes",
+"brand": "MDD(Microdiode Semiconductor)",
+"describe": "-55℃~+150℃ 1 Independent 100V 2A 500uA@100V 850mV@2A SMA(DO-214AC) Schottky Diodes ROHS",
+"stock": 810093,
+"class": "basic"
+},
+{
+"code": "C191023",
+"mpn": "1N5819WS",
+"package": "SOD-323",
+"category": "Schottky Diodes",
+"brand": "Guangdong Hottech",
+"describe": "1 Independent 1A 25A 40V 500uA@40V 600mV@1A SOD-323 Schottky Diodes ROHS",
+"stock": 4856594,
+"class": "basic"
+},
+{
+"code": "C22452",
+"mpn": "SS54",
+"package": "SMA(DO-214AC)",
+"category": "Schottky Diodes",
+"brand": "MDD(Microdiode Semiconductor)",
+"describe": "-55℃~+125℃ 1mA@40V 40V 550mV@5A 5A Independent SMA(DO-214AC) Schottky Diodes ROHS",
+"stock": 2398120,
+"class": "basic"
+},
+{
+"code": "C2480",
+"mpn": "SS14",
+"package": "SMA(DO-214AC)",
+"category": "Schottky Diodes",
+"brand": "MDD(Microdiode Semiconductor)",
+"describe": "-55℃~+150℃ 1A 25A 300uA@40V 40V 550mV@1A Independent SMA(DO-214AC) Schottky Diodes ROHS",
+"stock": 1172094,
+"class": "basic"
+},
+{
+"code": "C8598",
+"mpn": "B5819W SL",
+"package": "SOD-123",
+"category": "Schottky Diodes",
+"brand": "Jiangsu Changjing Electronics Technology Co., Ltd.",
+"describe": "1A 40V 600mV@1A 9A Independent SOD-123 Schottky Diodes ROHS",
+"stock": 512767,
+"class": "basic"
+},
+{
+"code": "C8678",
+"mpn": "SS34",
+"package": "SMA(DO-214AC)",
+"category": "Schottky Diodes",
+"brand": "MDD(Microdiode Semiconductor)",
+"describe": "-55℃~+125℃ 3A 40V 500uA@40V 550mV@3A Independent SMA(DO-214AC) Schottky Diodes ROHS",
+"stock": 4438637,
+"class": "basic"
+},
+{
+"code": "C5947",
+"mpn": "74HC595D,118",
+"package": "SOIC-16",
+"category": "Shift Registers",
+"brand": "Nexperia",
+"describe": "-40℃~+125℃ 1 100MHz 19ns@4.5V,50pF 2V~6V 74HC 8 Serial-to-Serial or Parallel Tri-State SOIC-16 Shift Registers ROHS",
+"stock": 403874,
+"class": "basic"
+},
+{
+"code": "C2128",
+"mpn": "1N4148WS",
+"package": "SOD-323",
+"category": "Switching Diodes",
+"brand": "Jiangsu Changjing Electronics Technology Co., Ltd.",
+"describe": "1.25V@150mA 100V 150mA 1uA@75V 200mW 2A 4ns Independent SOD-323 Switching Diodes ROHS",
+"stock": 2453517,
+"class": "basic"
+},
+{
+"code": "C2500",
+"mpn": "BAV99,215",
+"package": "SOT-23",
+"category": "Switching Diodes",
+"brand": "Nexperia",
+"describe": "1 Pair Series Connection 1.25V@150mA 100V 215mA 250mW 4A 4ns 500nA@80V SOT-23 Switching Diodes ROHS",
+"stock": 1146738,
+"class": "basic"
+},
+{
+"code": "C68978",
+"mpn": "BAV70",
+"package": "SOT-23",
+"category": "Switching Diodes",
+"brand": "Jiangsu Changjing Electronics Technology Co., Ltd.",
+"describe": "-55℃~+150℃ 1 Pair Common Cathode 1.25V@150mA 2.5uA@70V 200mA 225mW 2A 6ns 70V SOT-23 Switching Diodes ROHS",
+"stock": 210295,
+"class": "basic"
+},
+{
+"code": "C81598",
+"mpn": "1N4148W",
+"package": "SOD-123",
+"category": "Switching Diodes",
+"brand": "ST(Semtech)",
+"describe": "150mA 1A 1V@50mA 1uA@75V 400mW 4ns 75V Independent SOD-123 Switching Diodes ROHS",
+"stock": 5214290,
+"class": "basic"
+},
+{
+"code": "C318884",
+"mpn": "TS-1187A-B-A-B",
+"package": "SMD-4P,5.1x5.1mm",
+"category": "Tactile Switches",
+"brand": "XKB Connection",
+"describe": "-30℃~+85℃ 1.5mm 1.6N 100,000 cycles 12V 5.1mm 5.1mm 50mA Gold No Round Button SPST Surface Mount,Vertical Without Bracket SMD-4P,5.1x5.1mm Tactile Switches ROHS",
+"stock": 474216,
+"class": "basic"
+},
+{
+"code": "C720477",
+"mpn": "TS-1088-AR02016",
+"package": "SMD,4x3mm",
+"category": "Tactile Switches",
+"brand": "XUNPU",
+"describe": "-30℃~+80℃ 1.6N 100,000 cycles 12V 2mm 3.9mm 3mm 50mA Black Round Button SMD(SMT) Tab SPST Surface Mount,Vertical Without Bracket SMD,4x3mm Tactile Switches ROHS",
+"stock": 787089,
+"class": "basic"
+},
+{
+"code": "C16133",
+"mpn": "TAJB107K006RNJ",
+"package": "CASE-B-3528-21(mm)",
+"category": "Tantalum Capacitors",
+"brand": "--",
+"describe": "-55℃~+125℃ 1.7Ω@100kHz 100uF 6.3V ±10% CASE-B-3528-21(mm) Tantalum Capacitors ROHS",
+"stock": 617549,
+"class": "basic"
+},
+{
+"code": "C7171",
+"mpn": "TAJA106K016RNJ",
+"package": "CASE-A-3216-18(mm)",
+"category": "Tantalum Capacitors",
+"brand": "--",
+"describe": "-55℃~+125℃ 10uF 16V 3Ω@100kHz ±10% CASE-A-3216-18(mm) Tantalum Capacitors ROHS",
+"stock": 745031,
+"class": "basic"
+},
+{
+"code": "C109227",
+"mpn": "LTV-817S-TA1-C",
+"package": "SMD-4P",
+"category": "Transistor, Photovoltaic Output Optoisolators",
+"brand": "Lite-On",
+"describe": "-30℃~+110℃ 1 1.2V 100mV@1mA,20mA 35V 3us 4us@2mA,100Ω 50% 50mA 50mA 5kV 600% 6V DC Phototransistor SMD-4P Transistor, Photovoltaic Output Optoisolators ROHS",
+"stock": 185348,
+"class": "basic"
+},
+{
+"code": "C115450",
+"mpn": "LTV-217-B-G",
+"package": "SOP-4-175mil",
+"category": "Transistor, Photovoltaic Output Optoisolators",
+"brand": "Lite-On",
+"describe": "-55℃~+110℃ 1 1.2V 200mW 2us 3.75kV 3us 400mV@8mA,2.4mA 50% 50mA 50mA 600% 6V 70V DC Phototransistor SOP-4-175mil Transistor, Photovoltaic Output Optoisolators R",
+"stock": 286135,
+"class": "basic"
+},
+{
+"code": "C3113",
+"mpn": "CJ431",
+"package": "SOT-23",
+"category": "Voltage Reference",
+"brand": "Jiangsu Changjing Electronics Technology Co., Ltd.",
+"describe": "-25℃~+85℃@(Ta) 100mA 1mA 2.5V~36V 50ppm/℃ Adjustable Parallel ±0.5% SOT-23 Voltage Reference ROHS",
+"stock": 398050,
+"class": "basic"
+},
+{
+"code": "C14289",
+"mpn": "HT7533-1",
+"package": "SOT-89-3",
+"category": "Voltage Regulators - Linear, Low Drop Out (LDO) Regulators",
+"brand": "Holtek Semicon",
+"describe": "-40℃~+85℃@(Ta) 1 100mA 2.5uA 25mV@(1mA) 3.3V 30V Fixed Positive SOT-89-3 Voltage Regulators - Linear, Low Drop Out (LDO) Regulators ROHS",
+"stock": 109070,
+"class": "basic"
+},
+{
+"code": "C5446",
+"mpn": "XC6206P332MR-G",
+"package": "SOT-23-3L",
+"category": "Voltage Regulators - Linear, Low Drop Out (LDO) Regulators",
+"brand": "Torex Semicon",
+"describe": "-40℃~+85℃@(Ta) 1 1uA 200mA 3.3V 6V Fixed Over Current Protection Positive SOT-23-3L Voltage Regulators - Linear, Low Drop Out (LDO) Regulators ROHS",
+"stock": 474581,
+"class": "basic"
+},
+{
+"code": "C58069",
+"mpn": "L78M05ABDT-TR",
+"package": "TO-252-2(DPAK)",
+"category": "Voltage Regulators - Linear, Low Drop Out (LDO) Regulators",
+"brand": "STMicroelectronics",
+"describe": "-40℃~+125℃@(Tj) 1 2V@(350mA) 35V 40uV 500mA 5V 62dB@(120Hz) 6mA Fixed Over Temperature Protection、Short Circuit Protection Positive TO-252-2(DPAK) Voltage Regul",
+"stock": 141207,
+"class": "basic"
+},
+{
+"code": "C6186",
+"mpn": "AMS1117-3.3",
+"package": "SOT-223",
+"category": "Voltage Regulators - Linear, Low Drop Out (LDO) Regulators",
+"brand": "Advanced Monolithic Systems",
+"describe": "-40℃~+125℃ 0.003%Vout 1 1.1V@(800mA) 15V 1A 3.3V 5mA 72dB@(120Hz) Fixed Over Current Protection、Short Circuit Protection、Thermal shutdown Positive SOT-223 Volta",
+"stock": 1074192,
+"class": "basic"
+},
+{
+"code": "C6187",
+"mpn": "AMS1117-5.0",
+"package": "SOT-223",
+"category": "Voltage Regulators - Linear, Low Drop Out (LDO) Regulators",
+"brand": "Advanced Monolithic Systems",
+"describe": "-40℃~+125℃ 1 1.3V 15V 1A 5V 60dB Fixed Positive Short Circuit Protection、Thermal shutdown SOT-223 Voltage Regulators - Linear, Low Drop Out (LDO) Regulators ROH",
+"stock": 91591,
+"class": "basic"
+},
+{
+"code": "C71136",
+"mpn": "78L05G-AB3-R",
+"package": "SOT-89-3",
+"category": "Voltage Regulators - Linear, Low Drop Out (LDO) Regulators",
+"brand": "UTC(Unisonic Tech)",
+"describe": "-40℃~+85℃ 1 1.7V@(40mA) 100mA 2mA 30V 40uV 5V 80dB@(120Hz) Fixed Over Current Protection、Short Circuit Protection、Thermal Shutdown Positive SOT-89-3 Voltage Reg",
+"stock": 228290,
+"class": "basic"
+}
+]
+}

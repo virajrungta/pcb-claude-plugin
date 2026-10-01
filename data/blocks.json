@@ -106,6 +106,7 @@
     "description": "ESP32-C3-WROOM-02 with 10 uF + 100 nF at 3V3, EN pull-up and 1 uF delay with a RESET button, IO9 pull-up with a BOOT button, and native USB on IO18/IO19. IO2 and IO8 are strapping pins: don't pull them low at boot. Keep the antenna end at a board edge.",
     "params": {"edge": "top"},
     "power": ["+3V3", "GND"],
+    "autojoin": ["USB_DP", "USB_DN"],
     "optional": ["USB_DP", "USB_DN", "IO0", "IO1", "IO2", "IO3", "IO4", "IO5", "IO6", "IO7", "IO8", "IO10", "RXD", "TXD"],
     "components": [
       {"ref": "U1", "part": "ESP32-C3-WROOM-02", "place": {"edge": "{edge}"}},
@@ -134,6 +135,7 @@
     "description": "ESP32-S3-WROOM-1 with 10 uF + 100 nF at 3V3, EN pull-up and 1 uF delay with a RESET button, IO0 pull-up with a BOOT button, and native USB on IO19/IO20 (USB_D-/USB_D+). IO3, IO45 and IO46 are strapping pins. Keep the antenna end at a board edge.",
     "params": {"edge": "top"},
     "power": ["+3V3", "GND"],
+    "autojoin": ["USB_DP", "USB_DN"],
     "optional": ["USB_DP", "USB_DN", "IO1", "IO2", "IO3", "IO4", "IO5", "IO6", "IO7", "IO8", "IO9", "IO10", "IO11", "IO12",
                  "IO13", "IO14", "IO15", "IO16", "IO17", "IO18", "IO21", "IO35", "IO36", "IO37", "IO38", "IO39", "IO40",
                  "IO41", "IO42", "IO45", "IO46", "IO47", "IO48", "RXD0", "TXD0"],
@@ -218,7 +220,7 @@
     "params": {"resistor": "1k", "color": "Green"},
     "components": [
       {"ref": "R1", "part": "R0603", "value": "{resistor}"},
-      {"ref": "D1", "part": "LED0603", "value": "{color}", "place": {"near": "R1"}}
+      {"ref": "D1", "part": "LED0805", "value": "{color}", "place": {"near": "R1"}}
     ],
     "nets": {
       "@IN": "R1.1",
@@ -308,5 +310,620 @@
       "@OUT": "R1.2 R2.1 C1.1",
       "@GND": "R2.2 C1.2"
     }
+  },
+
+  "rp2040_minimal": {
+    "title": "RP2040 with 16 MB QSPI flash, 12 MHz crystal, USB, BOOTSEL and RESET",
+    "description": "Raspberry Pi RP2040 minimal system, from the hardware design guide and 14 open-source RP2040 boards: W25Q128JVS flash (JLCPCB basic), 12 MHz crystal (20 pF load) with 30 pF caps and a 1k XOUT resistor, 100 nF on every IOVDD/DVDD pin, 1 uF on VREG_VIN and VREG_VOUT (the internal 1.1 V core regulator feeds DVDD), 27R USB series resistors, BOOTSEL button (1k from QSPI_SS) and a RUN pull-up with RESET button. Keep the flash and crystal right next to the chip; USB_DP/USB_DN are a 90-ohm pair.",
+    "support": "advanced",
+    "support_note": "0.4 mm-pitch QFN-56: autorouting may leave a few connections near the chip on 2 layers; use 4 layers or finish them by hand in KiCad. Easier alternative: an ESP32-S3/C3 module.",
+    "power": ["+3V3", "GND"],
+    "autojoin": ["USB_DP", "USB_DN", "SWCLK", "SWDIO", "RUN"],
+    "optional": ["USB_DP", "USB_DN", "SWCLK", "SWDIO", "RUN",
+                 "GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4", "GPIO5", "GPIO6", "GPIO7", "GPIO8", "GPIO9",
+                 "GPIO10", "GPIO11", "GPIO12", "GPIO13", "GPIO14", "GPIO15", "GPIO16", "GPIO17", "GPIO18", "GPIO19",
+                 "GPIO20", "GPIO21", "GPIO22", "GPIO23", "GPIO24", "GPIO25", "GPIO26", "GPIO27", "GPIO28", "GPIO29"],
+    "components": [
+      {"ref": "U1", "part": "RP2040"},
+      {"ref": "U2", "part": "W25Q128JVS", "place": {"near": "U1.56"}},
+      {"ref": "Y1", "part": "CRYSTAL_3225", "value": "12MHz", "place": {"near": "U1.20"}},
+      {"ref": "C1", "part": "C0603", "value": "30pF", "place": {"near": "Y1"}},
+      {"ref": "C2", "part": "C0603", "value": "30pF", "place": {"near": "Y1"}},
+      {"ref": "R1", "part": "R0603", "value": "1k", "place": {"near": "U1.21"}},
+      {"ref": "C3", "part": "C0402", "value": "100nF", "place": {"near": "U1.1"}},
+      {"ref": "C4", "part": "C0402", "value": "100nF", "place": {"near": "U1.10"}},
+      {"ref": "C5", "part": "C0402", "value": "100nF", "place": {"near": "U1.22"}},
+      {"ref": "C6", "part": "C0402", "value": "100nF", "place": {"near": "U1.33"}},
+      {"ref": "C7", "part": "C0402", "value": "100nF", "place": {"near": "U1.42"}},
+      {"ref": "C8", "part": "C0402", "value": "100nF", "place": {"near": "U1.49"}},
+      {"ref": "C9", "part": "C0402", "value": "100nF", "place": {"near": "U1.23"}},
+      {"ref": "C10", "part": "C0402", "value": "100nF", "place": {"near": "U1.50"}},
+      {"ref": "C11", "part": "C0603", "value": "1uF", "place": {"near": "U1.44"}},
+      {"ref": "C12", "part": "C0603", "value": "1uF", "place": {"near": "U1.45"}},
+      {"ref": "C13", "part": "C0402", "value": "100nF", "place": {"near": "U1.48"}},
+      {"ref": "C14", "part": "C0402", "value": "100nF", "place": {"near": "U1.43"}},
+      {"ref": "C15", "part": "C0402", "value": "100nF", "place": {"near": "U2.8"}},
+      {"ref": "C16", "part": "C0805", "value": "10uF"},
+      {"ref": "R2", "part": "R0603", "value": "27", "lcsc": "C25190", "place": {"near": "U1.47"}},
+      {"ref": "R3", "part": "R0603", "value": "27", "lcsc": "C25190", "place": {"near": "U1.46"}},
+      {"ref": "R4", "part": "R0603", "value": "1k", "place": {"near": "U2.1"}},
+      {"ref": "R5", "part": "R0603", "value": "10k", "place": {"near": "U2.1"}},
+      {"ref": "R6", "part": "R0603", "value": "10k", "place": {"near": "U1.26"}},
+      {"ref": "SW1", "part": "BUTTON", "value": "BOOTSEL"},
+      {"ref": "SW2", "part": "BUTTON", "value": "RESET"}
+    ],
+    "nets": {
+      "@+3V3": "U1.IOVDD U1.ADC_AVDD U1.VREG_VIN U1.USB_VDD U2.VCC C3.1 C4.1 C5.1 C6.1 C7.1 C8.1 C11.1 C13.1 C14.1 C15.1 C16.1 R5.1 R6.1",
+      "@GND": "U1.GND U1.TESTEN U2.GND Y1.2 Y1.4 C1.2 C2.2 C3.2 C4.2 C5.2 C6.2 C7.2 C8.2 C9.2 C10.2 C11.2 C12.2 C13.2 C14.2 C15.2 C16.2 SW1.2 SW2.2",
+      "DVDD": "U1.DVDD U1.VREG_VOUT C9.1 C10.1 C12.1",
+      "XIN": "U1.XIN Y1.1 C1.1",
+      "XOUT": "U1.XOUT R1.1",
+      "XTAL": "R1.2 Y1.3 C2.1",
+      "QSPI_SS": "U1.QSPI_SS U2.CS R4.1 R5.2",
+      "BOOTSEL": "R4.2 SW1.1",
+      "QSPI_SCLK": "U1.QSPI_SCLK U2.CLK",
+      "QSPI_SD0": "U1.QSPI_SD0 U2.5",
+      "QSPI_SD1": "U1.QSPI_SD1 U2.2",
+      "QSPI_SD2": "U1.QSPI_SD2 U2.3",
+      "QSPI_SD3": "U1.QSPI_SD3 U2.7",
+      "@RUN": "U1.RUN R6.2 SW2.1",
+      "USB_DP_CHIP": "U1.USB_DP R2.1",
+      "USB_DM_CHIP": "U1.USB_DM R3.1",
+      "@USB_DP": "R2.2", "@USB_DN": "R3.2",
+      "@SWCLK": "U1.SWCLK", "@SWDIO": "U1.SWDIO",
+      "@GPIO0": "U1.2", "@GPIO1": "U1.3", "@GPIO2": "U1.4", "@GPIO3": "U1.5", "@GPIO4": "U1.6",
+      "@GPIO5": "U1.7", "@GPIO6": "U1.8", "@GPIO7": "U1.9", "@GPIO8": "U1.11", "@GPIO9": "U1.12",
+      "@GPIO10": "U1.13", "@GPIO11": "U1.14", "@GPIO12": "U1.15", "@GPIO13": "U1.16", "@GPIO14": "U1.17",
+      "@GPIO15": "U1.18", "@GPIO16": "U1.27", "@GPIO17": "U1.28", "@GPIO18": "U1.29", "@GPIO19": "U1.30",
+      "@GPIO20": "U1.31", "@GPIO21": "U1.32", "@GPIO22": "U1.34", "@GPIO23": "U1.35", "@GPIO24": "U1.36",
+      "@GPIO25": "U1.37", "@GPIO26": "U1.38", "@GPIO27": "U1.39", "@GPIO28": "U1.40", "@GPIO29": "U1.41"
+    }
+  },
+
+  "stm32f103c8_core": {
+    "title": "STM32F103C8T6 (\"Blue Pill\" core) with 8 MHz crystal, USB, SWD and reset",
+    "description": "STM32F103C8T6 LQFP-48: 100 nF on each VDD pin and VBAT plus 10 uF bulk, VDDA filtered with 100 nF + 1 uF, BOOT0 and BOOT1 (PB2) pulled low by 10k, NRST with 100 nF and a RESET button, 8 MHz crystal (20 pF load) on PD0/PD1 with 30 pF caps, and the 1.5k D+ pull-up USB full speed needs on PA12. SWD on PA13 (SWDIO) / PA14 (SWCLK).",
+    "support": "advanced",
+    "support_note": "LQFP-48 at 0.5 mm: usually routes on 2 layers with room around the chip; dense boards may need 4 layers.",
+    "power": ["+3V3", "GND"],
+    "autojoin": ["USB_DP", "USB_DN", "SWDIO", "SWCLK", "NRST"],
+    "optional": ["USB_DP", "USB_DN", "SWDIO", "SWCLK", "NRST",
+                 "PA0", "PA1", "PA2", "PA3", "PA4", "PA5", "PA6", "PA7", "PA8", "PA9", "PA10", "PA15",
+                 "PB0", "PB1", "PB3", "PB4", "PB5", "PB6", "PB7", "PB8", "PB9", "PB10", "PB11", "PB12", "PB13", "PB14", "PB15",
+                 "PC13", "PC14", "PC15"],
+    "components": [
+      {"ref": "U1", "part": "STM32F103C8"},
+      {"ref": "Y1", "part": "CRYSTAL_3225", "value": "8MHz", "place": {"near": "U1.5"}},
+      {"ref": "C1", "part": "C0603", "value": "30pF", "place": {"near": "Y1"}},
+      {"ref": "C2", "part": "C0603", "value": "30pF", "place": {"near": "Y1"}},
+      {"ref": "C3", "part": "C0402", "value": "100nF", "place": {"near": "U1.24"}},
+      {"ref": "C4", "part": "C0402", "value": "100nF", "place": {"near": "U1.36"}},
+      {"ref": "C5", "part": "C0402", "value": "100nF", "place": {"near": "U1.48"}},
+      {"ref": "C6", "part": "C0402", "value": "100nF", "place": {"near": "U1.1"}},
+      {"ref": "C7", "part": "C0805", "value": "10uF"},
+      {"ref": "C8", "part": "C0402", "value": "100nF", "place": {"near": "U1.9"}},
+      {"ref": "C9", "part": "C0603", "value": "1uF", "place": {"near": "U1.9"}},
+      {"ref": "C10", "part": "C0603", "value": "100nF", "place": {"near": "U1.7"}},
+      {"ref": "R1", "part": "R0603", "value": "10k", "place": {"near": "U1.44"}},
+      {"ref": "R2", "part": "R0603", "value": "10k", "place": {"near": "U1.20"}},
+      {"ref": "R3", "part": "R0603", "value": "1.5k", "place": {"near": "U1.33"}},
+      {"ref": "SW1", "part": "BUTTON", "value": "RESET"}
+    ],
+    "nets": {
+      "@+3V3": "U1.VDD U1.VBAT U1.VDDA C3.1 C4.1 C5.1 C6.1 C7.1 C8.1 C9.1 R3.1",
+      "@GND": "U1.VSS U1.VSSA Y1.2 Y1.4 C1.2 C2.2 C3.2 C4.2 C5.2 C6.2 C7.2 C8.2 C9.2 C10.2 R1.2 R2.2 SW1.2",
+      "OSC_IN": "U1.PD0 Y1.1 C1.1",
+      "OSC_OUT": "U1.PD1 Y1.3 C2.1",
+      "BOOT0": "U1.BOOT0 R1.1",
+      "BOOT1": "U1.PB2 R2.1",
+      "@NRST": "U1.NRST C10.1 SW1.1",
+      "@USB_DP": "U1.PA12 R3.2", "@USB_DN": "U1.PA11",
+      "@SWDIO": "U1.PA13", "@SWCLK": "U1.PA14",
+      "@PA0": "U1.PA0", "@PA1": "U1.PA1", "@PA2": "U1.PA2", "@PA3": "U1.PA3", "@PA4": "U1.PA4", "@PA5": "U1.PA5",
+      "@PA6": "U1.PA6", "@PA7": "U1.PA7", "@PA8": "U1.PA8", "@PA9": "U1.PA9", "@PA10": "U1.PA10", "@PA15": "U1.PA15",
+      "@PB0": "U1.PB0", "@PB1": "U1.PB1", "@PB3": "U1.PB3", "@PB4": "U1.PB4", "@PB5": "U1.PB5", "@PB6": "U1.PB6",
+      "@PB7": "U1.PB7", "@PB8": "U1.PB8", "@PB9": "U1.PB9", "@PB10": "U1.PB10", "@PB11": "U1.PB11", "@PB12": "U1.PB12",
+      "@PB13": "U1.PB13", "@PB14": "U1.PB14", "@PB15": "U1.PB15",
+      "@PC13": "U1.PC13", "@PC14": "U1.PC14", "@PC15": "U1.PC15"
+    }
+  },
+
+  "esp32_wroom32e": {
+    "title": "ESP32 module (WROOM-32E) with reset and boot buttons",
+    "description": "ESP32-WROOM-32E with 10 uF + 100 nF at 3V3, EN 10k pull-up + 1 uF delay + RESET button, IO0 10k pull-up + BOOT button. Program over UART0 (TXD0/RXD0) with a USB-UART (ch340c_usb_uart + esp_autoprogram, or press BOOT while resetting). Strapping pins: IO12 must be low at boot (3.3 V flash), keep IO0, IO2, IO5, IO15 free at reset. IO34-39 are inputs only. Antenna end at a board edge with no copper under it.",
+    "params": {"edge": "top"},
+    "power": ["+3V3", "GND"],
+    "autojoin": ["EN", "IO0"],
+    "optional": ["EN", "IO0", "TXD0", "RXD0", "IO2", "IO4", "IO5", "IO12", "IO13", "IO14", "IO15", "IO16", "IO17",
+                 "IO18", "IO19", "IO21", "IO22", "IO23", "IO25", "IO26", "IO27", "IO32", "IO33", "IO34", "IO35",
+                 "SENSOR_VP", "SENSOR_VN"],
+    "components": [
+      {"ref": "U1", "part": "ESP32-WROOM-32E", "place": {"edge": "{edge}"}},
+      {"ref": "C1", "part": "C0603", "value": "100nF", "place": {"near": "U1.2"}},
+      {"ref": "C2", "part": "C0805", "value": "10uF", "place": {"near": "C1"}},
+      {"ref": "R1", "part": "R0603", "value": "10k", "place": {"near": "U1.EN"}},
+      {"ref": "C3", "part": "C0603", "value": "1uF", "place": {"near": "U1.EN"}},
+      {"ref": "SW1", "part": "BUTTON", "value": "RESET"},
+      {"ref": "R2", "part": "R0603", "value": "10k", "place": {"near": "U1.25"}},
+      {"ref": "SW2", "part": "BUTTON", "value": "BOOT"}
+    ],
+    "nets": {
+      "@+3V3": "U1.VDD C1.1 C2.1 R1.1 R2.1",
+      "@GND": "U1.GND C1.2 C2.2 C3.2 SW1.2 SW2.2",
+      "@EN": "U1.EN R1.2 C3.1 SW1.1",
+      "@IO0": "U1.25 R2.2 SW2.1",
+      "@TXD0": "U1.35", "@RXD0": "U1.34",
+      "@IO2": "U1.24", "@IO4": "U1.26", "@IO5": "U1.29", "@IO12": "U1.14", "@IO13": "U1.16", "@IO14": "U1.13",
+      "@IO15": "U1.23", "@IO16": "U1.27", "@IO17": "U1.28", "@IO18": "U1.30", "@IO19": "U1.31", "@IO21": "U1.33",
+      "@IO22": "U1.36", "@IO23": "U1.37", "@IO25": "U1.10", "@IO26": "U1.11", "@IO27": "U1.12", "@IO32": "U1.8",
+      "@IO33": "U1.9", "@IO34": "U1.6", "@IO35": "U1.7", "@SENSOR_VP": "U1.4", "@SENSOR_VN": "U1.5"
+    }
+  },
+
+  "ch340c_usb_uart": {
+    "title": "USB to UART (CH340C, no crystal) at 3.3 V",
+    "description": "WCH CH340C powered from 3.3 V (V3 tied to VCC, as the datasheet requires for 3.3 V operation) with 100 nF. UD+/UD- go straight to the USB connector's D+/D-. TXD is the CH340's output: wire it to the MCU's RX. DTR/RTS drive esp_autoprogram or an Arduino-style reset (100 nF in series to RESET).",
+    "power": ["+3V3", "GND"],
+    "autojoin": ["DTR", "RTS"],
+    "optional": ["DTR", "RTS"],
+    "components": [
+      {"ref": "U1", "part": "CH340C"},
+      {"ref": "C1", "part": "C0603", "value": "100nF", "place": {"near": "U1.16"}}
+    ],
+    "nets": {
+      "@+3V3": "U1.VCC U1.V3 C1.1",
+      "@GND": "U1.GND C1.2",
+      "@USB_DP": "U1.UD+", "@USB_DN": "U1.UD-",
+      "@TXD": "U1.TXD", "@RXD": "U1.RXD",
+      "@DTR": "U1.DTR", "@RTS": "U1.RTS"
+    },
+    "no_connect": "U1.CTS U1.DSR U1.RI U1.DCD U1.R232"
+  },
+
+  "esp_autoprogram": {
+    "title": "ESP32/ESP8266 auto-program circuit (DTR/RTS to EN/IO0)",
+    "description": "The two-transistor circuit from the NodeMCU/DevKit boards: esptool toggles DTR and RTS to reset the ESP into its bootloader, while both lines high or both low leave it running. Two MMBT3904 (JLCPCB basic) with 10k base resistors.",
+    "components": [
+      {"ref": "Q1", "part": "MMBT3904"},
+      {"ref": "Q2", "part": "MMBT3904"},
+      {"ref": "R1", "part": "R0603", "value": "10k", "place": {"near": "Q1.1"}},
+      {"ref": "R2", "part": "R0603", "value": "10k", "place": {"near": "Q2.1"}}
+    ],
+    "nets": {
+      "@DTR": "R1.1 Q2.E",
+      "@RTS": "R2.1 Q1.E",
+      "Q1_B": "R1.2 Q1.B",
+      "Q2_B": "R2.2 Q2.B",
+      "@EN": "Q1.C",
+      "@IO0": "Q2.C"
+    }
+  },
+
+  "buck_ap63203_3v3": {
+    "title": "3.3 V buck converter, 2 A (AP63203, 3.8-32 V in)",
+    "description": "Diodes AP63203 synchronous buck at 1.1 MHz, values from its datasheet: 3.9 uH inductor (4x4 mm, 2.1 A), 10 uF + 100 nF input, 2x 22 uF output, 100 nF bootstrap; EN tied to VIN, FB to the output. Keep the input caps, chip and inductor in a tight loop with a solid ground under them; route SW short and wide, away from sensitive signals.",
+    "defaults": {"VIN": "VIN"},
+    "power": ["VIN", "+3V3", "GND"],
+    "components": [
+      {"ref": "U1", "part": "AP63203"},
+      {"ref": "C1", "part": "C1206", "value": "10uF", "place": {"near": "U1.3"}},
+      {"ref": "C2", "part": "C0603", "value": "100nF", "place": {"near": "U1.3"}},
+      {"ref": "C3", "part": "C0603", "value": "100nF", "place": {"near": "U1.6"}},
+      {"ref": "L1", "part": "L_4030", "value": "3.9uH", "place": {"near": "U1.5"}},
+      {"ref": "C4", "part": "C0805", "value": "22uF", "place": {"near": "L1"}},
+      {"ref": "C5", "part": "C0805", "value": "22uF", "place": {"near": "L1"}}
+    ],
+    "nets": {
+      "@VIN": "U1.IN U1.EN C1.1 C2.1",
+      "@GND": "U1.GND C1.2 C2.2 C4.2 C5.2",
+      "SW": "U1.SW C3.2 L1.1",
+      "BST": "U1.BST C3.1",
+      "@+3V3": "L1.2 U1.FB C4.1 C5.1"
+    }
+  },
+
+  "drv8833_motor": {
+    "title": "Dual DC motor / stepper driver (DRV8833, 2.7-10.8 V, 1.5 A per bridge)",
+    "description": "TI DRV8833 in HTSSOP-16 with 10 uF + 100 nF on VM, 2.2 uF on VINT, 10 nF VCP to VM, nSLEEP pulled up to 3V3 (drive it low to sleep), nFAULT open-drain with a 10k pull-up, xISEN to GND (no current limiting). Inputs take 3.3 V logic (PWM xIN1/xIN2). Motor outputs carry amps: wide traces, and the thermal pad needs its ground vias.",
+    "defaults": {"VM": "VM"},
+    "power": ["VM", "+3V3", "GND", "VINT"],
+    "optional": ["SLEEP", "FAULT"],
+    "components": [
+      {"ref": "U1", "part": "DRV8833"},
+      {"ref": "C1", "part": "C0805", "value": "10uF", "place": {"near": "U1.12"}},
+      {"ref": "C2", "part": "C0603", "value": "100nF", "place": {"near": "U1.12"}},
+      {"ref": "C3", "part": "C0603", "value": "2.2uF", "place": {"near": "U1.14"}},
+      {"ref": "C4", "part": "C0603", "value": "10nF", "place": {"near": "U1.11"}},
+      {"ref": "R1", "part": "R0603", "value": "10k", "place": {"near": "U1.1"}},
+      {"ref": "R2", "part": "R0603", "value": "10k", "place": {"near": "U1.8"}}
+    ],
+    "nets": {
+      "@VM": "U1.VM C1.1 C2.1 C4.2",
+      "@GND": "U1.GND U1.AISEN U1.BISEN C1.2 C2.2 C3.2",
+      "VINT": "U1.VINT C3.1",
+      "VCP": "U1.VCP C4.1",
+      "@+3V3": "R1.1 R2.1",
+      "@SLEEP": "U1.SLEEP R1.2",
+      "@FAULT": "U1.FAULT R2.2",
+      "@AIN1": "U1.AIN1", "@AIN2": "U1.AIN2", "@BIN1": "U1.BIN1", "@BIN2": "U1.BIN2",
+      "@AOUT1": "U1.AOUT1", "@AOUT2": "U1.AOUT2", "@BOUT1": "U1.BOUT1", "@BOUT2": "U1.BOUT2"
+    }
+  },
+
+  "bme280_i2c": {
+    "title": "BME280 temperature / humidity / pressure sensor (I2C, address 0x76)",
+    "description": "Bosch BME280 in I2C mode: CSB tied to VDDIO, SDO to GND (address 0x76; tie SDO to VDDIO for 0x77), 100 nF on VDD and VDDIO. Needs I2C pull-ups once per bus (i2c_pullups). Keep it away from regulators and the MCU, which warm it up; a slot in the board around it helps.",
+    "power": ["+3V3", "GND"],
+    "components": [
+      {"ref": "U1", "part": "BME280"},
+      {"ref": "C1", "part": "C0402", "value": "100nF", "place": {"near": "U1.8"}},
+      {"ref": "C2", "part": "C0402", "value": "100nF", "place": {"near": "U1.6"}}
+    ],
+    "nets": {
+      "@+3V3": "U1.VDD U1.VDDIO U1.CSB C1.1 C2.1",
+      "@GND": "U1.GND U1.SDO C1.2 C2.2",
+      "@SDA": "U1.SDI", "@SCL": "U1.SCK"
+    }
+  },
+
+  "sht31_i2c": {
+    "title": "SHT31 temperature / humidity sensor (I2C, address 0x44)",
+    "description": "Sensirion SHT31-DIS: ADDR to GND (0x44; to VDD for 0x45), R pin and thermal pad to VSS as the datasheet says, nRESET pulled up by 10k, 100 nF on VDD. ALERT is an optional output. Needs I2C pull-ups once per bus (i2c_pullups). Keep it away from heat sources.",
+    "power": ["+3V3", "GND"],
+    "optional": ["ALERT"],
+    "components": [
+      {"ref": "U1", "part": "SHT31"},
+      {"ref": "C1", "part": "C0402", "value": "100nF", "place": {"near": "U1.5"}},
+      {"ref": "R1", "part": "R0603", "value": "10k", "place": {"near": "U1.6"}}
+    ],
+    "nets": {
+      "@+3V3": "U1.VDD C1.1 R1.1",
+      "@GND": "U1.VSS U1.ADDR U1.R C1.2",
+      "RESET": "U1.RESET R1.2",
+      "@SDA": "U1.SDA", "@SCL": "U1.SCL", "@ALERT": "U1.ALERT"
+    }
+  },
+
+  "mpu6050_i2c": {
+    "title": "MPU-6050 6-axis accelerometer + gyroscope (I2C, address 0x68)",
+    "description": "InvenSense MPU-6050 per its datasheet: 100 nF REGOUT, 2.2 nF CPOUT, 10 nF on VLOGIC, 100 nF on VDD; CLKIN, FSYNC and AD0 to GND (address 0x68). INT is an optional interrupt output. Needs I2C pull-ups once per bus (i2c_pullups). Mount it near the board's centre, away from mounting holes and flex.",
+    "power": ["+3V3", "GND"],
+    "optional": ["INT"],
+    "components": [
+      {"ref": "U1", "part": "MPU-6050"},
+      {"ref": "C1", "part": "C0402", "value": "100nF", "place": {"near": "U1.13"}},
+      {"ref": "C2", "part": "C0402", "value": "10nF", "place": {"near": "U1.8"}},
+      {"ref": "C3", "part": "C0402", "value": "100nF", "place": {"near": "U1.10"}},
+      {"ref": "C4", "part": "C0603", "value": "2.2nF", "place": {"near": "U1.20"}}
+    ],
+    "nets": {
+      "@+3V3": "U1.VDD U1.VLOGIC C1.1 C2.1",
+      "@GND": "U1.GND U1.CLKIN U1.FSYNC U1.AD0 C1.2 C2.2 C3.2 C4.2",
+      "REGOUT": "U1.REGOUT C3.1",
+      "CPOUT": "U1.CPOUT C4.1",
+      "@SDA": "U1.SDA", "@SCL": "U1.SCL", "@INT": "U1.INT"
+    },
+    "no_connect": "U1.AUX_DA U1.AUX_CL"
+  },
+
+  "ina219_current": {
+    "title": "INA219 current / power monitor with 0.1 ohm shunt (I2C, address 0x40)",
+    "description": "TI INA219 with a 0.1 ohm 1206 shunt (JLCPCB basic) between IN+ (supply side) and IN- (load side): +-3.2 A range at 0.8 mA resolution, bus up to 26 V. A0/A1 to GND (0x40). Route IN+/IN- as a Kelvin pair straight from the shunt pads. Needs I2C pull-ups once per bus.",
+    "power": ["+3V3", "GND"],
+    "components": [
+      {"ref": "U1", "part": "INA219"},
+      {"ref": "C1", "part": "C0603", "value": "100nF", "place": {"near": "U1.5"}},
+      {"ref": "R1", "part": "R1206", "value": "0.1", "place": {"near": "U1.8"}}
+    ],
+    "nets": {
+      "@+3V3": "U1.VS C1.1",
+      "@GND": "U1.GND U1.A0 U1.A1 C1.2",
+      "@SENSE_IN": "U1.IN+ R1.1",
+      "@SENSE_OUT": "U1.IN- R1.2",
+      "@SDA": "U1.SDA", "@SCL": "U1.SCL"
+    }
+  },
+
+  "ads1115_adc": {
+    "title": "ADS1115 16-bit 4-channel ADC (I2C, address 0x48)",
+    "description": "TI ADS1115 with ADDR to GND (0x48), 100 nF on VDD. Inputs AIN0-AIN3 must stay between GND and VDD; add an RC filter (1k + 100 nF) on noisy inputs. ALERT/RDY is optional (open drain, needs a pull-up). Needs I2C pull-ups once per bus.",
+    "power": ["+3V3", "GND"],
+    "optional": ["AIN0", "AIN1", "AIN2", "AIN3", "ALERT"],
+    "components": [
+      {"ref": "U1", "part": "ADS1115"},
+      {"ref": "C1", "part": "C0603", "value": "100nF", "place": {"near": "U1.8"}}
+    ],
+    "nets": {
+      "@+3V3": "U1.VDD C1.1",
+      "@GND": "U1.GND U1.ADDR C1.2",
+      "@SDA": "U1.SDA", "@SCL": "U1.SCL", "@ALERT": "U1.2",
+      "@AIN0": "U1.AIN0", "@AIN1": "U1.AIN1", "@AIN2": "U1.AIN2", "@AIN3": "U1.AIN3"
+    }
+  },
+
+  "ds3231_rtc": {
+    "title": "DS3231MZ real-time clock, +-5 ppm (I2C, address 0x68)",
+    "description": "Maxim DS3231MZ (SOIC-8) with 100 nF on VCC. VBAT goes to GND by default; connect it to a coin cell net (e.g. a CR2032 holder) to keep time without power. INT/SQW, RST and 32KHZ are optional open-drain pins. Note: same I2C address as the MPU-6050 (0x68) unless that one's AD0 is high.",
+    "defaults": {"VBAT": "GND"},
+    "power": ["+3V3", "GND", "VBAT"],
+    "optional": ["INT", "RST", "32KHZ"],
+    "components": [
+      {"ref": "U1", "part": "DS3231MZ"},
+      {"ref": "C1", "part": "C0603", "value": "100nF", "place": {"near": "U1.2"}}
+    ],
+    "nets": {
+      "@+3V3": "U1.VCC C1.1",
+      "@GND": "U1.GND C1.2",
+      "@VBAT": "U1.VBAT",
+      "@SDA": "U1.SDA", "@SCL": "U1.SCL",
+      "@INT": "U1.3", "@RST": "U1.RST", "@32KHZ": "U1.32KHZ"
+    }
+  },
+
+  "micro_sd_spi": {
+    "title": "microSD card slot in SPI mode with card detect",
+    "description": "Molex 104031-0811 push-push microSD socket with 10 uF + 100 nF on VDD and 10k pull-ups on CMD, DAT0-DAT3 (the SD spec needs them; unused DAT1/DAT2 must not float). SPI mapping: CS = DAT3, MOSI = CMD, MISO = DAT0, SCK = CLK. CARD_DETECT closes to GND when a card is inserted (enable the MCU's pull-up). Place it at a board edge, socket opening outward.",
+    "params": {"edge": "right"},
+    "power": ["+3V3", "GND"],
+    "optional": ["CARD_DETECT"],
+    "components": [
+      {"ref": "J1", "part": "MICROSD", "place": {"edge": "{edge}"}},
+      {"ref": "C1", "part": "C0805", "value": "10uF", "place": {"near": "J1.4"}},
+      {"ref": "C2", "part": "C0603", "value": "100nF", "place": {"near": "J1.4"}},
+      {"ref": "R1", "part": "R0603", "value": "10k", "place": {"near": "J1.2"}},
+      {"ref": "R2", "part": "R0603", "value": "10k", "place": {"near": "J1.3"}},
+      {"ref": "R3", "part": "R0603", "value": "10k", "place": {"near": "J1.7"}},
+      {"ref": "R4", "part": "R0603", "value": "10k", "place": {"near": "J1.8"}},
+      {"ref": "R5", "part": "R0603", "value": "10k", "place": {"near": "J1.1"}}
+    ],
+    "nets": {
+      "@+3V3": "J1.VDD C1.1 C2.1 R1.1 R2.1 R3.1 R4.1 R5.1",
+      "@GND": "J1.VSS J1.SHIELD J1.DET_A C1.2 C2.2",
+      "@SD_CS": "J1.2 R1.2",
+      "@SD_MOSI": "J1.CMD R2.2",
+      "@SD_MISO": "J1.DAT0 R3.2",
+      "SD_DAT1": "J1.DAT1 R4.2",
+      "SD_DAT2": "J1.DAT2 R5.2",
+      "@SD_SCK": "J1.CLK",
+      "@CARD_DETECT": "J1.DET_B"
+    }
+  },
+
+  "rs485_transceiver": {
+    "title": "RS-485 half-duplex transceiver, 3.3 V (SP3485, JLCPCB basic)",
+    "description": "SP3485EN (pin-compatible with MAX3485) with 100 nF, ~RE and DE tied together as one direction pin (high = transmit), and a 120 ohm termination across A/B for the two ends of the bus (\"omit\": [\"R1\"] on middle nodes). RXD is the receiver output (to the MCU's RX), TXD the driver input. Add a TVS (SM712) on A/B for long cables.",
+    "power": ["+3V3", "GND"],
+    "components": [
+      {"ref": "U1", "part": "SP3485"},
+      {"ref": "C1", "part": "C0603", "value": "100nF", "place": {"near": "U1.8"}},
+      {"ref": "R1", "part": "R0603", "value": "120", "place": {"near": "U1.6"}}
+    ],
+    "nets": {
+      "@+3V3": "U1.VCC C1.1",
+      "@GND": "U1.GND C1.2",
+      "@RXD": "U1.RO", "@TXD": "U1.DI",
+      "@DE": "U1.3 U1.2",
+      "@RS485_A": "U1.A R1.1",
+      "@RS485_B": "U1.B R1.2"
+    }
+  },
+
+  "can_sn65hvd230": {
+    "title": "CAN bus transceiver, 3.3 V (SN65HVD230)",
+    "description": "TI SN65HVD230 with 100 nF, Rs to GND (high-speed mode, up to 1 Mbit/s), Vref unused, and a 120 ohm terminator across CANH/CANL for the two ends of the bus (\"omit\": [\"R1\"] on middle nodes). TXD/RXD go to the MCU's CAN controller (ESP32 TWAI, STM32 bxCAN). Route CANH/CANL as a pair.",
+    "power": ["+3V3", "GND"],
+    "components": [
+      {"ref": "U1", "part": "SN65HVD230"},
+      {"ref": "C1", "part": "C0603", "value": "100nF", "place": {"near": "U1.3"}},
+      {"ref": "R1", "part": "R0603", "value": "120", "place": {"near": "U1.7"}}
+    ],
+    "nets": {
+      "@+3V3": "U1.VCC C1.1",
+      "@GND": "U1.GND U1.Rs C1.2",
+      "@TXD": "U1.D", "@RXD": "U1.R",
+      "@CANH": "U1.CANH R1.1",
+      "@CANL": "U1.CANL R1.2"
+    },
+    "no_connect": "U1.Vref"
+  },
+
+  "level_shifter_bss138": {
+    "title": "Bidirectional logic level shifter, one channel (BSS138)",
+    "description": "The classic open-drain level shifter: BSS138 with gate on the low-voltage rail and 10k pull-ups on both sides. Works for I2C and slow GPIO (up to ~400 kHz); use one block per signal (give each a \"name\"). Not for push-pull high-speed signals such as SPI above a few MHz.",
+    "defaults": {"LV": "+3V3", "HV": "+5V"},
+    "power": ["LV", "HV"],
+    "components": [
+      {"ref": "Q1", "part": "BSS138"},
+      {"ref": "R1", "part": "R0603", "value": "10k", "place": {"near": "Q1.2"}},
+      {"ref": "R2", "part": "R0603", "value": "10k", "place": {"near": "Q1.3"}}
+    ],
+    "nets": {
+      "@LV": "Q1.G R1.1",
+      "@HV": "R2.1",
+      "@LV_SIG": "Q1.S R1.2",
+      "@HV_SIG": "Q1.D R2.2"
+    }
+  },
+
+  "reverse_polarity_pfet": {
+    "title": "Reverse-polarity protection with a P-MOSFET (AO3401A, up to 12 V)",
+    "description": "Low-loss reverse-battery protection: AO3401A (JLCPCB basic, 30 V 4 A, ~50 mohm) with drain to the raw input and source to the protected rail; the gate goes to GND through 10k, so a reversed supply leaves it off. Gate-source rating limits this to inputs up to 12 V (add a 10 V zener gate-source above that).",
+    "defaults": {"VIN_RAW": "VIN_RAW", "VOUT": "VIN"},
+    "power": ["VIN_RAW", "VOUT", "GND"],
+    "components": [
+      {"ref": "Q1", "part": "AO3401A"},
+      {"ref": "R1", "part": "R0603", "value": "10k", "place": {"near": "Q1.1"}}
+    ],
+    "nets": {
+      "@VIN_RAW": "Q1.D",
+      "@VOUT": "Q1.S",
+      "GATE": "Q1.G R1.1",
+      "@GND": "R1.2"
+    }
+  },
+
+  "input_protection_5v": {
+    "title": "5 V input protection: resettable fuse + TVS",
+    "description": "500 mA polyfuse (1206, 6 V) in series with the 5 V input, then an SMAJ5.0A TVS from the protected rail to GND that clamps ESD and hot-plug spikes. For USB or 5 V DC inputs only (the fuse is rated 6 V). Put it right after the connector, before any regulator.",
+    "defaults": {"VIN_RAW": "VBUS_RAW", "VOUT": "VBUS"},
+    "power": ["VIN_RAW", "VOUT", "GND"],
+    "components": [
+      {"ref": "F1", "part": "POLYFUSE_1206", "value": "500mA"},
+      {"ref": "D1", "part": "SMAJ5.0A", "place": {"near": "F1"}}
+    ],
+    "nets": {
+      "@VIN_RAW": "F1.1",
+      "@VOUT": "F1.2 D1.1",
+      "@GND": "D1.2"
+    }
+  },
+
+  "dc_jack_input": {
+    "title": "DC barrel jack input (5.5/2.1 mm, centre positive) with reverse protection",
+    "description": "Through-hole barrel jack, an SS34 Schottky (3 A, JLCPCB basic) in series against reversed adapters, and 10 uF (50 V) + 100 nF bulk. Costs ~0.4 V; use reverse_polarity_pfet instead for lower loss. Feed it into a regulator (buck_ap63203_3v3, ldo_ams1117_5v0...). Jack footprint is generic: check it against the part you buy.",
+    "params": {"edge": "left"},
+    "defaults": {"VIN": "VIN"},
+    "power": ["VIN", "GND"],
+    "components": [
+      {"ref": "J1", "part": "BARREL_JACK", "place": {"edge": "{edge}"}},
+      {"ref": "D1", "part": "SS34", "place": {"near": "J1.1"}},
+      {"ref": "C1", "part": "C1206", "value": "10uF", "place": {"near": "D1"}},
+      {"ref": "C2", "part": "C0603", "value": "100nF", "place": {"near": "D1"}}
+    ],
+    "nets": {
+      "VIN_JACK": "J1.1 D1.A",
+      "@VIN": "D1.K C1.1 C2.1",
+      "@GND": "J1.2 C1.2 C2.2"
+    },
+    "no_connect": "J1.3"
+  },
+
+  "relay_5v": {
+    "title": "5 V relay with transistor driver and flyback diode (SRD-05VDC, 10 A)",
+    "description": "Songle-type SRD-05VDC-SL-C relay (72 mA coil) switched by an MMBT3904 from a 3.3 V GPIO through 1k, with a 10k base pull-down so it stays off at boot and a 1N4148W flyback diode across the coil. COM/NO/NC are the contacts. For mains voltages keep 6+ mm clearance and cut a slot between the contact side and the low-voltage side, and have it reviewed.",
+    "defaults": {"+5V": "+5V"},
+    "power": ["+5V", "GND"],
+    "optional": ["NC"],
+    "components": [
+      {"ref": "K1", "part": "RELAY_SRD_5V"},
+      {"ref": "Q1", "part": "MMBT3904", "place": {"near": "K1.2"}},
+      {"ref": "R1", "part": "R0603", "value": "1k", "place": {"near": "Q1.1"}},
+      {"ref": "R2", "part": "R0603", "value": "10k", "place": {"near": "Q1.1"}},
+      {"ref": "D1", "part": "1N4148W", "place": {"near": "K1.5"}}
+    ],
+    "nets": {
+      "@+5V": "K1.5 D1.K",
+      "COIL": "K1.2 D1.A Q1.C",
+      "@GND": "Q1.E R2.2",
+      "BASE": "Q1.B R1.2 R2.1",
+      "@CTRL": "R1.1",
+      "@COM": "K1.1", "@NO": "K1.3", "@NC": "K1.4"
+    }
+  },
+
+  "buzzer_driver": {
+    "title": "Magnetic buzzer with transistor driver",
+    "description": "12 mm magnetic buzzer driven by an MMBT3904 from a GPIO (1k base, 10k pull-down), with a 1N4148W across the coil. Drive CTRL with a ~2-4 kHz PWM (passive buzzer) or high (active buzzer).",
+    "defaults": {"VCC": "+5V"},
+    "power": ["VCC", "GND"],
+    "components": [
+      {"ref": "BZ1", "part": "BUZZER"},
+      {"ref": "Q1", "part": "MMBT3904", "place": {"near": "BZ1.2"}},
+      {"ref": "R1", "part": "R0603", "value": "1k", "place": {"near": "Q1.1"}},
+      {"ref": "R2", "part": "R0603", "value": "10k", "place": {"near": "Q1.1"}},
+      {"ref": "D1", "part": "1N4148W", "place": {"near": "BZ1"}}
+    ],
+    "nets": {
+      "@VCC": "BZ1.1 D1.K",
+      "BZ_LOW": "BZ1.2 D1.A Q1.C",
+      "@GND": "Q1.E R2.2",
+      "BASE": "Q1.B R1.2 R2.1",
+      "@CTRL": "R1.1"
+    }
+  },
+
+  "ldo_ams1117_5v0": {
+    "title": "5 V linear regulator, 1 A (AMS1117-5.0)",
+    "description": "AMS1117-5.0 (JLCPCB basic) with 10 uF (50 V) input and 22 uF output. Needs at least ~6.5 V in; dissipates (Vin - 5 V) x current, so above ~12 V in or a few hundred mA use a buck converter.",
+    "defaults": {"VIN": "VIN"},
+    "power": ["VIN", "+5V", "GND"],
+    "components": [
+      {"ref": "U1", "part": "AMS1117-5.0"},
+      {"ref": "C1", "part": "C1206", "value": "10uF", "place": {"near": "U1.VI"}},
+      {"ref": "C2", "part": "C0805", "value": "22uF", "place": {"near": "U1.VO"}}
+    ],
+    "nets": {
+      "@VIN": "U1.VI C1.1",
+      "@+5V": "U1.VO C2.1",
+      "@GND": "U1.GND C1.2 C2.2"
+    }
+  },
+
+  "ldo_xc6206_3v3": {
+    "title": "3.3 V low-power LDO, 200 mA (XC6206, JLCPCB basic)",
+    "description": "Torex XC6206P332MR in SOT-23 with 1 uF in and out: 1 uA quiescent current, good for battery sensors. Input 6 V max (USB or 1S LiPo, not 9-12 V); 200 mA max, so not for Wi-Fi modules (use ldo_ams1117_3v3, ldo_ap2112_3v3 or buck_ap63203_3v3).",
+    "defaults": {"VIN": "VBUS"},
+    "power": ["VIN", "+3V3", "GND"],
+    "components": [
+      {"ref": "U1", "part": "XC6206-3.3"},
+      {"ref": "C1", "part": "C0603", "value": "1uF", "place": {"near": "U1.VI"}},
+      {"ref": "C2", "part": "C0603", "value": "1uF", "place": {"near": "U1.VO"}}
+    ],
+    "nets": {
+      "@VIN": "U1.VI C1.1",
+      "@+3V3": "U1.VO C2.1",
+      "@GND": "U1.GND C1.2 C2.2"
+    }
+  },
+
+  "lipo_charger_tp4056": {
+    "title": "1S LiPo charger, up to 1 A (TP4056)",
+    "description": "TP4056 linear charger (4.2 V) with 10 uF on input and battery, NTC input disabled (TEMP to GND), CE tied to VCC. Charge current = 1200 / R_PROG: \"prog\": \"2k\" gives 600 mA (default), \"1.2k\" 1 A. CHRG and STDBY are open-drain status outputs (for LEDs to VBUS through 1k, or MCU pins with pull-ups). The exposed pad is GND and spreads heat: at 1 A it dissipates up to ~1 W.",
+    "params": {"prog": "2k"},
+    "defaults": {"VIN": "VBUS"},
+    "power": ["VIN", "VBAT", "GND"],
+    "optional": ["CHRG", "STDBY"],
+    "components": [
+      {"ref": "U1", "part": "TP4056"},
+      {"ref": "C1", "part": "C0805", "value": "10uF", "place": {"near": "U1.4"}},
+      {"ref": "C2", "part": "C0805", "value": "10uF", "place": {"near": "U1.5"}},
+      {"ref": "R1", "part": "R0603", "value": "{prog}", "place": {"near": "U1.2"}}
+    ],
+    "nets": {
+      "@VIN": "U1.4 U1.CE C1.1",
+      "@VBAT": "U1.BAT C2.1",
+      "@GND": "U1.GND U1.TEMP U1.EPAD C1.2 C2.2 R1.2",
+      "PROG": "U1.PROG R1.1",
+      "@CHRG": "U1.CHRG", "@STDBY": "U1.STDBY"
+    }
+  },
+
+  "swd_header": {
+    "title": "SWD programming header (1x5, 2.54 mm)",
+    "description": "3V3, SWDIO, SWCLK, NRST, GND on a 2.54 mm header for an ST-Link, J-Link or Raspberry Pi Debug Probe. For STM32 and RP2040 (RP2040 has RUN in place of NRST).",
+    "power": ["+3V3", "GND"],
+    "autojoin": ["NRST"],
+    "optional": ["NRST"],
+    "components": [{"ref": "J1", "part": "HEADER_1x05", "value": "SWD", "place": {"edge": "{edge}"}}],
+    "params": {"edge": "bottom"},
+    "nets": {"@+3V3": "J1.1", "@SWDIO": "J1.2", "@SWCLK": "J1.3", "@NRST": "J1.4", "@GND": "J1.5"}
+  },
+
+  "uart_header": {
+    "title": "UART header (1x4, 2.54 mm: GND, RX, TX, 3V3)",
+    "description": "Serial console header. Pins are labelled from the board's side: wire the adapter's TX to RX here and RX to TX. Pin 4 supplies or takes 3V3; leave it unconnected on the adapter if the board has its own power.",
+    "power": ["+3V3", "GND"],
+    "components": [{"ref": "J1", "part": "HEADER_1x04", "value": "UART", "place": {"edge": "{edge}"}}],
+    "params": {"edge": "bottom"},
+    "nets": {"@GND": "J1.1", "@RXD": "J1.2", "@TXD": "J1.3", "@+3V3": "J1.4"}
+  },
+
+  "oled_i2c_header": {
+    "title": "I2C OLED display header (SSD1306/SH1106 0.96\" module: GND, VCC, SCL, SDA)",
+    "description": "4-pin socket in the pin order of the common 0.96\" and 1.3\" I2C OLED modules (GND, VCC, SCL, SDA; some modules swap GND and VCC, so check yours). The modules have their own pull-ups on most versions.",
+    "power": ["+3V3", "GND"],
+    "components": [{"ref": "J1", "part": "HEADER_1x04", "value": "OLED", "place": {"edge": "{edge}"}}],
+    "params": {"edge": "top"},
+    "nets": {"@GND": "J1.1", "@+3V3": "J1.2", "@SCL": "J1.3", "@SDA": "J1.4"}
   }
 }

@@ -11,7 +11,7 @@ One JSON file describes the whole board. `kipcb check` validates it, and
   "rules": {"track": 0.25, "power_track": 0.5, "clearance": 0.2},
   "power_nets": "GND VBUS",
   "components": [
-    {"ref": "U1", "symbol": "MCU_Microchip_ATtiny:ATtiny85-20S", "value": "ATtiny85-20S", "lcsc": "C89852", "current_ma": 10, "group": "mcu"},
+    {"ref": "U1", "symbol": "MCU_Microchip_ATtiny:ATtiny85-20S", "value": "ATtiny85-20S", "lcsc": "C31540447", "current_ma": 10, "group": "mcu"},
     {"ref": "C2", "symbol": "Device:C", "footprint": "Capacitor_SMD:C_0603_1608Metric", "value": "100nF", "group": "mcu", "place": {"near": "U1.VCC"}},
     {"ref": "J1", "symbol": "Connector:USB_C_Receptacle_PowerOnly_6P", "footprint": "Connector_USB:USB_C_Receptacle_GCT_USB4125-xx-x_6P_TopMnt_Horizontal", "value": "USB-C", "place": {"edge": "left"}}
   ],
@@ -45,7 +45,12 @@ shows ports, optional ports, defaults and parameters.
   (e.g. a regulator's `VIN` defaults to `VBUS`); otherwise the net with the
   port's own name (`GND`, `+3V3`, `USB_DP`…). Power ports are added to `power_nets`.
 - **Optional ports** (spare MCU IOs, a WS2812's `DOUT`) that aren't connected
-  become no-connects, so you don't list them.
+  become no-connects, so you don't list them. Bus ports a block marks
+  `autojoin` (USB_DP/DN, SWDIO/SWCLK, NRST, EN/IO0, DTR/RTS) instead join a
+  same-named net when another block or the spec has one.
+- **`"omit": ["R1"]`** drops parts from a block by their ref inside the block
+  (`kipcb blocks <name>` lists them), e.g. the 120 ohm terminator of an RS-485
+  or CAN node in the middle of a bus.
 - **Refs** are renumbered to avoid clashes with your own parts and each other;
   `kipcb check` prints the mapping. Nets inside a block are named `<block>_<net>`.
 - Use the same block twice with different `name`s (e.g. two `led_indicator`s).
@@ -53,7 +58,8 @@ shows ports, optional ports, defaults and parameters.
 ## Prebuilt parts
 
 `"part": "<name>"` fills `symbol`, `footprint`, a default `value` and
-`current_ma`, and an LCSC number for common values (e.g. `R0603` + `10k` →
+`current_ma`, and a JLCPCB/LCSC number (265 R/C values; LED colours like
+`"value": "green"`; ~80 named parts) (e.g. `R0603` + `10k` →
 C25804). `kipcb parts` lists them: `R0402/R0603/R0805`, `C0402/C0603/C0805/C1206`,
 `LED0603/LED0805`, `SCHOTTKY_SOD123`, `BUTTON`, `CRYSTAL_3225`,
 `HEADER_1x04`-style headers (any count), `JST_SH_4`, `USB-C-6P/16P`,

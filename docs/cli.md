@@ -23,15 +23,19 @@ these commands for you, but they also work on their own.
 | `kipcb sym-info A B C` | Compact pins of several symbols in one call (`-v` adds the datasheet URL) |
 | `kipcb guide [topic]` | Prints one section of the design references (USB-C, LDO, decoupling, placement hints…); no topic lists them |
 | `kipcb fmt spec.json` | Rewrites a spec in the compact one-line-per-part layout |
-| `kipcb blocks [name]` | Prebuilt circuit blocks; with a name, its ports, optional ports, parameters and parts |
-| `kipcb parts [query]` | Prebuilt part names for `"part": "…"` (symbol, footprint, LCSC for common values), plus parts remembered from your boards |
+| `kipcb blocks [names or words]` | Prebuilt circuit blocks (43). Block names show ports, optional ports, parameters and parts; other words filter the list (`kipcb blocks i2c`) |
+| `kipcb parts [query]` | Prebuilt part names for `"part": "…"` (symbol, footprint, JLCPCB part number), plus parts remembered from your boards |
+| `kipcb lcsc C25804 …` | Live JLCPCB data for part numbers: part, package, basic/extended, stock, price |
+| `kipcb lcsc -s "SHT31 \| 10uF 0805" [--basic]` | Searches JLCPCB's parts library, in-stock and basic parts first |
 | `kipcb ref <part>` | Shows how open-source designs wire a part (uses the knowledge base shipped with the plugin) |
 
 ## Design
 
 | Command | What it does |
 |---|---|
-| `kipcb run spec.json [--no-fab] [--force]` | **The whole pipeline**: check → build → route → manufacturing files → report, with one progress line per step. An unchanged spec returns the last report instantly |
+| `kipcb run spec.json [--no-fab] [--force]` | **The whole pipeline**: check → build → preflight → route → manufacturing files → report, with one progress line per step. An unchanged spec returns the last report instantly |
+| `kipcb estimate spec.json [--no-fab]` | Approximate time for each step of `kipcb run` on this design, with the reason when a step is long (e.g. fine-pitch chips); learns from your own run times |
+| `kipcb preflight spec.json` | Checks in under a second whether a built board can route cleanly: pad reach at each pin pitch, one netclass per net, manufacturer limits, copper near the edge, overlaps, decoupling and crystal placement, escape room around fine-pitch chips, routing density. `run` stops before routing if any of these fail |
 | `kipcb check spec.json` | Validates the spec: symbols, footprints, pins, nets, unused pins, logic levels, and the power budget / regulator heat |
 | `kipcb build spec.json [-o DIR] [--no-render]` | Generates the schematic and placed board, runs ERC, the placement DRC and placement noise checks, and renders previews |
 | `kipcb route <project> [--attempts N] [--timeout S] [--no-pour]` | Autoroutes, pours ground, adds stitching vias, then runs DRC and noise checks |

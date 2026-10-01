@@ -179,8 +179,96 @@ class ExampleSpecTests(unittest.TestCase):
             if name.endswith(".json"):
                 with open(os.path.join(root, name)) as f:
                     d = json.load(f)
-                for key in ("name", "requirements", "components", "nets"):
+                for key in ("name", "requirements"):
                     self.assertIn(key, d, "%s is missing %s" % (name, key))
+                self.assertTrue(d.get("components") or d.get("blocks"), "%s has no parts" % name)
+
+
+class FinePitchTests(unittest.TestCase):
+    FP = """(footprint "T:QFN" (attr smd)
+      (pad "1" smd roundrect (at -0.4 0) (size 0.2 0.8) (layers "F.Cu"))
+      (pad "2" smd roundrect (at 0 0) (size 0.2 0.8) (layers "F.Cu"))
+      (pad "3" smd roundrect (at 0.4 0) (size 0.2 0.8) (layers "F.Cu"))
+      (pad "4" smd roundrect (at 3 -0.4 90) (size 0.2 0.8) (layers "F.Cu"))
+      (pad "5" smd roundrect (at 3 0 90) (size 0.2 0.8) (layers "F.Cu"))
+      (pad "6" smd rect (at 6 0) (size 1 1) (layers "F.Cu"))
+      (pad "6" smd rect (at 6 0) (size 1 1) (layers "F.Cu")))"""
+
+    def fp(self):
+        from kipcb import fplib, sexp
+        return fplib.Footprint("T:QFN", "", sexp.loads(self.FP))
+
+    def test_track_limits_from_pitch(self):
+        lims = self.fp().track_limits(0.2)
+        # 0.4 mm pitch, 0.2 mm pads, 0.2 clearance + 0.01 margin: 2 * (0.4 - 0.1 - 0.21) = 0.18
+        self.assertAlmostEqual(lims["2"], 0.18, places=3)
+        self.assertAlmostEqual(lims["4"], 0.18, places=3)     # rotated pads use their real width
+        self.assertNotIn("6", lims)                            # stacked same-number pads ignored
+        self.assertAlmostEqual(self.fp().track_limits(0.15)["2"], 0.28, places=3)
+        self.assertAlmostEqual(self.fp().pitch(), 0.4, places=3)
+
+    def test_dsn_boundary_inset(self):
+        import tempfile
+        from kipcb import route
+        with tempfile.NamedTemporaryFile("w", suffix=".dsn", delete=False) as f:
+            f.write("(pcb x (structure (boundary (path pcb 0  0 0  10000 0  10000 -10000  0 -10000  0 0)) ))")
+        route._inset_boundary(f.name, 300)
+        text = open(f.name).read()
+        os.remove(f.name)
+        self.assertIn("300.0 -300.0", text)
+        self.assertIn("9700.0 -9700.0", text)
+
+
+class PreflightTests(unittest.TestCase):
+    def test_routability_learns_from_history(self):
+        from kipcb import learn
+        rows = [{"kind": "route_final", "features": {"layers": 2, "conn_density": d}, "unconnected": u}
+                for d, u in ((5.0, 0), (5.5, 0), (5.2, 3), (12.0, 9))]
+        orig = learn.history
+        try:
+            learn.history = lambda kind=None, include_tainted=False: rows
+            r = learn.routability(2, 5.1)
+            self.assertEqual((r["ok"], r["n"]), (2, 3))
+            self.assertEqual(learn.routability(2, 12.5)["ok"], 0)
+            self.assertIsNone(learn.routability(4, 5.0))
+        finally:
+            learn.history = orig
+
+    def test_report_blocks_on_preflight_failures(self):
+        import tempfile
+        from kipcb import report, paths
+        with tempfile.TemporaryDirectory() as pdir:
+            rep = paths.reports(pdir)
+            os.makedirs(rep, exist_ok=True)
+            with open(os.path.join(rep, "build.json"), "w") as f:
+                json.dump({"width": 10, "height": 10}, f)
+            with open(os.path.join(rep, "preflight.json"), "w") as f:
+                json.dump({"items": [{"check": "pad reach", "level": "FAIL", "message": "x", "fix": "y"}]}, f)
+            r = report.collect(pdir, "t")
+            self.assertTrue(any(b.startswith("preflight pad reach") for b in r["blockers"]))
+            self.assertIn("not routed: fix the preflight problems first", r["blockers"])
+
+
+class EstimateTests(unittest.TestCase):
+    def test_heuristics_and_learning(self):
+        from kipcb import estimate, learn
+        simple = {"parts": 10, "pads": 40, "connections": 20, "layers": 2, "finest_pitch": None, "fine_parts": []}
+        hard = dict(simple, parts=44, pads=200, finest_pitch=0.4, fine_parts=["U3 (RP2040)"])
+        self.assertLess(estimate._heuristic(simple)["route"][1], 60)
+        self.assertGreaterEqual(estimate._heuristic(hard)["route"][0], 300)
+        rows = [{"kind": "run_timings", "features": dict(hard), "timings": {"route": t, "build": 50}}
+                for t in (400, 440, 460)]
+        orig = learn.history
+        try:
+            learn.history = lambda kind=None, include_tainted=False: rows
+            got = estimate._learned(hard)
+            self.assertEqual(got["_n"], 3)
+            self.assertAlmostEqual(got["route"][0], 440 * 0.8)
+            self.assertEqual(estimate._learned(simple), {})
+        finally:
+            learn.history = orig
+        self.assertEqual(estimate.span(300, 480), "5-8 min")
+        self.assertEqual(estimate.fmt(6), "6s")
 
 
 if __name__ == "__main__":
@@ -242,12 +330,85 @@ class BlockExpansionTests(unittest.TestCase):
         self.assertEqual(c["symbol"], "Device:R")
         self.assertEqual(c["footprint"], "Resistor_SMD:R_0603_1608Metric")
         self.assertEqual(c["lcsc"], "C25804")
-        self.assertNotIn("lcsc", blocks.expand_part({"ref": "R2", "part": "R0603", "value": "33k"}))
+        self.assertNotIn("lcsc", blocks.expand_part({"ref": "R2", "part": "R0603", "value": "36.5k"}))
         h = blocks.expand_part({"ref": "J1", "part": "HEADER_1x06"})
         self.assertEqual(h["symbol"], "Connector_Generic:Conn_01x06")
         self.assertIn("PinHeader_1x06", h["footprint"])
         with self.assertRaises(blocks.BlockError):
             blocks.expand_part({"ref": "X1", "part": "NOPE"})
+
+    def test_catalog_value_matching(self):
+        from kipcb import blocks
+        part = lambda name, value: blocks.expand_part({"ref": "X1", "part": name, "value": value})
+        self.assertEqual(part("R0603", "0")["lcsc"], part("R0603", "0R")["lcsc"])       # zero ohm
+        self.assertEqual(part("C0603", "100nF")["lcsc"], part("C0603", "0.1uF")["lcsc"])
+        self.assertEqual(part("R0402", "4k7")["lcsc"], part("R0402", "4.7k")["lcsc"])
+        self.assertEqual(part("LED0805", "Green LED")["lcsc"], part("LED0805", "green")["lcsc"])
+        self.assertIn("lcsc", part("R1206", "0.1"))                                     # 100 mohm shunt
+        c = part("C1206", "22uF")
+        self.assertEqual(c["voltage_rating"], 25)
+        self.assertTrue(c["footprint_checked"])
+        self.assertNotIn("footprint_checked", blocks.expand_part(
+            {"ref": "C1", "part": "C0603", "value": "1uF", "footprint": "Capacitor_SMD:C_0805_2012Metric"}))
+
+    def test_catalog_lcsc_numbers_are_well_formed(self):
+        import re
+        from kipcb import blocks
+        for name, e in blocks.builtin_parts().items():
+            codes = [e["lcsc"]] if isinstance(e.get("lcsc"), str) else list((e.get("lcsc") or {}).values())
+            for code in codes:
+                self.assertRegex(code, r"^C\d+$", name)
+        for name, b in blocks.builtin_blocks().items():
+            for c in b["components"]:
+                if "part" in c:
+                    self.assertIsNotNone(blocks.lookup_part(c["part"]), "%s: %s" % (name, c["part"]))
+
+    def test_block_omit_drops_parts_and_their_pins(self):
+        from kipcb import blocks
+        raw = {"name": "t", "blocks": [{"use": "can_sn65hvd230", "omit": ["R1"]}]}
+        spec, _ = blocks.expand(raw)
+        self.assertEqual([c["ref"] for c in spec["components"] if c["ref"].startswith("R")], [])
+        self.assertEqual(spec["nets"]["CANH"], ["U1.CANH"])
+        with self.assertRaises(blocks.BlockError):
+            blocks.expand({"blocks": [{"use": "can_sn65hvd230", "omit": ["R9"]}]})
+
+    def test_block_internal_power_net_is_registered(self):
+        from kipcb import blocks
+        spec, _ = blocks.expand({"name": "t", "blocks": [{"use": "drv8833_motor"}]})
+        self.assertIn("drv8833_motor_VINT", spec["power_nets"])
+
+    def test_capacitor_voltage_rating_warning(self):
+        from kipcb.spec import Design
+        d = Design.__new__(Design)
+        d.raw = {}
+        d.warnings, d.notes = [], []
+
+        class P:
+            pass
+        c = P()
+        c.ref, c.value, c.d = "C1", "47uF", {"voltage_rating": 6.3}
+        c.sym = P(); c.sym.pins = [{"number": "1", "type": "passive"}, {"number": "2", "type": "passive"}]
+        d.components = [c]
+        d.nets = {"+12V": [("C1", "1")], "GND": [("C1", "2")]}
+        d.pin_net = {("C1", "1"): "+12V", ("C1", "2"): "GND"}
+        d.power_nets = {"+12V", "GND"}
+        d.by_ref = {"C1": c}
+        d.electrical_checks()
+        self.assertTrue(any("rated 6.3V" in w for w in d.warnings), d.warnings)
+
+    def test_bom_stock_check_is_silent_offline(self):
+        from kipcb import lcsc
+        orig = lcsc.lookup
+        try:
+            lcsc.lookup = lambda codes, refresh=False: {c: {"code": c, "found": False, "error": "network"} for c in codes}
+            self.assertEqual(lcsc.check_bom(["C1", "C2"]), [])
+            lcsc.lookup = lambda codes, refresh=False: {"C1": {"code": "C1", "found": True, "stock": 0, "mpn": "X"},
+                                                        "C2": {"code": "C2", "found": False}}
+            msgs = dict(lcsc.check_bom(["C1", "C2"]))
+            self.assertIn("out of stock", msgs["C1"])
+            self.assertIn("not a", msgs["C2"])
+        finally:
+            lcsc.lookup = orig
 
     def test_blocks_renumber_connect_and_handle_optional_ports(self):
         from kipcb import blocks

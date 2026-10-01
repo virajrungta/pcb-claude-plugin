@@ -92,3 +92,23 @@ def layout_prior(layers=2):
     if not d or d.get("n", 0) < 5:
         return None
     return d
+
+
+def routed_density(layers=2):
+    """Connections per cm² of fully routed real boards with this layer count (p50/p90), or None."""
+    kb = load()
+    d = ((kb or {}).get("design_rules", {}).get("routed_density_connections_per_cm2") or {}).get(str(layers))
+    if not d or d.get("n", 0) < 5:
+        return None
+    return d
+
+
+def pitch_rules(pitch):
+    """What real boards use to reach pads at this pitch: {"track_at_pad_mm": {...}, "clearance_mm": {...}}."""
+    kb = load()
+    rules = (kb or {}).get("design_rules", {}).get("by_pitch") or {}
+    for b in ("0.4", "0.5", "0.65", "0.8", "1"):
+        if pitch <= float(b) + 0.02:
+            r = rules.get(b)
+            return r if r and r.get("footprints", 0) >= 5 else None
+    return None

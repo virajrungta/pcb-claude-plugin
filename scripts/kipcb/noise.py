@@ -303,6 +303,10 @@ def check(pdir, name, board=None):
         if not ts:
             continue
         w = min(t.GetWidth() for t in ts) / 1e6
+        if any(t.GetNetClassName() == "PowerFine" for t in ts):
+            rep.add("power width", PASS, "%s narrowed to %.2f mm to reach fine-pitch pins; fine for "
+                    "a few hundred mA" % (_n(n), w))
+            continue
         rep.add("power width", PASS if w >= 0.4 else WARN, "%s narrowest track %.2f mm%s" % (
             _n(n), w, "" if w >= 0.4 else ": thin supply traces add resistance and noise; widen where current flows"))
 

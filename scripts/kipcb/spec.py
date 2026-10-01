@@ -93,6 +93,7 @@ class Design(object):
             self.raw, self.block_summary = blocks.expand(self.raw)
         except blocks.BlockError as e:
             raise SpecError(str(e))
+        self.support = self.raw.pop("_support", [])     # advanced blocks: set expectations up front
         r = self.raw
         self.name = r.get("name") or os.path.splitext(os.path.basename(path))[0]
         if not re.match(r"^[A-Za-z0-9_\-]+$", self.name):
@@ -112,7 +113,77 @@ class Design(object):
         self.nets = {}          # net name -> [(ref, pin_number)]
         self.pin_net = {}       # (ref, pin_number) -> net
         self.no_connect = set()
+        self.auto_classes = []
         self._load()
+        self._fit_tracks_to_pitch()
+        self._support_levels()
+
+    def _support_levels(self):
+        """Fine-pitch chips outside blocks get the same up-front note as advanced blocks."""
+        layers = int(self.board.get("layers", 2))
+        noted = " ".join(self.support)
+        for c in self.components:
+            if c.fp is None or len(c.fp.pads) < 32 or c.ref.rstrip("0123456789") not in ("U", "IC"):
+                continue
+            p = c.fp.pitch()
+            if p and p <= 0.42 and layers <= 2 and c.value.lower() not in noted.lower():
+                self.support.append("%s (%s) is advanced: %.1f mm-pitch pins on 2 layers; autorouting may leave a "
+                                    "few connections near it (4 layers or hand-finishing in KiCad)" % (c.ref, c.value, p))
+
+    def _fit_tracks_to_pitch(self):
+        """Nets that touch fine-pitch pads (QFN-56 at 0.4 mm, LQFP at 0.5 mm...) get a netclass
+        that can reach those pads, using the clearance and track width real boards use at that
+        pitch (knowledge base); otherwise the router can't connect them at all."""
+        from . import knowledge
+        user_nets = {n for nc in self.raw.get("net_classes", []) for n in nc.get("nets", [])}
+        user_rules = self.raw.get("rules", {})
+        gnd = self.board.get("ground_pour", "GND")
+        floor = 0.127                                   # JLCPCB / PCBWay standard minimum
+        base_clr = self.rules["clearance"]
+        need = {}                                       # net -> (fine clearance, max width there)
+        for c in self.components:
+            if c.fp is None or not c.fp.track_limits(base_clr):
+                continue
+            learned = knowledge.pitch_rules(c.fp.pitch() or 9.0) or {}
+            typical = (learned.get("track_at_pad_mm") or {}).get("p50")
+            clr = (learned.get("clearance_mm") or {}).get("p50")
+            clr = base_clr if (not clr or "clearance" in user_rules) else min(base_clr, max(floor, clr))
+            at_base = c.fp.track_limits(base_clr)
+            at_fine = c.fp.track_limits(clr)
+            for num, lim in at_base.items():
+                net = self.pin_net.get((c.ref, num))
+                if not net or net in user_nets:
+                    continue
+                power = net in self.power_nets and net != gnd
+                width = self.rules["power_track"] if power else self.rules["track"]
+                if lim >= width:
+                    continue                            # the normal rules already reach this pad
+                w = at_fine.get(num, lim)
+                if typical and typical < w:
+                    w = typical                         # what designers use there, if narrower
+                old = need.get(net)
+                need[net] = (min(clr, old[0]) if old else clr, min(w, old[1]) if old else w)
+        snap = lambda w: max(floor, int(w / 0.005 + 1e-6) * 0.005)
+        # unused pins of those chips get the same (smaller) clearance, or a track entering a pin
+        # would still have to keep the default clearance from its unused neighbours
+        fine_refs = sorted({ref for ref, num in self.pin_net if self.pin_net[(ref, num)] in need})
+        groups = {}
+        for net, (clr, w) in sorted(need.items()):
+            power = net in self.power_nets and net != gnd
+            groups.setdefault("PowerFine" if power else "Fine", []).append((net, clr, w))
+        for name, rows in sorted(groups.items()):
+            if name == "Fine" and "track" in user_rules:
+                continue
+            w = min(r[2] for r in rows)
+            clr = min(r[1] for r in rows)
+            cls = {"name": name, "track": round(snap(w), 3), "nets": [r[0] for r in rows]}
+            if clr < base_clr:
+                cls["clearance"] = round(clr, 3)
+            if w < floor:
+                cls["clearance"] = floor                # pitch too tight even at the minimum width
+            if name == "Fine":
+                cls["patterns"] = ["unconnected-(%s-*" % r for r in fine_refs]
+            self.auto_classes.append(cls)
 
     # ------------------------------------------------------------ loading
     def _load(self):
@@ -213,6 +284,8 @@ class Design(object):
             self.errors.append("%s: symbol pins %s have no pad in footprint %s (pads: %s)" % (
                 c.ref, ",".join(missing), c.footprint_id, ",".join(sorted(pads, key=fplib._natkey))))
         extra = sorted(pads - {p["number"] for p in c.sym.pins}, key=fplib._natkey)
+        if c.d.get("footprint_checked"):
+            return                # catalog part: symbol/footprint pairing already verified
         if extra:
             self.warnings.append("%s: footprint pads %s have no symbol pin (left unconnected)" % (c.ref, ",".join(extra)))
         filters = c.sym.props.get("ki_fp_filters", "").split()
@@ -284,6 +357,16 @@ class Design(object):
                 desc = " and ".join("%s (%gV)" % (", ".join(sorted(refs)), v) for v, refs in sorted(sides.items()))
                 self.warnings.append("logic levels: net %s connects %s; check the lower-voltage part is "
                                      "tolerant of %gV, or add a level shifter" % (net, desc, max(sides)))
+
+        # capacitor voltage ratings (catalog parts carry the rating of their LCSC part)
+        for c in self.components:
+            rating = c.d.get("voltage_rating")
+            if not rating:
+                continue
+            vmax = max([rails.get(self.pin_net.get((c.ref, p["number"])), 0) for p in c.sym.pins] or [0])
+            if vmax > 0.8 * float(rating):
+                self.warnings.append("%s (%s, rated %gV) sits on a %gV rail; use a higher-voltage part "
+                                     "(rating at least 1.25x the rail)" % (c.ref, c.value, float(rating), vmax))
 
         # power budget per rail, from component current_ma
         loads = {}

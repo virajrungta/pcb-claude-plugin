@@ -60,6 +60,11 @@ def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600):
     ui.always("check  ok: %d parts, %d nets, %d warning(s)" % (len(d.components), len(d.nets), len(d.warnings)))
     for line in getattr(d, "block_summary", []):
         ui.always("       block " + line)
+    for line in getattr(d, "support", []):
+        ui.always("       support " + line)
+    from . import estimate
+    for line in estimate.lines(d, fab=do_fab):
+        ui.always(line)
 
     # 2. build
     from . import build as buildmod
@@ -74,7 +79,18 @@ def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600):
     ui.always("build  %.0f x %.0f mm, %d layers (%ds)" % (b.get("width", 0), b.get("height", 0),
                                                          b.get("layers", 2), timings["build"]))
 
-    # 3. route
+    # 3. preflight: everything that would make routing fail, checked in seconds instead of minutes
+    from . import preflight
+    t = time.time()
+    fails = preflight.run(pdir, d.name, d)
+    timings["preflight"] = round(time.time() - t)
+    if fails:
+        ui.always("preflight  %d problem(s); not routing until they're fixed (fixes above)" % fails)
+        ui.always("\n" + report.text(report.write(pdir, d.name, timings)))
+        return 1
+    ui.always("preflight  ok (%ds)" % timings["preflight"])
+
+    # 4. route
     from . import route as routemod
     t = time.time()
     rc = routemod.route(pdir, d.name, passes=passes, timeout=timeout)
@@ -89,7 +105,7 @@ def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600):
                                             "%d unconnected" % rj["unconnected"],
                                             vias, "" if vias == 1 else "s", timings["route"]))
 
-    # 4. manufacturing files
+    # 5. manufacturing files
     if do_fab:
         from . import fab as fabmod, learn
         t = time.time()
@@ -111,5 +127,7 @@ def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600):
             blocks.remember(d)          # its parts become instant `part` names next time
     with open(_cache_file(pdir), "w") as f:
         json.dump({"hash": digest, "ready": ready, "timings": timings}, f)
+    if timings.get("route") is not None:
+        estimate.record(d, timings)       # future estimates use real timings of similar boards
     ui.always("\n" + report.text(r))
     return 0 if ready else 1

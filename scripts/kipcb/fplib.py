@@ -81,12 +81,16 @@ class Footprint(object):
             at = sexp.find(pad, "at")
             size = sexp.find(pad, "size")
             layers = sexp.find(pad, "layers")
+            w = float(size[1]) if size else 0.0
+            h = float(size[2]) if size else 0.0
+            if len(at) > 3 and int(round(float(at[3]))) % 180 == 90:
+                w, h = h, w                      # rotated pad: keep w/h in footprint axes
             self.pads.append({
                 "number": str(pad[1]),
                 "type": str(pad[2]),
                 "shape": str(pad[3]),
                 "x": float(at[1]), "y": float(at[2]),
-                "w": float(size[1]) if size else 0.0, "h": float(size[2]) if size else 0.0,
+                "w": w, "h": h,
                 "layers": [str(l) for l in layers[1:]] if layers else [],
             })
         self.courtyard = self._bbox(("F.CrtYd", "B.CrtYd"))
@@ -97,6 +101,48 @@ class Footprint(object):
     @property
     def smd(self):
         return "smd" in self.attrs
+
+    def track_limits(self, clearance, margin=0.01, clr_of=None):
+        """{pad number: widest track that can reach that pad without breaking clearance to the
+        next pad in its row}, for pads where the pitch is a constraint (QFN, LQFP, TSSOP...).
+        clr_of maps pad number -> its net's clearance; the larger of the two neighbours' counts."""
+        cu = [p for p in self.pads if p["number"] and any(l.endswith(".Cu") for l in p["layers"])]
+        out = {}
+        for a in cu:
+            for b in cu:
+                if a is b or a["number"] == b["number"]:
+                    continue
+                dx, dy = abs(a["x"] - b["x"]), abs(a["y"] - b["y"])
+                clr = clearance
+                if clr_of:
+                    clr = max(clr_of.get(a["number"], clearance), clr_of.get(b["number"], clearance))
+                if dy < 0.01 and (a["w"] + b["w"]) / 2 < dx < 1.5:
+                    room = dx - b["w"] / 2 - clr - margin
+                elif dx < 0.01 and (a["h"] + b["h"]) / 2 < dy < 1.5:
+                    room = dy - b["h"] / 2 - clr - margin
+                else:
+                    continue                     # overlapping (stacked) or far-apart pads
+                out[a["number"]] = min(out.get(a["number"], 9.0), 2 * room)
+        return out
+
+    def pitch(self):
+        """Smallest centre distance between neighbouring pads in a row (None for 2-pad parts)."""
+        cu = [p for p in self.pads if p["number"] and any(l.endswith(".Cu") for l in p["layers"])]
+        best = None
+        for i, a in enumerate(cu):
+            for b in cu[i + 1:]:
+                if a["number"] == b["number"]:
+                    continue
+                dx, dy = abs(a["x"] - b["x"]), abs(a["y"] - b["y"])
+                if dy < 0.01 and dx > (a["w"] + b["w"]) / 2:
+                    d = dx
+                elif dx < 0.01 and dy > (a["h"] + b["h"]) / 2:
+                    d = dy
+                else:
+                    continue
+                if best is None or d < best:
+                    best = d
+        return best
 
     def pad_numbers(self):
         return sorted({p["number"] for p in self.pads if p["number"]}, key=_natkey)

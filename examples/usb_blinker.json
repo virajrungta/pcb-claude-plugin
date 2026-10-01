@@ -11,7 +11,7 @@
     {"ref": "R1", "symbol": "Device:R", "footprint": "Resistor_SMD:R_0603_1608Metric", "value": "5.1k", "group": "power", "lcsc": "C23186", "place": {"near": "J1"}},
     {"ref": "R2", "symbol": "Device:R", "footprint": "Resistor_SMD:R_0603_1608Metric", "value": "5.1k", "group": "power", "lcsc": "C23186", "place": {"near": "J1"}},
     {"ref": "C1", "symbol": "Device:C", "footprint": "Capacitor_SMD:C_0603_1608Metric", "value": "10uF", "group": "power", "lcsc": "C19702"},
-    {"ref": "U1", "symbol": "MCU_Microchip_ATtiny:ATtiny85-20S", "value": "ATtiny85-20S", "group": "mcu", "lcsc": "C89852"},
+    {"ref": "U1", "symbol": "MCU_Microchip_ATtiny:ATtiny85-20S", "value": "ATtiny85-20S", "group": "mcu", "lcsc": "C31540447"},
     {"ref": "C2", "symbol": "Device:C", "footprint": "Capacitor_SMD:C_0603_1608Metric", "value": "100nF", "group": "mcu", "lcsc": "C14663", "place": {"near": "U1.VCC"}},
     {"ref": "R3", "symbol": "Device:R", "footprint": "Resistor_SMD:R_0603_1608Metric", "value": "10k", "group": "mcu", "lcsc": "C25804", "place": {"near": "U1.1"}},
     {"ref": "J2", "symbol": "Connector:AVR-ISP-6", "footprint": "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical", "value": "ISP", "group": "mcu", "place": {"edge": "right"}},

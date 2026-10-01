@@ -9,15 +9,17 @@ flowchart LR
     E --> F["🏗️ kipcb build<br/>schematic + placement"]
     F --> G["👀 Renders<br/>Claude inspects"]
     G -->|adjust hints| D
-    G --> H["🔀 kipcb route<br/>autoroute + pours"]
+    G --> P["🛫 kipcb preflight<br/>can it route?"]
+    P -->|fix| D
+    P --> H["🔀 kipcb route<br/>autoroute + pours"]
     H --> I["🔎 DRC + noise checks"]
     I -->|fix| D
     I --> J["📦 kipcb fab<br/>Gerbers, BOM, CPL"]
 ```
 
 `kipcb run` performs the whole right-hand side of this diagram in one command
-(check, build, route, manufacturing files, report), so a design iteration is a
-single step.
+(check, build, preflight, route, manufacturing files, report), so a design
+iteration is a single step.
 
 Claude does the engineering: requirements, part choice, circuit design,
 review and judgement calls. The bundled `kipcb` tool does the mechanical
@@ -43,6 +45,16 @@ already wired to the reference design, with spare IOs marked unused. Individual
 parts have short **part names** (`R0603`, `AMS1117-3.3`, `HEADER_1x04`) that fill
 in symbol, footprint and, for common values, an LCSC number. Every block and part
 is tested against KiCad's libraries before each release.
+
+The part catalog carries JLCPCB part numbers for 265 resistor and capacitor
+values (the JLCPCB basic library, which has no extra assembly fee; capacitors
+get the highest voltage rating stocked) and for about 80 named parts. `kipcb
+lcsc` checks live stock and searches JLCPCB's library, and exporting
+manufacturing files warns about out-of-stock parts in the BOM.
+
+Blocks can drop parts (`"omit": ["R1"]`, e.g. a bus terminator), and their
+optional bus ports (USB, SWD, reset) join a net of the same name automatically,
+so an `swd_header` block connects to an RP2040 or STM32 without wiring.
 
 Parts from boards that reach "ready to order" are remembered locally, so they
 become part names too.
@@ -86,6 +98,30 @@ Placement uses each footprint's real courtyard shape (a module's wide antenna
 section doesn't block the pins beside it), spacing presets with extra
 fan-out room around ICs, and `away_from` to separate noisy and sensitive parts.
 
+## Preflight
+
+Routing takes minutes; most reasons it fails can be seen in milliseconds on
+the placed board. `kipcb preflight` (run automatically before routing) checks:
+
+- **Pad reach**: the widest track that can reach a pad without breaking
+  clearance to its neighbour follows from the pad pitch. A 0.25 mm track
+  can't reach a 0.4 mm-pitch QFN pin at 0.2 mm clearance, so nets on
+  fine-pitch chips automatically get a netclass with the track width and
+  clearance real boards use at that pitch (from the knowledge base, e.g.
+  0.2 mm / 0.15 mm at 0.4 mm pitch); preflight verifies every pad is reachable.
+- **Netclasses**: each net has exactly one class (KiCad otherwise merges
+  them, usually with the wrong width).
+- **Manufacturer limits**: track, clearance, via, drill and edge clearance
+  against the chosen manufacturer's standard capabilities.
+- **Edge, overlaps, placement**: pads too near the edge, overlapping parts,
+  parts off the board, decoupling and crystal parts too far from their pins.
+- **Escape room**: sides of fine-pitch chips crowded by neighbours while
+  several pins still have to route out that way.
+- **Density**: connections per cm² compared with real routed boards and with
+  how your own boards of similar density routed.
+
+A failure stops the run before routing, with the fix.
+
 ## Routing
 
 Freerouting autoroutes from a Specctra DSN export. kipcb runs several
@@ -94,7 +130,8 @@ check and keeps the best, then runs a completion pass for anything left. The
 early strategies keep signals off the bottom layer so it stays an unbroken
 ground plane. Ground is then poured on both layers and stitched with vias.
 Stacked duplicate pads (like USB-C's paired VBUS pins) are hidden from the
-router so they don't cause failures.
+router so they don't cause failures, and the outline the router sees is
+shrunk by the copper-to-edge rule so no track ends up too close to the edge.
 
 ## Checks
 
@@ -116,6 +153,8 @@ pad density (a contextual bandit with an exploration bonus). The first run on
 a new kind of board uses the hand-tuned defaults; later runs start with what
 worked. Auto-sized boards use the tightest area per pad that has reliably
 routed, and footprints that caused unrouted connections get extra clearance.
+Preflight results and each board's routing density are logged too, so the
+density check learns how dense a board you can route at each layer count.
 Runs that followed a broken placement (a part left off the board) are
 ignored, so one bad run can't teach the wrong lesson. `kipcb learn reset`
 clears everything, and `KIPCB_LEARN=0` turns logging off.
@@ -123,8 +162,10 @@ clears everything, and `KIPCB_LEARN=0` turns logging off.
 **From open-source designs** (`kipcb ref <part>`): the companion
 [pcb-knowledge](https://github.com/virajrungta/pcb-knowledge) project mines
 openly licensed KiCad projects on GitHub into statistics: how real designs
-wire each chip's pins, plus layout distributions from hundreds of routed
-boards. Only aggregate statistics are kept, with attribution. A copy ships
+wire each chip's pins, layout distributions from hundreds of routed boards,
+the track widths and clearances designers use at each pin pitch, and the
+routing density real 2- and 4-layer boards reach. kipcb uses the pitch rules
+when it sets up netclasses and the density figures in preflight. Only aggregate statistics are kept, with attribution. A copy ships
 with the plugin, so `kipcb ref` works out of the box. Claude consults it during
 part selection and review; the datasheet always wins.
 

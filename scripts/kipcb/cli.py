@@ -2,6 +2,7 @@
 
 import argparse
 import os
+import re
 import sys
 
 from . import __version__, kienv
@@ -161,6 +162,8 @@ def cmd_check(a):
     print(d.summary())
     for line in getattr(d, "block_summary", []):
         print("block " + line)
+    for line in getattr(d, "support", []):
+        print("SUPPORT: " + line)
     for n in getattr(d, "notes", []):
         print("NOTE: " + n)
     for w in d.warnings:
@@ -234,6 +237,30 @@ def cmd_noise(a):
     return noise.run(pdir, name, quiet=a.quiet)
 
 
+def cmd_estimate(a):
+    """Approximate time per pipeline step, to tell the user before a run."""
+    from . import estimate
+    from .spec import Design
+    d = Design(a.spec)
+    for line in estimate.lines(d, fab=not a.no_fab):
+        print(line)
+    return 0
+
+
+def cmd_preflight(a):
+    """Routability checks on a built (placed) board, from its spec."""
+    from . import preflight
+    from .spec import Design
+    d = Design(a.spec)
+    pdir = os.path.join(d.dir, d.name)
+    if not os.path.exists(os.path.join(pdir, d.name + ".kicad_pcb")):
+        print("not built yet: kipcb build %s" % a.spec)
+        return 1
+    fails = preflight.run(pdir, d.name, d)
+    print("preflight: %s" % ("%d problem(s) to fix before routing" % fails if fails else "ok, ready to route"))
+    return 1 if fails else 0
+
+
 def cmd_netlist(a):
     from . import sexp
     pdir, name = _project_paths(a.target)
@@ -282,6 +309,32 @@ def cmd_settings(a):
     return 0
 
 
+def cmd_lcsc(a):
+    """C-numbers are looked up; anything else is a search ('kipcb lcsc -s "SHT31 | 10uF 0805"')."""
+    from . import lcsc
+    words = " ".join(a.codes)
+    if a.search or not all(re.match(r"^C?\d+$", w, re.I) for w in a.codes):
+        rc = 0
+        queries = _queries(a.codes)
+        for q in queries:
+            rows = lcsc.search(q, limit=a.limit or 6, basic_only=a.basic)
+            if len(queries) > 1:
+                print("## " + q)
+            if rows is None:
+                print("  offline: can't reach JLCPCB's parts search")
+                return 1
+            if not rows:
+                print("  no parts match")
+                rc = 1
+            for r in rows:
+                print(lcsc.describe(r))
+        return rc
+    res = lcsc.lookup(words.split(), refresh=a.refresh)
+    for code in res:
+        print(lcsc.describe(res[code]))
+    return 0 if all(r.get("found") for r in res.values()) else 1
+
+
 def cmd_parts(a):
     from . import blocks
     q = " ".join(a.query).lower()
@@ -313,31 +366,46 @@ def json_dumps(o):
 
 
 def cmd_blocks(a):
+    """No args: list all. Block names: details for each. Other words: filter the list."""
     from . import blocks
     cat = blocks.builtin_blocks()
-    if a.name:
-        b = cat.get(a.name)
-        if b is None:
-            print("no block %r; `kipcb blocks` lists them" % a.name)
-            return 1
+    names = [n for n in a.name if n in cat]
+    words = [w.lower() for w in a.name if w not in cat]
+    for name in names:
+        b = cat[name]
         ports = [n[1:] for n in b["nets"] if n.startswith("@")]
         opt = set(b.get("optional", []))
         req = [p for p in ports if p not in opt]
-        print("%s: %s" % (a.name, b["title"]))
+        print("%s: %s%s" % (name, b["title"], "  [advanced]" if b.get("support") == "advanced" else ""))
         print("  " + b["description"])
+        if b.get("support_note"):
+            print("  support: advanced -- " + b["support_note"])
         defaults = b.get("defaults", {})
         print("  ports: " + " ".join("%s%s" % (p, ("=" + defaults[p]) if p in defaults else "") for p in req))
         if opt:
             print("  optional ports (no-connect if unused): " + " ".join(p for p in ports if p in opt))
+        if b.get("autojoin"):
+            print("  joins a same-named net automatically: " + " ".join(b["autojoin"]))
         if b.get("params"):
             print("  params: " + " ".join("%s=%s" % kv for kv in b["params"].items()))
         print("  parts: " + ", ".join("%s %s %s" % (c["ref"], c.get("part", ""), c.get("value", "")) for c in b["components"]))
-        print('  use: {"use": "%s", "connect": {%s}}' % (a.name, ", ".join('"%s": "..."' % p for p in req[:3])))
+        print('  use: {"use": "%s", "connect": {%s}}  ("omit": ["R1"] drops a part)' % (
+            name, ", ".join('"%s": "..."' % p for p in req[:3])))
+    if names and not words:
         return 0
+    shown = 0
     for name, b in cat.items():
+        text = (name + " " + b["title"] + " " + b["description"]).lower()
+        if words and not all(w in text for w in words):
+            continue
         ports = [n[1:] for n in b["nets"] if n.startswith("@") and n[1:] not in set(b.get("optional", []))]
-        print("%s: %s | ports %s%s" % (name, b["title"], " ".join(ports), " +IOs" if b.get("optional") else ""))
-    print("(`kipcb blocks <name>` for ports, params and parts)")
+        print("%s: %s%s | ports %s%s" % (name, b["title"], " [advanced]" if b.get("support") == "advanced" else "",
+                                         " ".join(ports), " +IOs" if b.get("optional") else ""))
+        shown += 1
+    if words and not shown:
+        print("no block matches %r" % " ".join(words))
+        return 1
+    print("(`kipcb blocks <name> [<name>...]` for ports, params and parts)")
     return 0
 
 
@@ -429,10 +497,23 @@ def main(argv=None):
     p.add_argument("target"); p.set_defaults(fn=cmd_netlist)
     p = sp.add_parser("ref", help="how open-source designs wire a part (needs the knowledge base)")
     p.add_argument("part", nargs="+"); p.set_defaults(fn=cmd_ref)
+    p = sp.add_parser("estimate", help="approximate time for each step of `kipcb run` on this spec, "
+                      "with the reason when a step is long")
+    p.add_argument("spec"); p.add_argument("--no-fab", action="store_true"); p.set_defaults(fn=cmd_estimate)
+    p = sp.add_parser("preflight", help="seconds-long checks that a placed board can route cleanly "
+                      "(pad reach, fab limits, edge, placement, density)")
+    p.add_argument("spec"); p.set_defaults(fn=cmd_preflight)
+    p = sp.add_parser("lcsc", help="look up LCSC/JLCPCB numbers, or search JLCPCB's parts ('a | b'): "
+                      "package, basic/extended, stock, price")
+    p.add_argument("codes", nargs="+"); p.add_argument("--refresh", action="store_true")
+    p.add_argument("-s", "--search", action="store_true", help="treat the words as a search")
+    p.add_argument("--basic", action="store_true", help="search basic parts only (no extra setup fee)")
+    p.add_argument("--limit", type=int)
+    p.set_defaults(fn=cmd_lcsc)
     p = sp.add_parser("parts", help="prebuilt parts usable as {\"part\": \"R0603\"} (plus parts remembered from your boards)")
     p.add_argument("query", nargs="*"); p.set_defaults(fn=cmd_parts)
-    p = sp.add_parser("blocks", help="prebuilt circuit blocks (USB-C, regulators, MCUs, LEDs...); give a name for details")
-    p.add_argument("name", nargs="?"); p.set_defaults(fn=cmd_blocks)
+    p = sp.add_parser("blocks", help="prebuilt circuit blocks (USB-C, regulators, MCUs, LEDs...); names for details, other words filter")
+    p.add_argument("name", nargs="*"); p.set_defaults(fn=cmd_blocks)
     p = sp.add_parser("guide", help="print the reference section on a topic (no topic: list sections)")
     p.add_argument("topic", nargs="*"); p.set_defaults(fn=cmd_guide)
     p = sp.add_parser("fmt", help="rewrite specs in the compact one-line-per-part layout")
