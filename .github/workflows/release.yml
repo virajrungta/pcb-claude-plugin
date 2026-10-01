@@ -1,0 +1,27 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish the GitHub release from CHANGELOG.md
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          VERSION="${TAG#v}"
+          python3 - "$VERSION" > notes.md <<'EOF'
+          import re, sys
+          s = open("CHANGELOG.md").read()
+          m = re.search(r"## V%s - [^\n]*\n(.*?)(?=\n## |\Z)" % re.escape(sys.argv[1]), s, re.S)
+          print(m.group(1).strip() if m else "See CHANGELOG.md")
+          EOF
+          gh release create "$TAG" --title "V$VERSION" --notes-file notes.md --verify-tag

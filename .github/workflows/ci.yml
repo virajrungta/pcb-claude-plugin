@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # 3.9 matches the Python bundled with KiCad 9 on macOS
+        python: ["3.9", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Unit tests
+        run: PYTHONPATH=scripts python -m unittest discover -s tests -v
+      - name: Manifests and examples are valid JSON
+        run: |
+          for f in .claude-plugin/*.json examples/*.json; do python -m json.tool "$f" > /dev/null; done
+      - name: Shell scripts parse
+        run: bash -n bin/kipcb && bash -n scripts/release.sh

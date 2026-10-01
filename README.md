@@ -1,39 +1,99 @@
-# PCB Design plugin for Claude Code
+<div align="center">
 
-Describe a board in plain English and get a manufacturable KiCad project:
-requirements → part selection → schematic → placement → autorouting →
-ERC/DRC → Gerbers, BOM and pick-and-place files.
+<img src="docs/images/c3_sensor_angle.png" alt="A 3D render of an ESP32-C3 board designed, placed and routed by the plugin" width="640">
 
+# PCB Design for Claude Code
+
+**Describe a circuit board in plain English. Get a manufacturable KiCad project.**
+
+Requirements → parts → schematic → placement → autorouting → checks → Gerbers, BOM and pick-and-place,
+<br>with Claude as your electrical engineer.
+
+<a href="https://github.com/virajrungta/pcb-claude-plugin/releases"><img src="https://img.shields.io/github/v/release/virajrungta/pcb-claude-plugin?label=release&color=2ea44f" alt="Latest release"></a>
+<a href="https://github.com/virajrungta/pcb-claude-plugin/actions/workflows/ci.yml"><img src="https://github.com/virajrungta/pcb-claude-plugin/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+<img src="https://img.shields.io/badge/KiCad-9-314cb0" alt="KiCad 9">
+<img src="https://img.shields.io/badge/Claude%20Code-plugin-d97757" alt="Claude Code plugin">
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
+
+<a href="docs/getting-started.md"><b>Getting started</b></a> ·
+<a href="docs/how-it-works.md"><b>How it works</b></a> ·
+<a href="docs/cli.md"><b>CLI reference</b></a> ·
+<a href="docs/troubleshooting.md"><b>Troubleshooting</b></a> ·
+<a href="CHANGELOG.md"><b>Changelog</b></a>
+
+</div>
+
+---
+
+```text
+/pcb:design a USB-C powered ESP32-C3 board with an RGB status LED, reset and boot buttons, and a 4-pin sensor header
 ```
-/pcb:design a USB-C powered ESP32-C3 board with a WS2812 LED, reset/boot buttons and a 4-pin sensor header
-```
 
-Claude acts as the electrical engineer (choosing parts, following datasheet
-reference circuits, reviewing the design), and the bundled `kipcb` tool does
-the KiCad work. Everything is generated from a small JSON design spec, so
-changes are made in the spec and rebuilt.
+Claude asks a few questions (size, power, connectors, how you'll build it, anything noise-sensitive),
+picks real parts, follows each chip's datasheet, validates every pin, builds the schematic and board
+in KiCad, looks at its own renders to fix the layout, routes it, runs electrical and noise checks,
+and hands you files a fab house can build.
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/images/c3_sensor_top.png" alt="ESP32-C3 sensor board, top view" width="100%"><br>
+      <sub><b>ESP32-C3 sensor node</b>: USB-C, LDO, ESD, buttons, RGB LED, dual op-amp.<br>
+      0 DRC errors · antenna keep-out respected · decoupling ≤ 2 mm from every supply pin</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/images/c3_sensor_schematic.png" alt="Generated schematic for the ESP32-C3 sensor node" width="100%"><br>
+      <sub><b>Generated schematic</b>: grouped by function, labelled nets, standard<br>
+      power symbols, ERC-clean, editable in KiCad</sub>
+    </td>
+  </tr>
+</table>
 
 ## What you get
 
-| Command | What it does |
-|---|---|
-| `/pcb:design [idea]` | Full idea-to-PCB workflow |
-| `/pcb:review [project]` | Review any KiCad project: ERC, DRC, netlist checklist, renders |
-| `/pcb:fab [project]` | Gerbers + drill zip, JLCPCB-format BOM and CPL, ordering checklist |
-| `pcb:circuit-reviewer` agent | Independent schematic review against datasheets |
+<table>
+  <tr>
+    <th align="left">Command</th>
+    <th align="left">What it does</th>
+  </tr>
+  <tr>
+    <td><code>/pcb:design [idea]</code></td>
+    <td>The full workflow: requirements, part selection, schematic, placement, routing, checks and manufacturing files</td>
+  </tr>
+  <tr>
+    <td><code>/pcb:review [project]</code></td>
+    <td>Reviews <i>any</i> KiCad project: ERC, DRC, noise checks, a netlist checklist and renders, as a prioritized list of fixes</td>
+  </tr>
+  <tr>
+    <td><code>/pcb:fab [project]</code></td>
+    <td>Gerbers and drill zip, JLCPCB-format BOM and pick-and-place file, plus an ordering checklist</td>
+  </tr>
+  <tr>
+    <td><code>pcb:circuit-reviewer</code></td>
+    <td>A subagent that gives an independent second opinion on the circuit against datasheets</td>
+  </tr>
+  <tr>
+    <td><code>kipcb</code></td>
+    <td>The engine behind it all; also usable on its own (<a href="docs/cli.md">reference</a>)</td>
+  </tr>
+</table>
 
-Every build produces a normal KiCad 9 project (`.kicad_pro`, `.kicad_sch`,
-`.kicad_pcb`) that you can open and edit in KiCad.
+Every design is a normal **KiCad 9 project** (`.kicad_pro`, `.kicad_sch`, `.kicad_pcb`) that you can open and edit at any point.
 
-## Requirements
+## Highlights
 
-- [KiCad 9](https://www.kicad.org/download/). `kipcb` uses KiCad's bundled
-  Python (`pcbnew`) and `kicad-cli`.
-- Java 21+ for autorouting with [Freerouting](https://github.com/freerouting/freerouting)
-  (Java 25+ for the newest version). Run `kipcb setup-router` once to download it into `~/.cache/kipcb`.
-- macOS or Linux.
+- **Asks before it designs**: board size, power budget, connector edges, build method and noise sensitivity are pinned down first, not guessed.
+- **Real parts, verified pins**: every symbol and footprint comes from KiCad's libraries; every pin is checked, and unused pins must be marked deliberately.
+- **Placement that follows the rules of thumb**: connectors flush to edges facing out, decoupling caps first and right at their pins, room for ICs to fan out, noisy parts kept away from sensitive ones.
+- **Routing that finishes**: Freerouting with several strategies, a completion pass, ground pours on both layers and stitching vias.
+- **Noise checks**: decoupling distance, ground-plane integrity, crosstalk, crystal and switching-regulator layout, differential pairs, supply track width.
+- **Gets smarter with use**: routing strategy, board sizing and footprint clearances improve with every board you route, and `kipcb ref` shows how open-source designs wire each chip ([how](docs/how-it-works.md#learning)). Everything stays on your machine.
 
-## Install
+## Quick start
+
+**1. Install the requirements:** [Claude Code](https://claude.com/claude-code), [KiCad 9](https://www.kicad.org/download/), and Java 21+ for the autorouter (`brew install --cask temurin` on macOS).
+
+**2. Install the plugin:**
 
 ```bash
 claude plugin marketplace add virajrungta/pcb-claude-plugin
@@ -43,96 +103,84 @@ claude plugin marketplace add virajrungta/pcb-claude-plugin
 claude plugin install pcb@pcb-claude-plugin
 ```
 
-Or try it for one session without installing:
-
-```bash
-claude --plugin-dir /path/to/pcb-claude-plugin
-```
-
-Then check the toolchain:
+**3. Check your setup** (in a new Claude Code session, or ask Claude to run it):
 
 ```bash
 kipcb doctor
 ```
 
-## The `kipcb` tool
+**4. Design something:**
 
-Claude runs these for you; they're also usable directly (`bin/kipcb`).
-
-```
-kipcb doctor                      check KiCad, Java, Freerouting
-kipcb sym-search <words>          find schematic symbols      kipcb sym-info Lib:Name
-kipcb fp-search <words>           find footprints             kipcb fp-info Lib:Name
-kipcb check spec.json             validate a design spec
-kipcb build spec.json             schematic + placed board + ERC + previews
-kipcb route <project>             Freerouting + ground pour + stitching vias + DRC
-kipcb noise <project>             basic noise / signal-integrity checks
-kipcb ref <part>                  how open-source designs wire a part
-kipcb learn [reset]               what kipcb has learned from past runs
-kipcb erc|drc|netlist|render <project>
-kipcb fab <project>               Gerbers/drill zip, BOM, CPL
-kipcb setup-router                download Freerouting
+```text
+/pcb:design a 30 x 20 mm USB-C LED blinker with an ATtiny85 and an ISP header
 ```
 
-Try the examples:
+**5. Open the result in KiCad**, review it, and order boards with `/pcb:fab`.
+
+The [getting started guide](docs/getting-started.md) walks through each step.
+
+## Examples
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/images/usb_blinker_angle.png" alt="USB-C ATtiny85 LED blinker" width="100%"><br>
+      <sub><a href="examples/usb_blinker.json"><code>usb_blinker.json</code></a>: 30 × 22 mm, ATtiny85, USB-C power, ISP header</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/images/usb_blinker_top.png" alt="USB-C LED blinker, top view" width="100%"><br>
+      <sub>Routed on the top layer so the bottom stays a solid ground plane</sub>
+    </td>
+  </tr>
+</table>
+
+Build them yourself from a clone:
 
 ```bash
-bin/kipcb build examples/usb_blinker.json
+bin/kipcb build examples/c3_sensor.json && bin/kipcb route examples/c3_sensor && bin/kipcb fab examples/c3_sensor
 ```
 
-```bash
-bin/kipcb route examples/usb_blinker
-```
+## Documentation
 
-```bash
-bin/kipcb fab examples/usb_blinker
-```
+| Guide | For |
+|---|---|
+| [Getting started](docs/getting-started.md) | Installing, your first board, opening it in KiCad, ordering |
+| [How it works](docs/how-it-works.md) | The pipeline, placement, routing, checks and learning |
+| [CLI reference](docs/cli.md) | Every `kipcb` command, the output layout, environment variables |
+| [Design spec format](skills/design/references/spec-format.md) | The JSON spec: parts, nets, placement hints, custom parts |
+| [Circuit patterns](skills/design/references/circuit-patterns.md) | Proven sub-circuits and values Claude follows |
+| [Layout and noise guidelines](skills/design/references/layout-guidelines.md) | Placement hints, routing and noise-check criteria |
+| [Manufacturing](skills/design/references/manufacturing.md) | Fab rules, JLCPCB assembly and the ordering checklist |
+| [Troubleshooting](docs/troubleshooting.md) | Common problems and fixes |
 
-## How it works
+## Requirements
 
-1. **Spec**: a JSON file lists components (KiCad symbol + footprint + value
-   + LCSC number), nets as `REF.PIN` lists, and optional placement hints. See
-   [spec-format.md](skills/design/references/spec-format.md).
-2. **Validation**: every pin is resolved against the real KiCad library
-   symbol, symbol pins are checked against footprint pads, and every unused pin
-   must be explicitly marked no-connect.
-3. **Schematic**: symbols are laid out by functional group, each pin wired
-   to a net label or power symbol, with PWR_FLAGs where ERC needs them.
-4. **Board**: footprints, nets and net classes, an outline with rounded
-   corners and optional mounting holes, then connectivity-driven placement
-   (connectors flush to edges facing out, decoupling caps pulled to their pins).
-5. **Routing**: Specctra DSN → Freerouting → SES import, with automatic retry
-   at narrower power widths, healing of near-miss track ends, GND pours on both
-   layers, and stitching vias.
-6. **Checks and outputs**: KiCad ERC/DRC with schematic parity, noise
-   checks (decoupling distance, ground plane integrity, crosstalk, crystals,
-   switch-node loops, differential pairs), 3D renders for visual review, and fab
-   files referenced to the board corner.
-
-## Learning
-
-kipcb improves with use. Everything stays on your machine.
-
-- **From your own runs** (`kipcb learn`): every build and routing attempt is
-  logged to `~/.local/share/kipcb/experience.jsonl`. Routing strategies are
-  ranked by how they did on past boards of similar density (a contextual
-  bandit with exploration). Auto-sized boards use the tightest area per pad
-  that has reliably routed before. Footprints that keep causing unrouted
-  connections get extra clearance. `kipcb learn reset` forgets everything,
-  and `KIPCB_LEARN=0` turns logging off.
-- **From open-source designs** (`kipcb ref <part>`): the companion
-  [pcb-knowledge](https://github.com/virajrungta/pcb-knowledge) repo mines openly licensed KiCad projects
-  from GitHub into statistics: how real designs wire each IC's pins, plus
-  layout distributions that seed the sizing prior. Claude consults it during
-  part selection and review.
+<table>
+  <tr><td><b>Claude Code</b></td><td>Desktop app, CLI or IDE extension</td></tr>
+  <tr><td><b>KiCad 9</b></td><td>Provides <code>kicad-cli</code>, <code>pcbnew</code> and the part libraries</td></tr>
+  <tr><td><b>Java 21+</b></td><td>For the <a href="https://github.com/freerouting/freerouting">Freerouting</a> autorouter (downloaded with <code>kipcb setup-router</code>)</td></tr>
+  <tr><td><b>OS</b></td><td>macOS or Linux</td></tr>
+</table>
 
 ## Limits
 
-Autorouted boards are functional, not optimal. Switching-regulator layout,
-RF, controlled-impedance and high-speed signals (USB 480 Mb/s, Ethernet, DDR)
-need human review or hand routing in KiCad. The plugin flags these instead of
-pretending otherwise. Always review a design before ordering.
+Autorouted boards are functional, not optimal. Switching-regulator layout, RF, controlled-impedance and
+high-speed signals (USB 480 Mb/s, Ethernet, DDR) need human review or hand routing in KiCad. The plugin
+flags these rather than hiding them. **Always review a design before ordering boards.**
+
+## Releases
+
+The plugin is updated weekly: V1.0, V1.1, V1.2… See the [changelog](CHANGELOG.md) and
+[releases](https://github.com/virajrungta/pcb-claude-plugin/releases). Update with:
+
+```bash
+claude plugin update pcb
+```
+
+## Contributing
+
+Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the development setup, tests and release process.
 
 ## License
 
-MIT
+[MIT](LICENSE) © Viraj Rungta
