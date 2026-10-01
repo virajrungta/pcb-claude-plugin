@@ -7,7 +7,12 @@ release and publishes it on GitHub.
 
 ## Unreleased
 
-_Nothing yet._
+- **Faster failures**: `kipcb route` refuses in about a second when a part sits
+  outside the board, instead of spending minutes on routing attempts that can
+  never succeed.
+- **Parts no longer get stranded**: if a part doesn't fit at the chosen spacing
+  (e.g. `"roomy"` on a small board), placement retries with tighter spacing
+  before giving up, and says so in the build output.
 
 ## V1.0 - 2026-09-30
 

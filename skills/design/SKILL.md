@@ -102,6 +102,12 @@ runs ERC and a placement DRC, and renders previews into `<name>/out/`.
   near the power input, antenna at the board edge, sensible grouping, and
   enough space between parts (labels readable, room for traces).
 
+If the build says **PLACEMENT FAILED**, a part is parked outside the board.
+Never route in that state (kipcb refuses anyway): enlarge the board, use
+`"spacing": "normal"` or `"compact"` on small boards, or free up fixed
+positions, then rebuild. A `note: ... reduced spacing` line means a part
+was squeezed in; check it in the render.
+
 `kipcb build` also runs the placement noise checks (decoupling distance,
 crystal, switch-node loop). **Every FAIL must be fixed, and every WARN fixed or
 explained to the user.** Improve placement with `place` hints in the spec

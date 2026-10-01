@@ -124,6 +124,8 @@ def compute_placement(design, sch_builder, W, H, holes):
         obstacles.append((x - r, y - r, x + r, y + r))
     pl = place.Placer(W, H, parts, net_sizes, design.rules["edge_clearance"], obstacles)
     failed = pl.run(step=0.5 if max(W, H) < 120 else 1.0)
+    for line in pl.log:
+        print("note: " + line)
     return {p.ref: (p.x, p.y, p.rot) for p in parts if p.x is not None}, failed
 
 

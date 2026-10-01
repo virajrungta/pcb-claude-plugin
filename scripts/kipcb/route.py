@@ -385,6 +385,13 @@ def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=4):
     ses = os.path.join(out, name + ".ses")
 
     board = pn.LoadBoard(pcb)
+    stray = _parts_off_board(board)
+    if stray:
+        print("Not routing: %s %s outside the board outline, so %s connections can never be routed.\n"
+              "Fix the placement first (enlarge the board, relax spacing, or set positions), "
+              "rebuild with `kipcb build`, then route." % (
+                  ", ".join(stray), "is" if len(stray) == 1 else "are", "its" if len(stray) == 1 else "their"))
+        return 3
     _strip_routing(board)
     ns = board.GetDesignSettings().m_NetSettings
     power = ns.GetNetClassByName("Power") if ns.HasNetclass("Power") else None
@@ -485,6 +492,17 @@ def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=4):
         print("\nFix remaining DRC issues (adjust placement/rules and re-run build + route, "
               "or finish by hand in KiCad).")
     return rc
+
+
+def _parts_off_board(board):
+    """References of footprints whose pads fall outside the board outline."""
+    bb = board.GetBoardEdgesBoundingBox()
+    out = []
+    for fp in board.GetFootprints():
+        pads = list(fp.Pads())
+        if pads and not all(bb.Contains(p.GetPosition()) for p in pads):
+            out.append(fp.GetReference())
+    return sorted(out)
 
 
 def _record_final(pdir, name, board, features, arm):

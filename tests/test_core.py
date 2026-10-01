@@ -78,6 +78,13 @@ class PlacementTests(unittest.TestCase):
         vdd = [p for p in cap.pad_abs(cap.x, cap.y, cap.rot) if p[3] == "VDD"][0]
         self.assertLess(((pin[1] - vdd[1]) ** 2 + (pin[2] - vdd[2]) ** 2) ** 0.5, 3.0)
 
+    def test_part_too_big_for_roomy_spacing_is_squeezed_in_not_dropped(self):
+        ic = place.Part("U1", (-4, -3, 4, 3), [("1", -3, 0, "A")], {}, 8, margin=3.0)
+        r = place.Part("R1", (-1, -0.5, 1, 0.5), [("1", 0, 0, "A")], {}, 2, margin=3.0)
+        pl = place.Placer(12, 9, [ic, r], {"A": 2}, edge_margin=0.5)
+        self.assertEqual(pl.run(), [])
+        self.assertTrue(any("reduced spacing" in line for line in pl.log))
+
     def test_edge_part_sits_flush_and_faces_out(self):
         # connector: pads at the back (y=+2), body extends to y=-4 (the mating side)
         j = place.Part("J1", (-4, -4, 4, 3), [("1", -1, 2, "A"), ("2", 1, 2, "B")], {"edge": "left"}, 2)

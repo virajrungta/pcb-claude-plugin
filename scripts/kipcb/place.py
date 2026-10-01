@@ -317,6 +317,22 @@ class Placer(object):
         part.x, part.y, part.rot = best[1], best[2], best[3]
         return True
 
+    def _place_tighter(self, part, step, edge=False):
+        """Retry a part that didn't fit with progressively smaller spacing.
+
+        A roomy spacing preset on a small board can leave no spot for a large
+        part; squeezing it in is far better than parking it off the board."""
+        original = part.margin
+        for margin in (original * 0.5, 0.1):
+            part.margin = margin
+            ok = self._place_edge(part, step) if edge else self._place_free(part, step)
+            if ok:
+                self.log.append("%s placed with reduced spacing (%.2f mm instead of %.2f mm)"
+                                % (part.ref, margin, original))
+                return True
+        part.margin = original
+        return False
+
     def run(self, step=0.5, refine_passes=2):
         failed = []
         # 1. fixed parts
@@ -326,7 +342,7 @@ class Placer(object):
                 p.fixed = True
         # 2. edge parts, biggest first
         for p in sorted([p for p in self.parts if p.x is None and p.hint.get("edge")], key=lambda p: -p.npads):
-            if not self._place_edge(p, step):
+            if not self._place_edge(p, step) and not self._place_tighter(p, step, edge=True):
                 failed.append(p.ref)
         # 3. everything else in connectivity order
         remaining = [p for p in self.parts if p.x is None and p.ref not in failed]
@@ -350,7 +366,7 @@ class Placer(object):
                 return (-blocked, decoupling, near_ready, links, p.npads)
             nxt = max(remaining, key=score)
             remaining.remove(nxt)
-            if not self._place_free(nxt, step):
+            if not self._place_free(nxt, step) and not self._place_tighter(nxt, step):
                 failed.append(nxt.ref)
         # 4. refinement: re-place each movable part with full knowledge of the others
         for _ in range(refine_passes):

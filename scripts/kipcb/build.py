@@ -47,8 +47,10 @@ def build(spec_path, out=None, render=True, placement=None):
                                                        int(d.board.get("layers", 2))))
     _write_placement(pdir, info["placement"])
     if info["failed"]:
-        print("PLACEMENT FAILED for %s: parked beside the board. Enlarge the board, "
-              "or give explicit 'place' positions." % ", ".join(info["failed"]))
+        print("PLACEMENT FAILED for %s: no room even with tight spacing, so it is parked beside "
+              "the board and the board cannot be routed. Enlarge the board, reduce fixed "
+              "positions/mounting holes, or give explicit 'place' positions, then rebuild."
+              % ", ".join(info["failed"]))
 
     rc = checks.erc(pdir, d.name)
     print("(routing not done yet: expect DRC 'unconnected' items until `kipcb route`)")
