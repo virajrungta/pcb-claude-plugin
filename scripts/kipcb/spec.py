@@ -95,7 +95,8 @@ class Design(object):
         self.board = r.get("board", {})
         self.rules = dict(DEFAULT_RULES)
         self.rules.update(r.get("rules", {}))
-        self.power_nets = list(r.get("power_nets", []))
+        pn = r.get("power_nets", [])
+        self.power_nets = pn.split() if isinstance(pn, str) else list(pn)
         libs = r.get("libraries", {})
         self.sym_libs = kienv.lib_table("sym", self.dir, _rel(libs.get("symbols", {}), self.dir))
         self.fp_libs = kienv.lib_table("fp", self.dir, _rel(libs.get("footprints", {}), self.dir))
@@ -149,6 +150,8 @@ class Design(object):
             self.by_ref[ref] = c
 
         for net, pins in (self.raw.get("nets") or {}).items():
+            if isinstance(pins, str):          # compact form: "J1.VBUS U1.VI C1.1"
+                pins = pins.split()
             if not re.match(r"^[^\s{}]+$", net):
                 self.errors.append("net %r: names cannot contain spaces or braces" % net)
                 continue
@@ -161,7 +164,8 @@ class Design(object):
                         continue
                     self.pin_net[key] = net
                     self.nets.setdefault(net, []).append(key)
-        for p in self.raw.get("no_connect", []):
+        nc = self.raw.get("no_connect", [])
+        for p in (nc.split() if isinstance(nc, str) else nc):
             for key in self._resolve(p, "no_connect"):
                 if key in self.pin_net:
                     self.errors.append("pin %s.%s is marked no_connect but is on net %s" % (key[0], key[1], self.pin_net[key]))

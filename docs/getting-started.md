@@ -75,8 +75,19 @@ What happens next:
 6. **Manufacturing files.** Gerbers, BOM and pick-and-place files land in
    `hardware/<name>/fab/`.
 
-Claude finishes with a summary: what was built, the assumptions it made,
-which checks passed, and anything that deserves a human look.
+Claude finishes with the run report: whether the board is ready to order, **where
+the project is**, board size and layers, which checks passed, the
+manufacturing files, and anything that deserves a human look, plus the
+assumptions it made. The same summary is saved in `reports/REPORT.md` inside the
+project, and `kipcb report <project>` prints it again any time.
+
+```
+hardware/<name>/
+  <name>.kicad_pro / .kicad_sch / .kicad_pcb   open in KiCad
+  fab/        Gerber zip, BOM, pick-and-place: send these to the manufacturer
+  previews/   board and schematic images, printable PDFs
+  reports/    REPORT.md and the check results
+```
 
 ## 5. Open it in KiCad
 
@@ -109,7 +120,7 @@ git clone https://github.com/virajrungta/pcb-claude-plugin
 ```
 
 ```bash
-cd pcb-claude-plugin && bin/kipcb build examples/usb_blinker.json && bin/kipcb route examples/usb_blinker
+cd pcb-claude-plugin && bin/kipcb run examples/usb_blinker.json
 ```
 
 Then open `examples/usb_blinker/usb_blinker.kicad_pro` in KiCad.

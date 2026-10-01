@@ -5,12 +5,12 @@ import json
 import os
 
 from . import kienv
+from . import ui
 
 
 def _out_dir(pdir):
-    d = os.path.join(pdir, "out")
-    os.makedirs(d, exist_ok=True)
-    return d
+    from . import paths
+    return paths.reports(pdir)
 
 
 def run_erc(pdir, name):
@@ -43,7 +43,7 @@ def _describe(v):
     return "%s: %s [%s]" % (v.get("severity", "?"), v.get("description", v.get("type")), items)
 
 
-def summarize(violations, limit=40):
+def summarize(violations, limit=12):
     lines = []
     by_type = collections.Counter(v.get("type", "?") for v in violations)
     for v in violations[:limit]:
@@ -56,9 +56,9 @@ def summarize(violations, limit=40):
 def erc(pdir, name):
     items = run_erc(pdir, name)
     errs = [v for v in items if v.get("severity") == "error"]
-    print("ERC: %d error(s), %d warning(s)" % (len(errs), len(items) - len(errs)))
+    ui.say("ERC: %d error(s), %d warning(s)" % (len(errs), len(items) - len(errs)))
     _, lines = summarize(items)
-    print("\n".join(lines))
+    ui.say("\n".join(lines))
     return 1 if errs else 0
 
 
@@ -73,17 +73,17 @@ def drc_result(pdir, name):
 def drc(pdir, name, quiet=False):
     viol, unconnected, parity = drc_result(pdir, name)
     errs = [v for v in viol if v.get("severity") == "error"]
-    print("DRC: %d error(s), %d warning(s), %d unconnected, %d schematic-parity issue(s)" % (
+    ui.say("DRC: %d error(s), %d warning(s), %d unconnected, %d schematic-parity issue(s)" % (
         len(errs), len(viol) - len(errs), len(unconnected), len(parity)))
     if not quiet:
         by_type, lines = summarize(errs + [v for v in viol if v not in errs])
         if by_type:
-            print("  by type: " + ", ".join("%s=%d" % kv for kv in by_type.most_common()))
-        print("\n".join(lines))
+            ui.say("  by type: " + ", ".join("%s=%d" % kv for kv in by_type.most_common()))
+        ui.say("\n".join(lines))
         if unconnected:
-            print("  unconnected:")
-            print("\n".join(summarize(unconnected, 15)[1]))
+            ui.say("  unconnected:")
+            ui.say("\n".join(summarize(unconnected, 15)[1]))
         if parity:
-            print("  parity:")
-            print("\n".join(summarize(parity, 15)[1]))
+            ui.say("  parity:")
+            ui.say("\n".join(summarize(parity, 15)[1]))
     return 1 if (errs or unconnected or parity) else 0

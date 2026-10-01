@@ -15,6 +15,10 @@ flowchart LR
     I --> J["📦 kipcb fab<br/>Gerbers, BOM, CPL"]
 ```
 
+`kipcb run` performs the whole right-hand side of this diagram in one command
+(check, build, route, manufacturing files, report), so a design iteration is a
+single step.
+
 Claude does the engineering: requirements, part choice, circuit design,
 review and judgement calls. The bundled `kipcb` tool does the mechanical
 KiCad work. A single JSON **design spec** sits between them and is the source

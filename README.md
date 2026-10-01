@@ -185,11 +185,24 @@ After an update, the next session tells you which version you're on and links to
   </tr>
 </table>
 
-Build them yourself from a clone:
+Build one yourself from a clone. One command runs the whole pipeline (about 20 seconds) and ends with a report:
 
 ```bash
-bin/kipcb build examples/c3_sensor.json && bin/kipcb route examples/c3_sensor && bin/kipcb fab examples/c3_sensor
+bin/kipcb run examples/c3_sensor.json
 ```
+
+```text
+READY TO ORDER: ESP32-C3 sensor node
+Project   …/examples/c3_sensor/c3_sensor.kicad_pro
+Board     58 x 43 mm, 2 layers, 20 parts, 14 nets
+Checks    ERC ok, DRC ok, parity ok, noise 13 pass / 3 warn / 0 fail
+Power     U1 (AMS1117-3.3) 5V->3.3V at 363 mA dissipates 0.62 W; SOT-223 handles about 1.0 W
+Fab       fab/c3_sensor-gerbers.zip, fab/c3_sensor-bom.csv, fab/c3_sensor-cpl.csv
+Previews  previews/review.png, previews/schematic.png
+Time      check 0s, build 10s, route 7s, fab 2s (total 19s)
+```
+
+Every project folder has the same layout: the KiCad files, `fab/` (send these to the manufacturer), `previews/` (images and PDFs), `reports/` (`REPORT.md` and check results).
 
 ## Documentation
 

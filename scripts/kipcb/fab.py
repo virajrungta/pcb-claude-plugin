@@ -6,6 +6,7 @@ import os
 import zipfile
 
 from . import checks, kienv
+from . import ui
 
 
 def _layers(pcb_path):
@@ -22,7 +23,7 @@ def export(pdir, name, fab="jlcpcb", force=False):
     viol, unconnected, parity = checks.drc_result(pdir, name)
     errs = [v for v in viol if v.get("severity") == "error"]
     if (errs or unconnected) and not force:
-        print("Refusing to export: DRC has %d error(s) and %d unconnected item(s). "
+        ui.always("Refusing to export: DRC has %d error(s) and %d unconnected item(s). "
               "Run `kipcb drc %s` and fix them first." % (len(errs), len(unconnected), pdir))
         return 1
 
@@ -79,16 +80,21 @@ def export(pdir, name, fab="jlcpcb", force=False):
     else:
         missing = []
 
-    print("fab outputs in %s" % fdir)
-    print("  %s   <- upload to the PCB order page" % os.path.relpath(zpath, pdir))
-    print("  %s" % os.path.relpath(bom, pdir))
-    print("  %s   <- pick-and-place (CPL) for assembly" % os.path.relpath(cpl, pdir))
+    import json
+    from . import paths
+    with open(os.path.join(paths.reports(pdir), "fab.json"), "w") as f:
+        json.dump({"format": fab, "files": [os.path.relpath(p, pdir) for p in (zpath, bom, cpl) if os.path.exists(p)],
+                   "missing_lcsc": missing, "parity_issues": len(parity)}, f, indent=1)
+    ui.say("fab outputs in %s" % fdir)
+    ui.say("  %s   <- upload to the PCB order page" % os.path.relpath(zpath, pdir))
+    ui.say("  %s" % os.path.relpath(bom, pdir))
+    ui.say("  %s   <- pick-and-place (CPL) for assembly" % os.path.relpath(cpl, pdir))
     if missing:
-        print("NOTE: no LCSC part number for %s. Add \"lcsc\" to those components for JLCPCB assembly "
+        ui.say("NOTE: no LCSC part number for %s. Add \"lcsc\" to those components for JLCPCB assembly "
               "(or hand-solder / source them)." % ", ".join(missing))
     if fab == "jlcpcb":
-        print("NOTE: check part rotations in JLCPCB's assembly preview; some footprints need a "
+        ui.say("NOTE: check part rotations in JLCPCB's assembly preview; some footprints need a "
               "rotation offset (a known KiCad/JLC convention difference).")
     if parity:
-        print("WARNING: %d schematic/PCB parity issue(s); run `kipcb drc`." % len(parity))
+        ui.say("WARNING: %d schematic/PCB parity issue(s); run `kipcb drc`." % len(parity))
     return 0

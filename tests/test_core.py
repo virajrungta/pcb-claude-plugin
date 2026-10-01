@@ -185,3 +185,51 @@ class ExampleSpecTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class V13Tests(unittest.TestCase):
+    def test_fmt_keeps_meaning_and_shrinks(self):
+        from kipcb import fmt
+        import collections
+        raw = collections.OrderedDict([
+            ("name", "x"), ("power_nets", ["GND", "+3V3"]),
+            ("components", [{"ref": "R1", "symbol": "Device:R", "value": "10k"}]),
+            ("nets", {"A": ["R1.1", "J1.1"], "GND": ["R1.2", "J1.2"]}),
+            ("no_connect", ["U1.5"])])
+        text = fmt.format_spec(raw)
+        back = json.loads(text)
+        self.assertEqual(back["nets"]["A"].split(), ["R1.1", "J1.1"])
+        self.assertEqual(back["power_nets"], "GND +3V3")
+        self.assertEqual(back["no_connect"], "U1.5")
+        self.assertEqual(back["components"], raw["components"])
+        self.assertLess(len(text), len(json.dumps(raw, indent=2)))
+
+    def test_guide_finds_single_sections(self):
+        from kipcb import guide
+        import io, contextlib
+        for topic, must in (("usb-c", "5.1 k"), ("i2c", "pull-up"), ("crystal", "load")):
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                self.assertEqual(guide.show(topic), 0)
+            self.assertIn(must, buf.getvalue())
+            self.assertLess(len(buf.getvalue()), 3000)
+
+    def test_report_status_and_location(self):
+        from kipcb import report
+        with tempfile.TemporaryDirectory() as pdir:
+            rep = os.path.join(pdir, "reports")
+            os.makedirs(rep)
+            dump = lambda n, d: json.dump(d, open(os.path.join(rep, n), "w"))
+            dump("build.json", {"title": "T", "width": 30, "height": 20, "layers": 2, "parts": 5, "nets": 4,
+                                "placement_failed": [], "notes": [], "spec_warnings": [], "spec_notes": []})
+            r = report.collect(pdir, "t")
+            self.assertEqual(report._status(r), "BUILT, NOT ROUTED")
+            dump("route.json", {"unconnected": 0, "vias": 2, "chosen": "x"})
+            dump("drc.json", {"violations": [], "unconnected_items": [], "schematic_parity": []})
+            dump("noise.json", [{"check": "decoupling", "level": "PASS", "message": "ok"}])
+            dump("fab.json", {"files": ["fab/t-gerbers.zip"], "missing_lcsc": [], "parity_issues": 0})
+            r = report.write(pdir, "t", {"build": 3, "route": 5})
+            out = report.text(r)
+            self.assertTrue(out.startswith("READY TO ORDER"))
+            self.assertIn(os.path.join(pdir, "t.kicad_pro"), out)
+            self.assertTrue(os.path.exists(os.path.join(rep, "REPORT.md")))

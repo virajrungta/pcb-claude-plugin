@@ -4,6 +4,7 @@ import math
 import os
 
 from . import place
+from . import ui
 from .kicad import mm, pcbnew
 
 ORIGIN = (50.0, 50.0)   # board top-left in KiCad page coordinates (mm)
@@ -136,9 +137,9 @@ def compute_placement(design, sch_builder, W, H, holes, quiet=False, step=None, 
     failed = pl.run(step=step or (0.5 if max(W, H) < 120 else 1.0), refine_passes=refine)
     if not quiet:
         for line in pl.log:
-            print("note: " + line)
+            ui.say("note: " + line)
     result = {p.ref: (p.x, p.y, p.rot) for p in parts if p.x is not None}
-    return (result, failed, pl.log) if quiet else (result, failed)
+    return result, failed, list(pl.log)
 
 
 def _set_rules(board, design):
@@ -260,6 +261,7 @@ def shrink_to_fit(design, sch_builder, W, H, step=0.92, max_steps=6):
 
 
 def build(design, sch_builder, pcb_path, placement=None):
+    notes = []
     pn = pcbnew()
     board = pn.NewBoard(pcb_path)
     layers = int(design.board.get("layers", 2))
@@ -296,11 +298,13 @@ def build(design, sch_builder, pcb_path, placement=None):
         if auto_sized(design) and design.board.get("auto_shrink", True):
             W2, H2, shrunk = shrink_to_fit(design, sch_builder, W, H)
             if shrunk:
-                print("note: auto-size shrank the board from %.0f x %.0f to %.0f x %.0f mm" % (W, H, W2, H2))
+                notes.append("auto-size shrank the board from %.0f x %.0f to %.0f x %.0f mm" % (W, H, W2, H2))
+                ui.say("note: " + notes[-1])
                 W, H, placement, failed = W2, H2, shrunk, []
                 hole_size, hole_pos, holes = _holes(design, W, H)
         if not shrunk:
-            placement, failed = compute_placement(design, sch_builder, W, H, holes)
+            placement, failed, log = compute_placement(design, sch_builder, W, H, holes)
+            notes.extend(log)
     else:
         failed = []
 
@@ -378,7 +382,7 @@ def build(design, sch_builder, pcb_path, placement=None):
     ds.SetAuxOrigin(pn.VECTOR2I(mm(ox), mm(oy + H)))
     ds.SetGridOrigin(pn.VECTOR2I(mm(ox), mm(oy + H)))
     pn.SaveBoard(pcb_path, board)
-    return {"width": W, "height": H, "placement": placement, "failed": failed}
+    return {"width": W, "height": H, "placement": placement, "failed": failed, "notes": notes}
 
 
 def read_placement(pcb_path):

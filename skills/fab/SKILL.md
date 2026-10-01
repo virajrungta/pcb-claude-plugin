@@ -18,8 +18,9 @@ argument-hint: "[project dir or .kicad_pro]"
 4. Read `fab/<name>-bom.csv`. Flag parts without an LCSC number when the user
    wants JLCPCB assembly, and never make one up. Suggest they match those in
    JLCPCB's BOM tool, or hand-solder / mark them DNP.
-5. Render (`kipcb render <project> --what 3d`) and show `out/pcb_3d_top.png`
-   so the user sees what they're ordering.
+5. Show `previews/review.png` (render it with `kipcb render <project> --what review`
+   if it's missing) so the user sees what they're ordering. `kipcb report <project>`
+   prints the summary with the project location and file list.
 6. Hand off with the file paths and the ordering checklist from
    `${CLAUDE_PLUGIN_ROOT}/skills/design/references/manufacturing.md`: upload the
    Gerber zip, confirm size/layers/thickness/finish, then upload the BOM and

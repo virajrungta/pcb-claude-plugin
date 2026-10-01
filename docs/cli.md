@@ -19,12 +19,17 @@ these commands for you, but they also work on their own.
 | `kipcb sym-info Lib:Name` | Lists every pin (number, name, electrical type, unit) |
 | `kipcb fp-search <words>` | Searches footprint libraries |
 | `kipcb fp-info Lib:Name` | Shows a footprint's pads and courtyard size |
+| `kipcb sym-search "a \| b \| c"` | Several searches in one call (8 results for one query, 5 each for several) |
+| `kipcb sym-info A B C` | Compact pins of several symbols in one call (`-v` adds the datasheet URL) |
+| `kipcb guide [topic]` | Prints one section of the design references (USB-C, LDO, decoupling, placement hints…); no topic lists them |
+| `kipcb fmt spec.json` | Rewrites a spec in the compact one-line-per-part layout |
 | `kipcb ref <part>` | Shows how open-source designs wire a part (uses the knowledge base shipped with the plugin) |
 
 ## Design
 
 | Command | What it does |
 |---|---|
+| `kipcb run spec.json [--no-fab] [--force]` | **The whole pipeline**: check → build → route → manufacturing files → report, with one progress line per step. An unchanged spec returns the last report instantly |
 | `kipcb check spec.json` | Validates the spec: symbols, footprints, pins, nets, unused pins, logic levels, and the power budget / regulator heat |
 | `kipcb build spec.json [-o DIR] [--no-render]` | Generates the schematic and placed board, runs ERC, the placement DRC and placement noise checks, and renders previews |
 | `kipcb route <project> [--attempts N] [--timeout S] [--no-pour]` | Autoroutes, pours ground, adds stitching vias, then runs DRC and noise checks |
@@ -40,12 +45,14 @@ these commands for you, but they also work on their own.
 | `kipcb drc <project>` | Board design rules check, including schematic parity |
 | `kipcb noise <project> [-q]` | Noise / signal-integrity checks (`-q` shows problems only) |
 | `kipcb netlist <project>` | Components and nets with pin functions, for review |
-| `kipcb render <project> [--what all\|sch\|pcb\|3d]` | Schematic PDF/PNG, board PDF and 3D PNG renders into `out/` |
+| `kipcb render <project> [--what build\|review\|full]` | Previews into `previews/`: `review.png` (board, top), `schematic.png/.pdf`; `full` adds `bottom.png` and `board.pdf` |
+| `kipcb report <project>` | Prints the summary (status, project location, board, checks, files, what to check); also in `reports/REPORT.md` |
 
 ## Learning
 
 | Command | What it does |
 |---|---|
+| `kipcb settings` | Your defaults from the install dialog |
 | `kipcb learn` | What has been learned: strategy success rates, hard footprints, sizing, and how many runs were ignored |
 | `kipcb learn reset` | Forget all local experience |
 
@@ -54,9 +61,11 @@ these commands for you, but they also work on their own.
 ```
 my_board.json              design spec (source of truth)
 my_board/
-  my_board.kicad_pro/.kicad_sch/.kicad_pcb
-  out/    renders, ERC/DRC/noise reports, placement.json, router logs
-  fab/    <name>-gerbers.zip, <name>-bom.csv, <name>-cpl.csv, gerbers/
+  my_board.kicad_pro/.kicad_sch/.kicad_pcb    the KiCad project
+  fab/        <name>-gerbers.zip, <name>-bom.csv, <name>-cpl.csv, gerbers/
+  previews/   review.png, schematic.png/.pdf, bottom.png, board.pdf
+  reports/    REPORT.md, erc/drc/noise/placement/build/route/fab .json
+  .kipcb/     router working files and logs (safe to delete)
 ```
 
 ## Environment variables

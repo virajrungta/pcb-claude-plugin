@@ -57,48 +57,85 @@ def cmd_doctor(a):
     return 0 if ok else 1
 
 
+def _queries(words):
+    """'esp32 c3 | ams1117 | usb c' -> three queries (one call, one round trip)."""
+    return [q.strip() for q in " ".join(words).split("|") if q.strip()]
+
+
 def cmd_sym_search(a):
     from . import symlib
     libs = kienv.lib_table("sym")
-    res = symlib.search(libs, " ".join(a.query), a.limit)
-    if not res:
-        print("no symbols match %r" % " ".join(a.query))
-        return 1
-    for e in res:
-        fp = (" fp=" + e["fp"]) if e["fp"] else ""
-        print("%s:%s  [%s pins]%s\n    %s" % (e["lib"], e["name"], e["pins"], fp, e["desc"][:140]))
-    return 0
+    queries = _queries(a.query)
+    limit = a.limit or (8 if len(queries) == 1 else 5)
+    rc = 0
+    for q in queries:
+        res = symlib.search(libs, q, limit)
+        if len(queries) > 1:
+            print("## " + q)
+        if not res:
+            print("  no symbols match")
+            rc = 1
+        for e in res:
+            fp = (" fp=" + e["fp"].split(":")[-1]) if e["fp"] else ""
+            print("%s:%s [%sp]%s | %s" % (e["lib"], e["name"], e["pins"], fp, e["desc"][:80]))
+    return rc
+
+
+TYPE_ABBR = {"input": "in", "output": "out", "bidirectional": "io", "tri_state": "3s", "passive": "",
+             "power_in": "pwr", "power_out": "PWR_OUT", "open_collector": "oc", "open_emitter": "oe",
+             "unspecified": "?", "free": "", "no_connect": "nc"}
 
 
 def cmd_sym_info(a):
+    """Compact pin listing: 'number=name/type' grouped per unit; several symbols per call."""
     from . import symlib
     from .spec import strip_markup
-    libs = kienv.lib_table("sym")
-    s = symlib.load(libs, a.id)
-    print(s.lib_id)
-    for k in ("Description", "Footprint", "ki_fp_filters", "Datasheet", "ki_keywords"):
-        if s.props.get(k):
-            print("  %-13s %s" % (k, s.props[k]))
-    if len(s.units) > 1:
-        print("  units         %s" % ", ".join(str(u) for u in sorted(s.units)))
-    print("  pins (number  name  type  unit):")
     from .fplib import _natkey
-    for p in sorted(s.pins, key=lambda p: _natkey(p["number"])):
-        print("    %-5s %-22s %-14s %s%s" % (p["number"], strip_markup(p["name"]), p["type"], p["unit"],
-                                           "  hidden" if p["hidden"] else ""))
-    return 0
+    libs = kienv.lib_table("sym")
+    rc = 0
+    for sid in a.id:
+        try:
+            s = symlib.load(libs, sid)
+        except KeyError as e:
+            print("%s: %s" % (sid, e.args[0]))
+            rc = 1
+            continue
+        filters = s.props.get("ki_fp_filters", "-").split()
+        fp = s.props.get("Footprint") or ("filters " + " ".join(filters[:3]) + (" ..." if len(filters) > 3 else ""))
+        print("%s | fp %s | %s" % (s.lib_id, fp, s.props.get("Description", "")[:90]))
+        if a.verbose and s.props.get("Datasheet", "~") != "~":
+            print("  datasheet " + s.props["Datasheet"])
+        units = sorted({p["unit"] for p in s.pins})
+        for u in units:
+            pins = sorted([p for p in s.pins if p["unit"] == u], key=lambda p: _natkey(p["number"]))
+            cells = []
+            for p in pins:
+                name = strip_markup(p["name"])
+                t = TYPE_ABBR.get(p["type"], p["type"])
+                cells.append("%s%s%s%s" % (p["number"], ("=" + name) if name not in ("", "~") else "",
+                                           ("/" + t) if t else "", "*" if p["hidden"] else ""))
+            label = "  " if len(units) == 1 else "  unit %s: " % ("common" if u == 0 else u)
+            print(label + " ".join(cells))
+    print("(types: pwr=power in, io=bidirectional, in/out; *=hidden pin; no suffix=passive)")
+    return rc
 
 
 def cmd_fp_search(a):
     from . import fplib
     libs = kienv.lib_table("fp")
-    res = fplib.search(libs, " ".join(a.query), a.limit)
-    if not res:
-        print("no footprints match %r" % " ".join(a.query))
-        return 1
-    for e in res:
-        print("%s:%s\n    %s" % (e["lib"], e["name"], e["desc"][:140]))
-    return 0
+    queries = _queries(a.query)
+    limit = a.limit or (8 if len(queries) == 1 else 5)
+    rc = 0
+    for q in queries:
+        res = fplib.search(libs, q, limit)
+        if len(queries) > 1:
+            print("## " + q)
+        if not res:
+            print("  no footprints match")
+            rc = 1
+        for e in res:
+            print("%s:%s | %s" % (e["lib"], e["name"], e["desc"].split(",")[0][:70]))
+    return rc
 
 
 def cmd_fp_info(a):
@@ -145,6 +182,18 @@ def cmd_place(a):
     return build.replace(a.spec, a.out, render=not a.no_render)
 
 
+def cmd_run(a):
+    from . import run
+    return run.run(a.spec, a.out, do_fab=not a.no_fab, force=a.force, passes=a.passes, timeout=a.timeout)
+
+
+def cmd_report(a):
+    from . import report
+    pdir, name = _project_paths(a.target)
+    print(report.text(report.write(pdir, name)))
+    return 0
+
+
 def cmd_route(a):
     from . import route
     pdir, name = _project_paths(a.target)
@@ -186,8 +235,8 @@ def cmd_noise(a):
 def cmd_netlist(a):
     from . import sexp
     pdir, name = _project_paths(a.target)
-    out = os.path.join(pdir, "out")
-    os.makedirs(out, exist_ok=True)
+    from . import paths
+    out = paths.work(pdir)
     path = os.path.join(out, name + ".net")
     kienv.run_cli(["sch", "export", "netlist", "--format", "kicadsexpr", "-o", path,
                    os.path.join(pdir, name + ".kicad_sch")])
@@ -231,6 +280,19 @@ def cmd_settings(a):
     return 0
 
 
+def cmd_guide(a):
+    from . import guide
+    return guide.show(" ".join(a.topic))
+
+
+def cmd_fmt(a):
+    from . import fmt
+    for path in a.spec:
+        before, after = fmt.fmt_file(path)
+        print("%s: %d -> %d characters" % (path, before, after))
+    return 0
+
+
 def cmd_learn(a):
     from . import learn
     return learn.reset() if a.action == "reset" else learn.status()
@@ -253,17 +315,26 @@ def main(argv=None):
     p = sp.add_parser("doctor", help="check KiCad, Java and Freerouting installation")
     p.set_defaults(fn=cmd_doctor)
 
-    p = sp.add_parser("sym-search", help="search symbol libraries")
-    p.add_argument("query", nargs="+"); p.add_argument("-n", "--limit", type=int, default=25)
+    p = sp.add_parser("sym-search", help="search symbol libraries ('a | b | c' runs several searches)")
+    p.add_argument("query", nargs="+"); p.add_argument("-n", "--limit", type=int, default=None)
     p.set_defaults(fn=cmd_sym_search)
-    p = sp.add_parser("sym-info", help="show a symbol's pins, units and default footprint")
-    p.add_argument("id"); p.set_defaults(fn=cmd_sym_info)
-    p = sp.add_parser("fp-search", help="search footprint libraries")
-    p.add_argument("query", nargs="+"); p.add_argument("-n", "--limit", type=int, default=25)
+    p = sp.add_parser("sym-info", help="pins, units and default footprint of one or more symbols")
+    p.add_argument("id", nargs="+"); p.add_argument("-v", "--verbose", action="store_true", help="include datasheet URL")
+    p.set_defaults(fn=cmd_sym_info)
+    p = sp.add_parser("fp-search", help="search footprint libraries ('a | b' runs several searches)")
+    p.add_argument("query", nargs="+"); p.add_argument("-n", "--limit", type=int, default=None)
     p.set_defaults(fn=cmd_fp_search)
     p = sp.add_parser("fp-info", help="show a footprint's pads and size")
     p.add_argument("id"); p.set_defaults(fn=cmd_fp_info)
 
+    p = sp.add_parser("run", help="spec -> checked, routed board + manufacturing files + final report")
+    p.add_argument("spec"); p.add_argument("-o", "--out", help="output dir (default: <spec dir>/<name>)")
+    p.add_argument("--no-fab", action="store_true", help="stop after routing")
+    p.add_argument("--force", action="store_true", help="rebuild even if the spec is unchanged")
+    p.add_argument("--passes", type=int, default=100); p.add_argument("--timeout", type=int, default=600)
+    p.set_defaults(fn=cmd_run)
+    p = sp.add_parser("report", help="print the summary of a project (also in reports/REPORT.md)")
+    p.add_argument("target"); p.set_defaults(fn=cmd_report)
     p = sp.add_parser("check", help="validate a design spec (JSON)")
     p.add_argument("spec"); p.set_defaults(fn=cmd_check)
     p = sp.add_parser("build", help="spec -> KiCad project (schematic + placed PCB), ERC, renders")
@@ -287,7 +358,8 @@ def main(argv=None):
     for name, fn, hlp in (("erc", cmd_erc, "run schematic ERC"), ("drc", cmd_drc, "run PCB DRC")):
         p = sp.add_parser(name, help=hlp); p.add_argument("target"); p.set_defaults(fn=fn)
     p = sp.add_parser("render", help="render PNG previews (schematic, 2D layers, 3D)")
-    p.add_argument("target"); p.add_argument("--what", default="all", choices=["all", "sch", "pcb", "3d"])
+    p.add_argument("target"); p.add_argument("--what", default="build",
+                                             choices=["build", "review", "full", "all", "sch", "pcb", "3d"])
     p.set_defaults(fn=cmd_render)
     p = sp.add_parser("noise", help="basic noise / signal-integrity checks on the board")
     p.add_argument("target"); p.add_argument("-q", "--quiet", action="store_true", help="only show problems")
@@ -296,6 +368,10 @@ def main(argv=None):
     p.add_argument("target"); p.set_defaults(fn=cmd_netlist)
     p = sp.add_parser("ref", help="how open-source designs wire a part (needs the knowledge base)")
     p.add_argument("part", nargs="+"); p.set_defaults(fn=cmd_ref)
+    p = sp.add_parser("guide", help="print the reference section on a topic (no topic: list sections)")
+    p.add_argument("topic", nargs="*"); p.set_defaults(fn=cmd_guide)
+    p = sp.add_parser("fmt", help="rewrite specs in the compact one-line-per-part layout")
+    p.add_argument("spec", nargs="+"); p.set_defaults(fn=cmd_fmt)
     sp.add_parser("settings", help="show your defaults from the install dialog").set_defaults(fn=cmd_settings)
     p = sp.add_parser("learn", help="show or reset what kipcb has learned from past runs")
     p.add_argument("action", nargs="?", default="status", choices=["status", "reset"])

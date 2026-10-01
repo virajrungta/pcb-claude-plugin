@@ -5,55 +5,27 @@ One JSON file describes the whole board. `kipcb check` validates it, and
 
 ```json
 {
-  "name": "usb_blinker",
-  "title": "USB-C ATtiny85 LED blinker",
-  "revision": "A",
-  "author": "Your Name",
-
-  "requirements": {
-    "size": "max 30x22 mm", "power": "USB-C 5 V, <100 mA",
-    "build": "JLCPCB assembly", "noise": "none critical"
-  },
-
-  "board": {
-    "width": 30, "height": 22,
-    "layers": 2,
-    "thickness": 1.6,
-    "corner_radius": 1.5,
-    "mounting_holes": {"size": "M3", "inset": 3.5},
-    "ground_pour": "GND"
-  },
-  "rules": {
-    "track": 0.25, "power_track": 0.5, "clearance": 0.2,
-    "via_diameter": 0.6, "via_drill": 0.3, "edge_clearance": 0.5
-  },
-  "power_nets": ["GND", "VBUS", "+3V3"],
-  "net_classes": [
-    {"name": "HighCurrent", "track": 1.0, "nets": ["VMOT"]}
-  ],
-  "libraries": {
-    "symbols":    {"MyParts": "./lib/MyParts.kicad_sym"},
-    "footprints": {"MyParts": "./lib/MyParts.pretty"}
-  },
-
+  "name": "usb_blinker", "title": "USB-C ATtiny85 LED blinker", "revision": "A",
+  "requirements": {"size": "30x22 mm", "power": "USB-C 5 V, < 50 mA", "build": "JLCPCB assembly", "noise": "none critical"},
+  "board": {"width": 30, "height": 22, "layers": 2, "corner_radius": 1.5, "mounting_holes": {"size": "M3", "inset": 3.5}, "ground_pour": "GND"},
+  "rules": {"track": 0.25, "power_track": 0.5, "clearance": 0.2},
+  "power_nets": "GND VBUS",
   "components": [
-    {"ref": "U1", "symbol": "MCU_Microchip_ATtiny:ATtiny85-20S",
-     "value": "ATtiny85-20S", "lcsc": "C89852", "mpn": "ATTINY85-20SU",
-     "group": "mcu"},
-    {"ref": "C2", "symbol": "Device:C", "footprint": "Capacitor_SMD:C_0603_1608Metric",
-     "value": "100nF", "group": "mcu", "place": {"near": "U1.VCC"}},
-    {"ref": "J1", "symbol": "Connector:USB_C_Receptacle_PowerOnly_6P",
-     "footprint": "Connector_USB:USB_C_Receptacle_GCT_USB4125-xx-x_6P_TopMnt_Horizontal",
-     "value": "USB-C", "place": {"edge": "left"}}
+    {"ref": "U1", "symbol": "MCU_Microchip_ATtiny:ATtiny85-20S", "value": "ATtiny85-20S", "lcsc": "C89852", "current_ma": 10, "group": "mcu"},
+    {"ref": "C2", "symbol": "Device:C", "footprint": "Capacitor_SMD:C_0603_1608Metric", "value": "100nF", "group": "mcu", "place": {"near": "U1.VCC"}},
+    {"ref": "J1", "symbol": "Connector:USB_C_Receptacle_PowerOnly_6P", "footprint": "Connector_USB:USB_C_Receptacle_GCT_USB4125-xx-x_6P_TopMnt_Horizontal", "value": "USB-C", "place": {"edge": "left"}}
   ],
-
   "nets": {
-    "VBUS": ["J1.VBUS", "U1.VCC", "C2.1"],
-    "GND":  ["J1.GND", "J1.SHIELD", "U1.GND", "C2.2"]
+    "VBUS": "J1.VBUS U1.VCC C2.1",
+    "GND": "J1.GND J1.SHIELD U1.GND C2.2"
   },
-  "no_connect": ["U1.PB3", "U1.PB4"]
+  "no_connect": "U1.PB3 U1.PB4"
 }
 ```
+
+Write specs in this compact layout (one line per component, nets and
+`power_nets`/`no_connect` as space-separated strings; JSON lists also work).
+`kipcb fmt <spec>` rewrites any spec into it.
 
 ## Top level
 
@@ -140,6 +112,15 @@ Every symbol pin must appear in exactly one net or in `no_connect`
 
 Net names: no spaces or braces. Use `+3V3`, `+5V`, `VBUS`, `GND` for power so
 the standard KiCad power symbols are used. Signal nets: `SDA`, `USB_DP`, `LED_R`.
+
+## Power budget
+
+Give the main loads a `current_ma` (MCU or radio module at its peak, LEDs,
+motors, heaters). `kipcb check` then adds up each rail (rail voltages come from
+names like `+3V3`, `5V`, `VBUS`, or the `rails` field) and works out each linear
+regulator's heat, (Vin − Vout) × I, against what its package can dissipate:
+SOT-23 about 0.35 W, SOT-89 0.6 W, SOT-223 1 W, TO-252/DPAK 1.5 W. Over the
+limit: a bigger package, a lower input voltage, or a buck converter.
 
 ## Multi-unit parts
 

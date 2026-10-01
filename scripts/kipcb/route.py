@@ -9,6 +9,7 @@ import subprocess
 import time
 
 from . import checks, kienv, render as rendermod
+from . import ui
 from .kicad import mm, pcbnew
 
 # Freerouting >= 2.2 needs Java 25; 2.1.0 runs on Java 21+.
@@ -43,7 +44,7 @@ def find_jar():
 def setup(version=None):
     jv = java_version()
     if not jv:
-        print("Java not found. Install a JRE (Java 21+; Java 25 for the newest Freerouting), "
+        ui.say("Java not found. Install a JRE (Java 21+; Java 25 for the newest Freerouting), "
               "e.g. `brew install --cask temurin`.")
         return 1
     if version is None:
@@ -52,14 +53,14 @@ def setup(version=None):
                 version = v
                 break
     if version is None:
-        print("Java %d is too old; Freerouting needs Java 21+." % jv)
+        ui.say("Java %d is too old; Freerouting needs Java 21+." % jv)
         return 1
     dest = os.path.join(kienv.cache_dir(), "freerouting-%s.jar" % version)
     if os.path.exists(dest):
-        print("already installed: %s" % dest)
+        ui.say("already installed: %s" % dest)
         return 0
     url = URL.format(v=version)
-    print("downloading %s (Java %d detected)" % (url, jv))
+    ui.say("downloading %s (Java %d detected)" % (url, jv))
     tmp = dest + ".part"
     try:
         from urllib.request import urlopen
@@ -71,7 +72,7 @@ def setup(version=None):
         else:
             raise RuntimeError("download failed: %s" % e)
     os.replace(tmp, dest)
-    print("installed: %s (%.1f MB)" % (dest, os.path.getsize(dest) / 1e6))
+    ui.say("installed: %s (%.1f MB)" % (dest, os.path.getsize(dest) / 1e6))
     return 0
 
 
@@ -251,8 +252,8 @@ def _export_dsn(pn, board, dsn):
     return ok
 
 
-def _freeroute(pn, board, jar, dsn, ses, out, passes, timeout, bottom_cost=None):
-    """Export DSN, run Freerouting, return the number of unrouted connections."""
+def _prepare(pn, board, jar, dsn, ses, passes, timeout, bottom_cost=None):
+    """Export the router input for the board as it is now; return (command, log path)."""
     if not _export_dsn(pn, board, dsn):
         raise RuntimeError("DSN export failed")
     rules = dsn[:-4] + ".rules"
@@ -269,23 +270,45 @@ def _freeroute(pn, board, jar, dsn, ses, out, passes, timeout, bottom_cost=None)
            "--router.max_passes=%d" % passes,
            "--router.job_timeout=%02d:%02d:%02d" % (budget // 3600, budget % 3600 // 60, budget % 60),
            "--gui.enabled=false"]
-    print("routing with %s (max %d passes, time budget %ds)..." % (os.path.basename(jar), passes, budget))
-    t0 = time.time()
-    log_path = os.path.join(out, "freerouting.log")
-    with open(log_path, "w") as log:
-        try:
-            p = subprocess.run(cmd, stdout=log, stderr=subprocess.STDOUT, timeout=timeout, cwd=out)
-            rc = p.returncode
-        except subprocess.TimeoutExpired:
-            rc = "timeout"
+    return cmd, dsn[:-4] + ".log"
+
+
+def _launch(cmd, log_path, cwd):
+    log = open(log_path, "w")
+    proc = subprocess.Popen(cmd, stdout=log, stderr=subprocess.STDOUT, cwd=cwd)
+    proc._kipcb_log = log
+    return proc
+
+
+def _collect(proc, timeout, log_path, ses):
+    """Wait for a router process; return its unrouted count (raises if it produced nothing)."""
+    try:
+        proc.wait(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        proc.kill()
+        proc.wait()
+    proc._kipcb_log.close()
     with open(log_path, errors="replace") as f:
         text = f.read()
-    print("freerouting finished in %.0fs (exit %s), log: %s" % (time.time() - t0, rc, log_path))
     if not os.path.exists(ses):
-        print(text[-2000:])
-        raise RuntimeError("Freerouting produced no session file")
+        ui.say(text[-1500:])
+        raise RuntimeError("Freerouting produced no session file (log: %s)" % log_path)
     m = re.findall(r'"incomplete_count":\s*(\d+)', text) or re.findall(r"\((\d+) unrouted\)", text)
     return int(m[-1]) if m else 0
+
+
+def _freeroute(pn, board, jar, dsn, ses, out, passes, timeout, bottom_cost=None):
+    """Run one routing attempt to completion; return the number of unrouted connections."""
+    cmd, log_path = _prepare(pn, board, jar, dsn, ses, passes, timeout, bottom_cost)
+    return _collect(_launch(cmd, log_path, out), timeout, log_path, ses)
+
+
+def parallel_attempts():
+    """How many routing strategies to try at once (Freerouting is itself multi-threaded)."""
+    env = os.environ.get("KIPCB_ROUTE_PARALLEL")
+    if env and env.isdigit():
+        return max(1, int(env))
+    return 2 if (os.cpu_count() or 2) >= 6 else 1
 
 
 BOTTOM_COST = 3.0
@@ -388,18 +411,18 @@ def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=4):
     pn = pcbnew()
     jar = find_jar()
     if not jar:
-        print("Freerouting is not installed. Run `kipcb setup-router` (downloads ~60 MB from GitHub).")
+        ui.always("Freerouting is not installed. Run `kipcb setup-router` (downloads ~60 MB from GitHub).")
         return 2
     pcb = os.path.join(pdir, name + ".kicad_pcb")
-    out = os.path.join(pdir, "out")
-    os.makedirs(out, exist_ok=True)
+    from . import paths
+    out = paths.work(pdir)
     dsn = os.path.join(out, name + ".dsn")
     ses = os.path.join(out, name + ".ses")
 
     board = pn.LoadBoard(pcb)
     stray = _parts_off_board(board)
     if stray:
-        print("Not routing: %s %s outside the board outline, so %s connections can never be routed.\n"
+        ui.always("Not routing: %s %s outside the board outline, so %s connections can never be routed.\n"
               "Fix the placement first (enlarge the board, relax spacing, or set positions), "
               "rebuild with `kipcb build`, then route." % (
                   ", ".join(stray), "is" if len(stray) == 1 else "are", "its" if len(stray) == 1 else "their"))
@@ -426,35 +449,56 @@ def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=4):
     narrow_ok = power is not None and signal_w < (base_w or 0)
     arms, _ = learn.rank_arms(features, available_narrow=narrow_ok)
     arms = arms[:max(1, attempts_max)]
-    print("routing plan (learned from %d past attempts): %s" % (
+    ui.say("routing plan (learned from %d past attempts): %s" % (
         len(learn.history("route_attempt")), " -> ".join("[%s]" % learn.arm_label(a) for a in arms)))
     plan = [((signal_w if narrow else base_w), bcost) for narrow, bcost in arms]
+    batch = parallel_attempts()
+    per_attempt = max(60, timeout // ((len(plan) + batch - 1) // batch + 1))
     best = None
-    for i, (width, bcost) in enumerate(plan):
-        if i:
-            print("retrying: %s" % learn.arm_label(arms[i]))
-        t_attempt = time.time()
-        set_power_width(width)
-        per_attempt = max(60, timeout // (len(plan) + 1))
-        _freeroute(pn, board, jar, dsn, ses, out, passes, per_attempt, bottom_cost=bcost)
-        if not pn.ImportSpecctraSES(board, ses):
-            raise RuntimeError("SES import failed")
-        heal_dangling(board)
-        board.BuildConnectivity()
-        missing = board.GetConnectivity().GetUnconnectedCount(True)
-        bottom = bottom_signal_length(board)
-        print("attempt %d: %d unconnected, %.0f mm of signal on the bottom layer" % (i + 1, missing, bottom))
-        learn.record("route_attempt", features=features, arm=list(arms[i]), missing=missing,
-                     bottom_mm=round(bottom, 1), seconds=round(time.time() - t_attempt))
-        kept = os.path.join(out, "%s.attempt%d.ses" % (name, i + 1))
-        shutil.copyfile(ses, kept)
-        score = (missing, bottom)
-        if best is None or score < best[0]:
-            best = (score, kept, width, arms[i])
-        if missing == 0:
-            break          # arms are ranked best-first, so the first complete route wins
-        for t in list(board.GetTracks()):
-            _delete(board, t)
+    attempts = []
+    kept = None
+    t_route = time.time()
+    for start in range(0, len(plan), batch):
+        group = list(range(start, min(start + batch, len(plan))))
+        procs = []
+        for i in group:                       # export each strategy's input, then start it
+            width, bcost = plan[i]
+            set_power_width(width)
+            dsn_i = os.path.join(out, "%s.attempt%d.dsn" % (name, i + 1))
+            ses_i = dsn_i[:-4] + ".ses"
+            cmd, log_i = _prepare(pn, board, jar, dsn_i, ses_i, passes, per_attempt, bcost)
+            procs.append((i, _launch(cmd, log_i, out), log_i, ses_i, time.time()))
+        ui.say("routing: %s" % "  |  ".join(learn.arm_label(arms[i]) for i in group))
+        done = False
+        for i, proc, log_i, ses_i, t0 in procs:  # judge them in ranked order
+            if done:                          # a better-ranked strategy already succeeded
+                proc.kill()
+                proc.wait()
+                proc._kipcb_log.close()
+                continue
+            _collect(proc, per_attempt, log_i, ses_i)
+            set_power_width(plan[i][0])
+            for t in list(board.GetTracks()):
+                _delete(board, t)
+            if not pn.ImportSpecctraSES(board, ses_i):
+                raise RuntimeError("SES import failed")
+            heal_dangling(board)
+            board.BuildConnectivity()
+            missing = board.GetConnectivity().GetUnconnectedCount(True)
+            bottom = bottom_signal_length(board)
+            secs = round(time.time() - t0)
+            ui.say("  attempt %d: %d unconnected, %.0f mm on the bottom layer, %ds" % (i + 1, missing, bottom, secs))
+            learn.record("route_attempt", features=features, arm=list(arms[i]), missing=missing,
+                         bottom_mm=round(bottom, 1), seconds=secs)
+            attempts.append({"strategy": learn.arm_label(arms[i]), "unconnected": missing,
+                             "bottom_mm": round(bottom, 1), "seconds": secs})
+            kept = ses_i
+            if best is None or (missing, bottom) < best[0]:
+                best = ((missing, bottom), ses_i, plan[i][0], arms[i])
+            if missing == 0 and not done:
+                done = True
+        if done:
+            break
 
     if best[1] != kept or best[0][0] != 0:
         for t in list(board.GetTracks()):
@@ -466,20 +510,21 @@ def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=4):
     if board.GetConnectivity().GetUnconnectedCount(True):
         # completion pass: the DSN export carries the existing tracks, so the
         # router keeps them and only has to finish the few missing connections
-        print("completion pass for %d missing connection(s)..." % board.GetConnectivity().GetUnconnectedCount(True))
+        ui.say("completion pass for %d missing connection(s)..." % board.GetConnectivity().GetUnconnectedCount(True))
         _freeroute(pn, board, jar, dsn, ses, out, passes, max(60, timeout // 5))
         for t in list(board.GetTracks()):
             _delete(board, t)
         pn.ImportSpecctraSES(board, ses)
         healed += heal_dangling(board)
         board.BuildConnectivity()
-        print("after completion: %d unconnected" % board.GetConnectivity().GetUnconnectedCount(True))
+        ui.say("after completion: %d unconnected" % board.GetConnectivity().GetUnconnectedCount(True))
     set_power_width(base_w)   # tracks keep their routed width; the project keeps the intended class
-    for f in glob.glob(os.path.join(out, "%s.attempt*.ses" % name)):
-        os.remove(f)
+    for f in glob.glob(os.path.join(out, "%s.attempt*" % name)):
+        if f != best[1]:
+            os.remove(f)
     ntracks = sum(1 for t in board.GetTracks() if t.GetClass() == "PCB_TRACK")
     nvias = sum(1 for t in board.GetTracks() if t.GetClass() == "PCB_VIA")
-    print("using best attempt: %d unconnected, %d track segments, %d vias%s" % (
+    ui.say("using best attempt: %d unconnected, %d track segments, %d vias%s" % (
         best[0][0], ntracks, nvias, (", %d bridged" % healed) if healed else ""))
 
     if pour:
@@ -488,22 +533,34 @@ def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=4):
         if gnd:
             add_pours(board, gnd, 0.3)
             n = add_stitching_vias(board, gnd)
-            print("poured %s on top and bottom, %d stitching vias" % (gnd, n))
+            ui.say("poured %s on top and bottom, %d stitching vias" % (gnd, n))
     pn.SaveBoard(pcb, board)
     rc = checks.drc(pdir, name)
     from . import noise
-    print()
+    ui.say()
     noise.run(pdir, name, quiet=True)
     _record_final(pdir, name, board, features, best[3])
-    for p in rendermod.render(pdir, name, "pcb"):
+    board.BuildConnectivity()
+    _write_route_json(pdir, {
+        "seconds": round(time.time() - t_route), "parallel": batch, "attempts": attempts,
+        "chosen": learn.arm_label(best[3]), "unconnected": board.GetConnectivity().GetUnconnectedCount(True),
+        "tracks": ntracks, "vias": nvias, "bottom_mm": round(bottom_signal_length(board), 1),
+        "drc_ok": rc == 0})
+    for p in rendermod.render(pdir, name, "review"):
         if p.endswith(".png"):
-            print("preview:   %s" % p)
+            ui.say("preview:   %s" % os.path.relpath(p, pdir))
     if rc == 0:
-        print("\nDRC clean. Next: `kipcb fab %s`" % pdir)
+        ui.say("\nDRC clean. Next: `kipcb fab %s`" % pdir)
     else:
-        print("\nFix remaining DRC issues (adjust placement/rules and re-run build + route, "
+        ui.say("\nFix remaining DRC issues (adjust placement/rules and re-run build + route, "
               "or finish by hand in KiCad).")
     return rc
+
+
+def _write_route_json(pdir, data):
+    from . import paths
+    with open(os.path.join(paths.reports(pdir), "route.json"), "w") as f:
+        json.dump(data, f, indent=1)
 
 
 def _parts_off_board(board):
@@ -520,7 +577,8 @@ def _parts_off_board(board):
 def _record_final(pdir, name, board, features, arm):
     """Log the outcome so later runs learn from it (strategy, sizing, hard footprints)."""
     from . import learn
-    out = os.path.join(pdir, "out")
+    from . import paths
+    out = paths.reports(pdir)
     try:
         with open(os.path.join(out, "drc.json")) as f:
             drc = json.load(f)

@@ -1,180 +1,33 @@
 {
   "name": "usb_blinker",
   "title": "USB-C ATtiny85 LED blinker",
-  "requirements": {
-    "size": "about 30x22 mm",
-    "power": "USB-C 5 V, < 50 mA",
-    "io": "USB-C left edge, ISP header right edge",
-    "build": "JLCPCB assembly, 0603",
-    "noise": "not critical"
-  },
+  "requirements": {"size": "about 30x22 mm", "power": "USB-C 5 V, < 50 mA", "io": "USB-C left edge, ISP header right edge", "build": "JLCPCB assembly, 0603", "noise": "not critical"},
   "revision": "A",
-  "board": {
-    "width": 30,
-    "height": 22,
-    "layers": 2,
-    "corner_radius": 1.5,
-    "ground_pour": "GND"
-  },
-  "rules": {
-    "track": 0.25,
-    "power_track": 0.5,
-    "clearance": 0.2
-  },
-  "power_nets": [
-    "GND",
-    "VBUS"
-  ],
+  "board": {"width": 30, "height": 22, "layers": 2, "corner_radius": 1.5, "ground_pour": "GND"},
+  "rules": {"track": 0.25, "power_track": 0.5, "clearance": 0.2},
+  "power_nets": "GND VBUS",
   "components": [
-    {
-      "ref": "J1",
-      "symbol": "Connector:USB_C_Receptacle_PowerOnly_6P",
-      "footprint": "Connector_USB:USB_C_Receptacle_GCT_USB4125-xx-x_6P_TopMnt_Horizontal",
-      "value": "USB-C 5V",
-      "group": "power",
-      "place": {
-        "edge": "left"
-      }
-    },
-    {
-      "ref": "R1",
-      "symbol": "Device:R",
-      "footprint": "Resistor_SMD:R_0603_1608Metric",
-      "value": "5.1k",
-      "group": "power",
-      "lcsc": "C23186",
-      "place": {
-        "near": "J1"
-      }
-    },
-    {
-      "ref": "R2",
-      "symbol": "Device:R",
-      "footprint": "Resistor_SMD:R_0603_1608Metric",
-      "value": "5.1k",
-      "group": "power",
-      "lcsc": "C23186",
-      "place": {
-        "near": "J1"
-      }
-    },
-    {
-      "ref": "C1",
-      "symbol": "Device:C",
-      "footprint": "Capacitor_SMD:C_0603_1608Metric",
-      "value": "10uF",
-      "group": "power",
-      "lcsc": "C19702"
-    },
-    {
-      "ref": "U1",
-      "symbol": "MCU_Microchip_ATtiny:ATtiny85-20S",
-      "value": "ATtiny85-20S",
-      "group": "mcu",
-      "lcsc": "C89852"
-    },
-    {
-      "ref": "C2",
-      "symbol": "Device:C",
-      "footprint": "Capacitor_SMD:C_0603_1608Metric",
-      "value": "100nF",
-      "group": "mcu",
-      "lcsc": "C14663",
-      "place": {
-        "near": "U1.VCC"
-      }
-    },
-    {
-      "ref": "R3",
-      "symbol": "Device:R",
-      "footprint": "Resistor_SMD:R_0603_1608Metric",
-      "value": "10k",
-      "group": "mcu",
-      "lcsc": "C25804",
-      "place": {
-        "near": "U1.1"
-      }
-    },
-    {
-      "ref": "J2",
-      "symbol": "Connector:AVR-ISP-6",
-      "footprint": "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical",
-      "value": "ISP",
-      "group": "mcu",
-      "place": {
-        "edge": "right"
-      }
-    },
-    {
-      "ref": "R4",
-      "symbol": "Device:R",
-      "footprint": "Resistor_SMD:R_0603_1608Metric",
-      "value": "1k",
-      "group": "led",
-      "lcsc": "C21190"
-    },
-    {
-      "ref": "D1",
-      "symbol": "Device:LED",
-      "footprint": "LED_SMD:LED_0603_1608Metric",
-      "value": "Green",
-      "group": "led",
-      "lcsc": "C72043"
-    }
+    {"ref": "J1", "symbol": "Connector:USB_C_Receptacle_PowerOnly_6P", "footprint": "Connector_USB:USB_C_Receptacle_GCT_USB4125-xx-x_6P_TopMnt_Horizontal", "value": "USB-C 5V", "group": "power", "place": {"edge": "left"}},
+    {"ref": "R1", "symbol": "Device:R", "footprint": "Resistor_SMD:R_0603_1608Metric", "value": "5.1k", "group": "power", "lcsc": "C23186", "place": {"near": "J1"}},
+    {"ref": "R2", "symbol": "Device:R", "footprint": "Resistor_SMD:R_0603_1608Metric", "value": "5.1k", "group": "power", "lcsc": "C23186", "place": {"near": "J1"}},
+    {"ref": "C1", "symbol": "Device:C", "footprint": "Capacitor_SMD:C_0603_1608Metric", "value": "10uF", "group": "power", "lcsc": "C19702"},
+    {"ref": "U1", "symbol": "MCU_Microchip_ATtiny:ATtiny85-20S", "value": "ATtiny85-20S", "group": "mcu", "lcsc": "C89852"},
+    {"ref": "C2", "symbol": "Device:C", "footprint": "Capacitor_SMD:C_0603_1608Metric", "value": "100nF", "group": "mcu", "lcsc": "C14663", "place": {"near": "U1.VCC"}},
+    {"ref": "R3", "symbol": "Device:R", "footprint": "Resistor_SMD:R_0603_1608Metric", "value": "10k", "group": "mcu", "lcsc": "C25804", "place": {"near": "U1.1"}},
+    {"ref": "J2", "symbol": "Connector:AVR-ISP-6", "footprint": "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical", "value": "ISP", "group": "mcu", "place": {"edge": "right"}},
+    {"ref": "R4", "symbol": "Device:R", "footprint": "Resistor_SMD:R_0603_1608Metric", "value": "1k", "group": "led", "lcsc": "C21190"},
+    {"ref": "D1", "symbol": "Device:LED", "footprint": "LED_SMD:LED_0603_1608Metric", "value": "Green", "group": "led", "lcsc": "C72043"}
   ],
   "nets": {
-    "VBUS": [
-      "J1.VBUS",
-      "C1.1",
-      "U1.VCC",
-      "C2.1",
-      "R3.1",
-      "J2.VCC"
-    ],
-    "GND": [
-      "J1.GND",
-      "J1.SHIELD",
-      "R1.2",
-      "R2.2",
-      "C1.2",
-      "U1.GND",
-      "C2.2",
-      "J2.GND",
-      "D1.K"
-    ],
-    "CC1": [
-      "J1.CC1",
-      "R1.1"
-    ],
-    "CC2": [
-      "J1.CC2",
-      "R2.1"
-    ],
-    "RESET": [
-      "U1.RESET",
-      "R3.2",
-      "J2.RST"
-    ],
-    "MOSI": [
-      "U1.PB0",
-      "J2.MOSI",
-      "R4.1"
-    ],
-    "MISO": [
-      "U1.PB1",
-      "J2.MISO"
-    ],
-    "SCK": [
-      "U1.PB2",
-      "J2.SCK"
-    ],
-    "LED_A": [
-      "R4.2",
-      "D1.A"
-    ]
+    "VBUS": "J1.VBUS C1.1 U1.VCC C2.1 R3.1 J2.VCC",
+    "GND": "J1.GND J1.SHIELD R1.2 R2.2 C1.2 U1.GND C2.2 J2.GND D1.K",
+    "CC1": "J1.CC1 R1.1",
+    "CC2": "J1.CC2 R2.1",
+    "RESET": "U1.RESET R3.2 J2.RST",
+    "MOSI": "U1.PB0 J2.MOSI R4.1",
+    "MISO": "U1.PB1 J2.MISO",
+    "SCK": "U1.PB2 J2.SCK",
+    "LED_A": "R4.2 D1.A"
   },
-  "no_connect": [
-    "U1.PB3",
-    "U1.PB4"
-  ]
+  "no_connect": "U1.PB3 U1.PB4"
 }

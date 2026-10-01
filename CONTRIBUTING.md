@@ -36,7 +36,7 @@ The unit tests need no KiCad and run in CI on every push. For an end-to-end
 check with KiCad installed:
 
 ```bash
-bin/kipcb build examples/c3_sensor.json && bin/kipcb route examples/c3_sensor && bin/kipcb fab examples/c3_sensor
+bin/kipcb run examples/c3_sensor.json --force
 ```
 
 Code in `scripts/kipcb` must stay compatible with Python 3.9, the version

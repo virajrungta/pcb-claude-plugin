@@ -9,6 +9,36 @@ release and publishes it on GitHub.
 
 _Nothing yet._
 
+## V1.3 - 2026-09-30
+
+- **One command for the whole pipeline**: `kipcb run <spec>` checks, builds,
+  routes and exports manufacturing files, prints one line per step, and ends
+  with a report: ready or not, **the project's location**, board size, checks,
+  power budget, manufacturing files, previews, what to check, and timing. The
+  report is saved as `reports/REPORT.md`, and `kipcb report` prints it again.
+  An unchanged spec returns the last report instantly.
+- **About 3x faster**: routing tries two strategies at once and stops the moment
+  one finishes cleanly (ESP32-C3 example: 44 s → 7 s; full run about 20 s
+  instead of over a minute). Previews render in parallel, and only what's needed.
+- **Organized project folders**: `fab/` (send to the manufacturer),
+  `previews/` (images and PDFs), `reports/` (report and check results), and a
+  hidden `.kipcb/` for router working files.
+- **Far fewer tokens per design**:
+  - part search output is ~75% smaller, and `kipcb sym-search "a | b | c"`
+    runs several searches in one call
+  - `kipcb sym-info A B C` gives compact pins for several parts at once (~70% smaller)
+  - `kipcb guide <topic>` prints one section of the design references
+    (~50–300 tokens) instead of whole files (~2,000 each)
+  - previews are sized for review: one ~1100 px board image per iteration,
+    with the schematic image only when the circuit changes
+  - a compact spec layout (nets as one-line strings, one line per part) is
+    ~30% smaller; `kipcb fmt` converts existing specs
+  - the design skill is ~40% shorter and tells Claude to batch lookups, run the
+    whole pipeline in one call, edit specs instead of rewriting them, check
+    `kipcb ref` before fetching datasheets, and use the reviewer agent only
+    for complex boards
+  - the reviewer agent is capped at three datasheet fetches and a short report
+
 ## V1.2 - 2026-09-30
 
 - **Setup dialog at install**: installing from `/plugin` asks for your usual

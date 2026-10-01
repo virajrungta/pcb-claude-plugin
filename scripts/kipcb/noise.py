@@ -14,6 +14,7 @@ import json
 import math
 import os
 import re
+from . import ui
 
 from .kicad import mm, pcbnew
 
@@ -311,15 +312,15 @@ def check(pdir, name, board=None):
 def run(pdir, name, board=None, quiet=False, save=True):
     rep = check(pdir, name, board)
     if save:
-        out = os.path.join(pdir, "out")
-        os.makedirs(out, exist_ok=True)
+        from . import paths
+        out = paths.reports(pdir)
         with open(os.path.join(out, "noise.json"), "w") as f:
             json.dump(rep.items, f, indent=1)
     fails, warns = rep.count(FAIL), rep.count(WARN)
-    print("NOISE CHECK: %d fail, %d warn, %d pass" % (fails, warns, rep.count(PASS)))
+    ui.say("NOISE CHECK: %d fail, %d warn, %d pass" % (fails, warns, rep.count(PASS)))
     order = {FAIL: 0, WARN: 1, PASS: 2}
     for it in sorted(rep.items, key=lambda i: (order[i["level"]], i["check"])):
         if quiet and it["level"] == PASS:
             continue
-        print("  %-4s %-13s %s" % (it["level"], it["check"], it["message"]))
+        ui.say("  %-4s %-13s %s" % (it["level"], it["check"], it["message"]))
     return 1 if fails else 0
