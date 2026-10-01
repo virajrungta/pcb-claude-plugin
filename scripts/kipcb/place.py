@@ -39,6 +39,7 @@ class Part(object):
     def __init__(self, ref, courtyard, pads, hint, npads, margin=GAP / 2, rects=None):
         self.ref = ref
         self.margin = margin
+        self.squeezed = False
         self.rects = rects or [courtyard]
         self.court = courtyard           # (x0,y0,x1,y1) rel. to origin, rot 0
         self.pads = pads                 # [(pad_number, x, y, net)]
@@ -100,7 +101,7 @@ class Placer(object):
 
     # ---------------------------------------------------------- geometry
     def _pair_gap(self, p, q):
-        if _near_ref(p) == q.ref or _near_ref(q) == p.ref:
+        if _near_ref(p) == q.ref or _near_ref(q) == p.ref or p.squeezed or q.squeezed:
             return 2 * min(p.margin, q.margin)
         return p.margin + q.margin
 
@@ -323,6 +324,7 @@ class Placer(object):
         A roomy spacing preset on a small board can leave no spot for a large
         part; squeezing it in is far better than parking it off the board."""
         original = part.margin
+        part.squeezed = True     # the tight gap applies on both sides, not just this part's
         for margin in (original * 0.5, 0.1):
             part.margin = margin
             ok = self._place_edge(part, step) if edge else self._place_free(part, step)
@@ -331,6 +333,7 @@ class Placer(object):
                                 % (part.ref, margin, original))
                 return True
         part.margin = original
+        part.squeezed = False
         return False
 
     def run(self, step=0.5, refine_passes=2):
