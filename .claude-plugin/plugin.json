@@ -17,6 +17,6 @@
     "jlcpcb",
     "freerouting"
   ],
-  "homepage": "https://github.com/virajrungta/pcb-plugin",
-  "repository": "https://github.com/virajrungta/pcb-plugin"
+  "homepage": "https://github.com/virajrungta/pcb-claude-plugin",
+  "repository": "https://github.com/virajrungta/pcb-claude-plugin"
 }

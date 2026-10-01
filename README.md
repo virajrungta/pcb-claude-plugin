@@ -36,17 +36,17 @@ Every build produces a normal KiCad 9 project (`.kicad_pro`, `.kicad_sch`,
 ## Install
 
 ```bash
-claude plugin marketplace add virajrungta/pcb-plugin
+claude plugin marketplace add virajrungta/pcb-claude-plugin
 ```
 
 ```bash
-claude plugin install pcb@pcb-plugin
+claude plugin install pcb@pcb-claude-plugin
 ```
 
 Or try it for one session without installing:
 
 ```bash
-claude --plugin-dir /path/to/pcb-plugin
+claude --plugin-dir /path/to/pcb-claude-plugin
 ```
 
 Then check the toolchain:
