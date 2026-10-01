@@ -202,6 +202,14 @@ def check(pdir, name, design, board=None):
     if not any(i["check"] == "placement" for i in res.items):
         res.add("placement", PASS, "no overlaps; decoupling and crystal parts close to their pins")
 
+    # ---- crowding: most parts packed into a small corner of a roomy board
+    crowd = _crowding(board)
+    if crowd:
+        res.add("crowding", WARN, crowd, "rebuild (kipcb spreads parts over spare room), or set a smaller "
+                "board size; avoid \"spacing\": \"compact\" on roomy boards")
+    else:
+        res.add("crowding", PASS, "parts use the board evenly")
+
     # ---- escape room around fine-pitch chips
     blocked = _escape(board, design, pcb_nets)
     for line in blocked:
@@ -277,6 +285,36 @@ def _escape(board, design, pcb_nets, ring=1.5):
                 out.append("%s %s side: %d%% blocked by %s, %d pins must route out that way" % (
                     ref, side, min(100, round(100 * share)), ", ".join(sorted(who)[:6]), pins[side]))
     return out
+
+
+def _crowding(board, n=8, win=3):
+    """A small region packed far denser than the board as a whole: the densest window
+    (3x3 cells of an 8x8 grid, about 14% of the board) vs. the overall fill. Returns a
+    message, or None when the layout is reasonably even or the board is simply full."""
+    bb = board.GetBoardEdgesBoundingBox()
+    x0, y0, w, h = _mm(bb.GetX()), _mm(bb.GetY()), _mm(bb.GetWidth()), _mm(bb.GetHeight())
+    cells = [[0.0] * n for _ in range(n)]
+    total = 0.0
+    for fp in board.GetFootprints():
+        b = fp.GetBoundingBox(False)
+        bx0, by0, bx1, by1 = _mm(b.GetX()), _mm(b.GetY()), _mm(b.GetRight()), _mm(b.GetBottom())
+        for i in range(n):
+            for j in range(n):
+                cx0, cy0 = x0 + w * i / n, y0 + h * j / n
+                ix = max(0.0, min(bx1, cx0 + w / n) - max(bx0, cx0))
+                iy = max(0.0, min(by1, cy0 + h / n) - max(by0, cy0))
+                cells[i][j] += ix * iy
+        total += (bx1 - bx0) * (by1 - by0)
+    fill = total / (w * h)
+    if total <= 0 or fill > 0.35:
+        return None                          # a full board isn't "crowded in a corner"
+    cell = w * h / (n * n)
+    peak = max(sum(cells[i + a][j + b] for a in range(win) for b in range(win)) / (win * win * cell)
+               for i in range(n - win + 1) for j in range(n - win + 1))
+    if peak < 0.45 or peak < 2.5 * fill:
+        return None
+    return "one area is %d%% packed while the board overall is only %d%% used; crowded parts are " \
+           "hard to route" % (round(100 * peak), round(100 * fill))
 
 
 def _min_pad_gap(c, pcb_nets):

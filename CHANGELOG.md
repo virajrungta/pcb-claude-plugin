@@ -9,6 +9,39 @@ release and publishes it on GitHub.
 
 _Nothing yet._
 
+## V1.6 - 2026-10-01
+
+- **Progress checklist**: after the requirements questions, Claude shows a
+  checklist in Claude Code's task list and ticks it off as the work happens:
+  Requirements → Components & circuit → Schematic → Placement → Preflight
+  checks → Routing → DRC & noise checks → Manufacturing files → Review &
+  hand-off. Long steps show their expected time and the reason. Backed by
+  `kipcb run --until build|preflight|route` and `--resume`; each stage ends
+  with a `checkpoint:` line.
+- **Routing is several times faster on normal boards**: the ESP32-C3
+  examples' route step (routing, pour, DRC, previews) takes 7-30 s instead of
+  32-99 s, and the whole pipeline about 40 s. Two Freerouting processes running at once were slowing each
+  other down and leaving connections unrouted. Attempts now run one at a time,
+  each capped at 20 s, stop at the first complete route, and give up early
+  when a round brings no improvement.
+- **Fan-out for fine-pitch chips**: before routing, kipcb bridges neighbouring
+  same-net pins and adds a locked escape stub from every used pin, so the
+  router doesn't have to thread between 0.4 mm-pitch pads. The RP2040 test
+  board now gets within about 9 connections on 2 layers (from 15-26). It stays
+  marked advanced.
+- **Better use of the board**:
+  - Parts spread over spare room instead of packing into one corner. Parts
+    that must sit at a pin (decoupling, crystal caps) stay close.
+  - Auto-size no longer shrinks a board denser than most real boards that
+    routed at that layer count.
+  - Preflight warns when one area is crowded while the rest of the board is
+    empty.
+- **Learning fixes**: failures from before V1.6 no longer make boards bigger
+  or add footprint margins. They were caused by bugs that are now fixed, and
+  had been inflating board sizes.
+- Fixed: a completion pass that ran out of time crashed the route step
+  instead of keeping the best result.
+
 ## V1.5 - 2026-10-01
 
 - **Preflight before routing**: a new step between build and route

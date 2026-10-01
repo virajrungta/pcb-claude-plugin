@@ -39,6 +39,7 @@ class Part(object):
     def __init__(self, ref, courtyard, pads, hint, npads, margin=GAP / 2, rects=None):
         self.ref = ref
         self.margin = margin
+        self.spread = 0.0                # extra room on a roomy board, only between spread parts
         self.squeezed = False
         self.rects = rects or [courtyard]
         self.court = courtyard           # (x0,y0,x1,y1) rel. to origin, rot 0
@@ -103,7 +104,8 @@ class Placer(object):
     def _pair_gap(self, p, q):
         if _near_ref(p) == q.ref or _near_ref(q) == p.ref or p.squeezed or q.squeezed:
             return 2 * min(p.margin, q.margin)
-        return p.margin + q.margin
+        extra = p.spread + q.spread if (p.spread and q.spread) else 0.0
+        return p.margin + q.margin + extra
 
     def _overlaps(self, box, skip, rects=None):
         """box: bounding box of the candidate; rects: its exact courtyard rectangles."""

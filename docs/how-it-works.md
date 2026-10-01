@@ -98,6 +98,16 @@ Placement uses each footprint's real courtyard shape (a module's wide antenna
 section doesn't block the pins beside it), spacing presets with extra
 fan-out room around ICs, and `away_from` to separate noisy and sensitive parts.
 
+## Placement spacing
+
+On a board with spare room, kipcb widens the gaps between parts until the
+layout covers about 45% of the board, instead of packing everything into one
+corner, because crowded clusters are what fail to route. Parts pinned next to a pin
+(decoupling and crystal capacitors) keep their tight spacing; fine-pitch
+chips get the most extra room. Auto-sizing stops shrinking a board before it
+gets denser than most real boards that routed completely at that layer count
+(knowledge base).
+
 ## Preflight
 
 Routing takes minutes; most reasons it fails can be seen in milliseconds on
@@ -117,6 +127,7 @@ the placed board. `kipcb preflight` (run automatically before routing) checks:
   parts off the board, decoupling and crystal parts too far from their pins.
 - **Escape room**: sides of fine-pitch chips crowded by neighbours while
   several pins still have to route out that way.
+- **Crowding**: one area packed far denser than the board as a whole.
 - **Density**: connections per cm² compared with real routed boards and with
   how your own boards of similar density routed.
 
@@ -124,9 +135,19 @@ A failure stops the run before routing, with the fix.
 
 ## Routing
 
-Freerouting autoroutes from a Specctra DSN export. kipcb runs several
-attempts with different strategies, scores each by KiCad's own connectivity
-check and keeps the best, then runs a completion pass for anything left. The
+Freerouting autoroutes from a Specctra DSN export. Its runs are randomized and
+behave in two ways: most finish a board completely within seconds, a few wander
+for minutes and still leave connections. So kipcb runs short attempts (20 s
+each, cycling through strategies), one at a time (two at once interfere and
+both slow down), stops at the first complete route, lengthens the attempts
+only if short ones keep failing, and gives up early when a whole round brings no
+improvement. Each attempt is scored by KiCad's own connectivity check; a
+completion pass then tries to finish anything left.
+
+Fine-pitch chips get **fan-out** first, the way a person would start: a
+bridge between neighbouring pins on the same net and a short locked stub from
+every other used pin out past the pad row, so the router starts from easy
+stub ends. The
 early strategies keep signals off the bottom layer so it stays an unbroken
 ground plane. Ground is then poured on both layers and stitched with vias.
 Stacked duplicate pads (like USB-C's paired VBUS pins) are hidden from the

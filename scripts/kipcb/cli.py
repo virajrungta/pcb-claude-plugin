@@ -189,7 +189,8 @@ def cmd_place(a):
 
 def cmd_run(a):
     from . import run
-    return run.run(a.spec, a.out, do_fab=not a.no_fab, force=a.force, passes=a.passes, timeout=a.timeout)
+    return run.run(a.spec, a.out, do_fab=not a.no_fab, force=a.force, passes=a.passes, timeout=a.timeout,
+                   until=a.until, resume=a.resume)
 
 
 def cmd_report(a):
@@ -461,6 +462,9 @@ def main(argv=None):
     p.add_argument("--no-fab", action="store_true", help="stop after routing")
     p.add_argument("--force", action="store_true", help="rebuild even if the spec is unchanged")
     p.add_argument("--passes", type=int, default=100); p.add_argument("--timeout", type=int, default=600)
+    p.add_argument("--until", choices=["build", "preflight", "route"],
+                   help="stop after this stage (each stage ends with a 'checkpoint:' line)")
+    p.add_argument("--resume", action="store_true", help="continue a staged run after its last finished stage")
     p.set_defaults(fn=cmd_run)
     p = sp.add_parser("report", help="print the summary of a project (also in reports/REPORT.md)")
     p.add_argument("target"); p.set_defaults(fn=cmd_report)

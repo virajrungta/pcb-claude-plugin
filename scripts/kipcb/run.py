@@ -22,7 +22,32 @@ def _cache_file(pdir):
     return os.path.join(paths.work(pdir), "last_run.json")
 
 
-def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600):
+def _stage_file(pdir):
+    return os.path.join(paths.work(pdir), "stage.json")
+
+
+STAGES = ("build", "preflight", "route", "fab")
+
+
+def _erc_errors(pdir):
+    erc = report._load(pdir, "erc.json") or {}
+    return sum(1 for sh in erc.get("sheets", []) for v in sh.get("violations", []) if v.get("severity") == "error")
+
+
+def _checkpoint(done, summary, d, nxt):
+    """One line Claude can relay (and tick in its checklist): what finished, what's next."""
+    from . import estimate
+    line = "checkpoint: %s done -- %s" % (done, summary)
+    if nxt:
+        est, _, _ = estimate.estimate(d)
+        lo, hi = est.get(nxt, (0, 0))
+        line += "; next: %s %s" % ({"fab": "manufacturing files"}.get(nxt, nxt), estimate.span(lo, hi))
+    ui.always(line)
+
+
+def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600, until=None, resume=False):
+    """until: stop after that stage ("build", "preflight", "route"); resume: continue after the
+    last finished stage of a staged run (so Claude can tick a checklist between stages)."""
     from .spec import Design, SpecError
     ui.QUIET = True
     timings = {}
@@ -52,58 +77,101 @@ def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600):
             last = json.load(f)
     except (OSError, ValueError):
         last = {}
-    if (not force and last.get("hash") == digest and last.get("ready")
+    start = 0
+    if resume:
+        try:
+            with open(_stage_file(pdir)) as f:
+                st = json.load(f)
+        except (OSError, ValueError):
+            st = {}
+        if st.get("hash") != digest or not os.path.exists(os.path.join(pdir, d.name + ".kicad_pcb")):
+            ui.always("nothing to resume: the spec changed or no staged run exists; start with "
+                      "`kipcb run %s --until build`" % spec_path)
+            return 1
+        start = STAGES.index(st["stage"]) + 1
+        timings.update(st.get("timings", {}))
+        if start >= len(STAGES):
+            ui.always(report.text(report.write(pdir, d.name, timings)))
+            return 0
+    stop = STAGES.index(until) if until in STAGES else len(STAGES)
+
+    def staged(stage):
+        """Save progress after a stage; True if the run should stop here."""
+        with open(_stage_file(pdir), "w") as f:
+            json.dump({"hash": digest, "stage": stage, "timings": timings}, f)
+        return STAGES.index(stage) >= stop
+
+    if (not resume and not force and last.get("hash") == digest and last.get("ready")
             and os.path.exists(os.path.join(pdir, d.name + ".kicad_pcb"))):
         ui.always("unchanged since the last successful run; nothing to redo (use --force to rebuild)\n")
         ui.always(report.text(report.write(pdir, d.name, last.get("timings"))))
         return 0
-    ui.always("check  ok: %d parts, %d nets, %d warning(s)" % (len(d.components), len(d.nets), len(d.warnings)))
-    for line in getattr(d, "block_summary", []):
-        ui.always("       block " + line)
-    for line in getattr(d, "support", []):
-        ui.always("       support " + line)
     from . import estimate
-    for line in estimate.lines(d, fab=do_fab):
-        ui.always(line)
+    if not resume:
+        ui.always("check  ok: %d parts, %d nets, %d warning(s)" % (len(d.components), len(d.nets), len(d.warnings)))
+        for line in getattr(d, "block_summary", []):
+            ui.always("       block " + line)
+        for line in getattr(d, "support", []):
+            ui.always("       support " + line)
+        for line in estimate.lines(d, fab=do_fab):
+            ui.always(line)
 
-    # 2. build
-    from . import build as buildmod
-    t = time.time()
-    rc = buildmod.build(spec_path, out, render=True, design=d)
-    timings["build"] = round(time.time() - t)
-    b = report._load(pdir, "build.json") or {}
-    if b.get("placement_failed") or rc == 2:
-        ui.always("build  stopped: %s did not fit on the board" % ", ".join(b.get("placement_failed", [])))
-        ui.always("\n" + report.text(report.write(pdir, d.name, timings)))
-        return 1
-    ui.always("build  %.0f x %.0f mm, %d layers (%ds)" % (b.get("width", 0), b.get("height", 0),
-                                                         b.get("layers", 2), timings["build"]))
+    # 2. build: schematic + placed board
+    if start <= STAGES.index("build"):
+        from . import build as buildmod
+        t = time.time()
+        rc = buildmod.build(spec_path, out, render=True, design=d)
+        timings["build"] = round(time.time() - t)
+        b = report._load(pdir, "build.json") or {}
+        if b.get("placement_failed") or rc == 2:
+            ui.always("build  stopped: %s did not fit on the board" % ", ".join(b.get("placement_failed", [])))
+            ui.always("\n" + report.text(report.write(pdir, d.name, timings)))
+            return 1
+        ui.always("build  %.0f x %.0f mm, %d layers (%ds)" % (b.get("width", 0), b.get("height", 0),
+                                                             b.get("layers", 2), timings["build"]))
+        _checkpoint("schematic + placement", "%d parts on a %.0f x %.0f mm board, ERC %s" % (
+            len(d.components), b.get("width", 0), b.get("height", 0),
+            "ok" if not _erc_errors(pdir) else "%d error(s)" % _erc_errors(pdir)), d, "preflight")
+        if staged("build"):
+            return 0
 
     # 3. preflight: everything that would make routing fail, checked in seconds instead of minutes
-    from . import preflight
-    t = time.time()
-    fails = preflight.run(pdir, d.name, d)
-    timings["preflight"] = round(time.time() - t)
-    if fails:
-        ui.always("preflight  %d problem(s); not routing until they're fixed (fixes above)" % fails)
-        ui.always("\n" + report.text(report.write(pdir, d.name, timings)))
-        return 1
-    ui.always("preflight  ok (%ds)" % timings["preflight"])
+    if start <= STAGES.index("preflight"):
+        from . import preflight
+        t = time.time()
+        fails = preflight.run(pdir, d.name, d)
+        timings["preflight"] = round(time.time() - t)
+        if fails:
+            ui.always("preflight  %d problem(s); not routing until they're fixed (fixes above)" % fails)
+            ui.always("\n" + report.text(report.write(pdir, d.name, timings)))
+            return 1
+        ui.always("preflight  ok (%ds)" % timings["preflight"])
+        _checkpoint("preflight", "the board can route cleanly", d, "route")
+        if staged("preflight"):
+            return 0
 
-    # 4. route
-    from . import route as routemod
-    t = time.time()
-    rc = routemod.route(pdir, d.name, passes=passes, timeout=timeout)
-    timings["route"] = round(time.time() - t)
-    rj = report._load(pdir, "route.json") or {}
-    if rc in (2, 3) or not rj:
-        ui.always("route  not done (see above)")
-        ui.always("\n" + report.text(report.write(pdir, d.name, timings)))
-        return 1
-    vias = rj.get("vias", 0)
-    ui.always("route  %s, %d via%s (%ds)" % ("complete" if not rj.get("unconnected") else
-                                            "%d unconnected" % rj["unconnected"],
-                                            vias, "" if vias == 1 else "s", timings["route"]))
+    # 4. route (+ DRC and noise checks)
+    if start <= STAGES.index("route"):
+        from . import route as routemod
+        t = time.time()
+        rc = routemod.route(pdir, d.name, passes=passes, timeout=timeout)
+        timings["route"] = round(time.time() - t)
+        rj = report._load(pdir, "route.json") or {}
+        if rc in (2, 3) or not rj:
+            ui.always("route  not done (see above)")
+            ui.always("\n" + report.text(report.write(pdir, d.name, timings)))
+            return 1
+        vias = rj.get("vias", 0)
+        ui.always("route  %s, %d via%s (%ds)" % ("complete" if not rj.get("unconnected") else
+                                                "%d unconnected" % rj["unconnected"],
+                                                vias, "" if vias == 1 else "s", timings["route"]))
+        drc = report._load(pdir, "drc.json") or {}
+        errs = sum(1 for v in drc.get("violations", []) if v.get("severity") == "error")
+        _checkpoint("routing + DRC + noise checks", "%s, DRC %s" % (
+            "all connections routed" if not rj.get("unconnected") else "%d connection(s) left" % rj["unconnected"],
+            "clean" if not errs else "%d error(s)" % errs), d, "fab" if do_fab else None)
+        if staged("route"):
+            return 0
 
     # 5. manufacturing files
     if do_fab:
@@ -114,6 +182,9 @@ def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600):
         timings["fab"] = round(time.time() - t)
         ui.always("fab    %s (%ds)" % ("exported" if frc == 0 else "skipped: fix the DRC problems first",
                                       timings["fab"]))
+        if frc == 0:
+            _checkpoint("manufacturing files", "Gerbers, BOM and pick-and-place in fab/", d, None)
+    staged("fab")
 
     # printable extras for people (bottom view, board PDF); Claude doesn't need to read them
     from . import render as rendermod

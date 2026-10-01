@@ -193,13 +193,13 @@ def add_stitching_vias(board, net_name, pitch=5.0, drill=0.3, dia=0.6):
     return added
 
 
-def _rules_file(board, path, bottom_cost):
+def _rules_file(board, path, bottom_cost, fanout=False):
     """Freerouting autoroute settings. Making the bottom layer expensive keeps
     signals on top so the bottom stays an unbroken ground plane (less noise)."""
     pn = pcbnew()
     names = [board.GetLayerName(l) for l in board.GetEnabledLayers().CuStack()]
     lines = ["(rules PCB board", "  (snap_angle fortyfive_degree)", "  (autoroute_settings",
-             "    (fanout off) (autoroute on) (postroute on) (vias on)",
+             "    (fanout %s) (autoroute on) (postroute on) (vias on)" % ("on" if fanout else "off"),
              "    (via_costs 50) (plane_via_costs 5) (start_ripup_costs 100) (start_pass_no 1)"]
     for i, n in enumerate(names):
         bottom = (i == len(names) - 1)
@@ -255,20 +255,28 @@ def _export_dsn(pn, board, dsn):
     return ok
 
 
-def _prepare(pn, board, jar, dsn, ses, passes, timeout, bottom_cost=None):
-    """Export the router input for the board as it is now; return (command, log path)."""
+def _prepare(pn, board, jar, dsn, ses, passes, timeout, bottom_cost=None, fanout=False, protect=False):
+    """Export the router input for the board as it is now; return (command, log path).
+    protect: the router must keep the existing wires (kipcb's fan-out stubs) as they are."""
     if not _export_dsn(pn, board, dsn):
         raise RuntimeError("DSN export failed")
+    if protect:
+        with open(dsn) as f:
+            text = f.read()
+        with open(dsn, "w") as f:
+            f.write(text.replace("(type route)", "(type protect)"))
     rules = dsn[:-4] + ".rules"
     if os.path.exists(rules):
         os.remove(rules)
     extra = []
     if bottom_cost:
-        _rules_file(board, rules, bottom_cost)
+        _rules_file(board, rules, bottom_cost, fanout)
         extra = ["-dr", rules]
+    if fanout:      # short escape stubs + vias from fine-pitch pins before the main routing
+        extra += ["--router.fanout.enabled=true"]
     if os.path.exists(ses):
         os.remove(ses)
-    budget = max(30, timeout - 30)
+    budget = max(10, timeout)
     cmd = ["java", "-jar", jar, "-de", dsn, "-do", ses] + extra + ["-mp", str(passes),
            "--router.max_passes=%d" % passes,
            "--router.job_timeout=%02d:%02d:%02d" % (budget // 3600, budget % 3600 // 60, budget % 60),
@@ -303,15 +311,17 @@ def _collect(proc, timeout, log_path, ses):
 def _freeroute(pn, board, jar, dsn, ses, out, passes, timeout, bottom_cost=None):
     """Run one routing attempt to completion; return the number of unrouted connections."""
     cmd, log_path = _prepare(pn, board, jar, dsn, ses, passes, timeout, bottom_cost)
-    return _collect(_launch(cmd, log_path, out), timeout, log_path, ses)
+    return _collect(_launch(cmd, log_path, out), timeout + 20, log_path, ses)
 
 
 def parallel_attempts():
-    """How many routing strategies to try at once (Freerouting is itself multi-threaded)."""
+    """How many routing strategies to run at once. One: two Freerouting processes running
+    side by side interfere (both spin through hundreds of passes and leave connections
+    unrouted), while one alone usually finishes a normal board in seconds."""
     env = os.environ.get("KIPCB_ROUTE_PARALLEL")
     if env and env.isdigit():
         return max(1, int(env))
-    return 2 if (os.cpu_count() or 2) >= 6 else 1
+    return 1
 
 
 BOTTOM_COST = 3.0
@@ -431,6 +441,9 @@ def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=4):
                   ", ".join(stray), "is" if len(stray) == 1 else "are", "its" if len(stray) == 1 else "their"))
         return 3
     _strip_routing(board)
+    fan = fanout(board)
+    if any(fan):
+        ui.say("fan-out: %d escape stubs, %d same-net bridges on fine-pitch chips" % fan)
     ns = board.GetDesignSettings().m_NetSettings
     power = ns.GetNetClassByName("Power") if ns.HasNetclass("Power") else None
     base_w = power.GetTrackWidth() if power is not None else None
@@ -455,42 +468,65 @@ def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=4):
     ui.say("routing plan (learned from %d past attempts): %s" % (
         len(learn.history("route_attempt")), " -> ".join("[%s]" % learn.arm_label(a) for a in arms)))
     plan = [((signal_w if narrow else base_w), bcost) for narrow, bcost in arms]
+    # Freerouting is randomized and bimodal: on most boards a run either finishes completely
+    # within seconds or wanders for minutes and still leaves connections. So: many short
+    # attempts, stop at the first complete one, and lengthen the cap only if short ones fail.
     batch = parallel_attempts()
-    per_attempt = max(60, timeout // ((len(plan) + batch - 1) // batch + 1))
+    cap0 = int(os.environ.get("KIPCB_ATTEMPT_SECONDS", "20"))
     best = None
     attempts = []
     kept = None
     t_route = time.time()
-    for start in range(0, len(plan), batch):
-        group = list(range(start, min(start + batch, len(plan))))
+    n = 0
+    done = False
+    round_best = None
+    while not done:
+        if n and n % len(plan) == 0:          # a full round of strategies finished
+            now = best[0][0] if best else None
+            if round_best is not None and now is not None and now >= round_best:
+                ui.say("  no improvement over the last round; stopping here")
+                break
+            round_best = now
+        left = timeout - (time.time() - t_route)
+        cap = cap0 * (1 if n < 2 * len(plan) else 2 if n < 3 * len(plan) else 4)
+        if left < 10 or n >= 6 * len(plan):
+            break
+        cap = int(min(cap, left))
+        group = list(range(n, n + batch))
+        n += batch
         procs = []
-        for i in group:                       # export each strategy's input, then start it
+        for k in group:                       # export each strategy's input, then start it
+            i = k % len(plan)
             width, bcost = plan[i]
             set_power_width(width)
-            dsn_i = os.path.join(out, "%s.attempt%d.dsn" % (name, i + 1))
+            _reset_to_fanout(board)
+            dsn_i = os.path.join(out, "%s.attempt%d.dsn" % (name, k + 1))
             ses_i = dsn_i[:-4] + ".ses"
-            cmd, log_i = _prepare(pn, board, jar, dsn_i, ses_i, passes, per_attempt, bcost)
-            procs.append((i, _launch(cmd, log_i, out), log_i, ses_i, time.time()))
-        ui.say("routing: %s" % "  |  ".join(learn.arm_label(arms[i]) for i in group))
-        done = False
-        for i, proc, log_i, ses_i, t0 in procs:  # judge them in ranked order
-            if done:                          # a better-ranked strategy already succeeded
+            cmd, log_i = _prepare(pn, board, jar, dsn_i, ses_i, passes, cap, bcost,
+                                  protect=bool(getattr(board, "_kipcb_fanout", None)))
+            procs.append((k, i, _launch(cmd, log_i, out), log_i, ses_i, time.time()))
+        for k, i, proc, log_i, ses_i, t0 in procs:
+            if done:
                 proc.kill()
                 proc.wait()
                 proc._kipcb_log.close()
                 continue
-            _collect(proc, per_attempt, log_i, ses_i)
+            try:
+                _collect(proc, cap + 20, log_i, ses_i)
+            except RuntimeError:
+                continue                      # killed before it wrote a result: try the next one
             set_power_width(plan[i][0])
-            for t in list(board.GetTracks()):
-                _delete(board, t)
+            _reset_to_fanout(board)          # the router's result doesn't carry the locked stubs
             if not pn.ImportSpecctraSES(board, ses_i):
                 raise RuntimeError("SES import failed")
+            _dedupe_fanout(board)
             heal_dangling(board)
             board.BuildConnectivity()
             missing = board.GetConnectivity().GetUnconnectedCount(True)
             bottom = bottom_signal_length(board)
             secs = round(time.time() - t0)
-            ui.say("  attempt %d: %d unconnected, %.0f mm on the bottom layer, %ds" % (i + 1, missing, bottom, secs))
+            ui.say("  attempt %d (%s, cap %ds): %d unconnected, %.0f mm on the bottom layer, %ds" % (
+                k + 1, learn.arm_label(arms[i]), cap, missing, bottom, secs))
             learn.record("route_attempt", features=features, arm=list(arms[i]), missing=missing,
                          bottom_mm=round(bottom, 1), seconds=secs)
             attempts.append({"strategy": learn.arm_label(arms[i]), "unconnected": missing,
@@ -498,26 +534,31 @@ def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=4):
             kept = ses_i
             if best is None or (missing, bottom) < best[0]:
                 best = ((missing, bottom), ses_i, plan[i][0], arms[i])
-            if missing == 0 and not done:
+            if missing == 0:
                 done = True
-        if done:
-            break
+    if best is None:
+        raise RuntimeError("no routing attempt produced a result (logs in %s)" % out)
 
     if best[1] != kept or best[0][0] != 0:
-        for t in list(board.GetTracks()):
-            _delete(board, t)
+        _reset_to_fanout(board)
         set_power_width(best[2])
         pn.ImportSpecctraSES(board, best[1])
+        _dedupe_fanout(board)
     healed = heal_dangling(board)
     board.BuildConnectivity()
     if board.GetConnectivity().GetUnconnectedCount(True):
         # completion pass: the DSN export carries the existing tracks, so the
         # router keeps them and only has to finish the few missing connections
         ui.say("completion pass for %d missing connection(s)..." % board.GetConnectivity().GetUnconnectedCount(True))
-        _freeroute(pn, board, jar, dsn, ses, out, passes, max(60, timeout // 5))
-        for t in list(board.GetTracks()):
-            _delete(board, t)
-        pn.ImportSpecctraSES(board, ses)
+        try:
+            _freeroute(pn, board, jar, dsn, ses, out, passes, max(60, timeout // 5))
+            completed = True
+        except RuntimeError:
+            completed = False                 # no result in time: keep the best attempt as it is
+        if completed:
+            _reset_to_fanout(board)
+            pn.ImportSpecctraSES(board, ses)
+            _dedupe_fanout(board)
         healed += heal_dangling(board)
         board.BuildConnectivity()
         ui.say("after completion: %d unconnected" % board.GetConnectivity().GetUnconnectedCount(True))
@@ -701,3 +742,134 @@ def _inset_boundary(dsn, inset_um):
     text = text[:m.start(1)] + path + text[m.end(1):]
     with open(dsn, "w") as f:
         f.write(text)
+
+def fanout(board, stub=0.6, max_pitch=0.52, min_pads=24):
+    """Escape routing for fine-pitch chips, done before autorouting (as a person would):
+    a straight bridge between neighbouring pins on the same net, and a short locked stub
+    from every other used pin straight out past the pad row, so the router only has to
+    reach easy stub ends instead of threading between 0.4 mm-pitch pins.
+    Returns (stubs, bridges)."""
+    pn = pcbnew()
+    ns = board.GetDesignSettings().m_NetSettings
+    all_pads = [p for fp in board.GetFootprints() for p in fp.Pads()]
+    stubs = bridges = 0
+    added = []
+    board._kipcb_fanout = []
+
+    def width_of(pad):
+        nc = ns.GetEffectiveNetClass(pad.GetNetname())
+        return nc.GetTrackWidth(), nc.GetClearance()
+
+    def clear(a, b, net, width, clr):
+        steps = max(2, int(((b.x - a.x) ** 2 + (b.y - a.y) ** 2) ** 0.5 / mm(0.05)))
+        reach = int(clr + width / 2)
+        for i in range(steps + 1):
+            q = pn.VECTOR2I(int(a.x + (b.x - a.x) * i / steps), int(a.y + (b.y - a.y) * i / steps))
+            for p in all_pads:
+                if p.GetNetCode() != net and p.IsOnLayer(pn.F_Cu) and p.HitTest(q, reach):
+                    return False
+            for t in added:
+                if t.GetNetCode() != net and t.HitTest(q, reach):
+                    return False
+        return True
+
+    def add(a, b, pad, width):
+        t = pn.PCB_TRACK(board)
+        t.SetStart(a)
+        t.SetEnd(b)
+        t.SetWidth(width)
+        t.SetLayer(pn.F_Cu)
+        t.SetNet(pad.GetNet())
+        t.SetLocked(True)
+        board.Add(t)
+        added.append(t)
+        board._kipcb_fanout.append((a, b, width, pad.GetNet()))
+
+    for fp in board.GetFootprints():
+        pads = [p for p in fp.Pads() if p.GetNumber() and p.IsOnLayer(pn.F_Cu) and p.GetAttribute() == pn.PAD_ATTRIB_SMD]
+        if len(pads) < min_pads or fp.GetReference().rstrip("0123456789") not in ("U", "IC"):
+            continue
+        c = fp.GetPosition()
+        rows = []
+        for p in pads:
+            pos, bb = p.GetPosition(), p.GetBoundingBox()
+            dx, dy = pos.x - c.x, pos.y - c.y
+            if abs(dx) < mm(0.3) and abs(dy) < mm(0.3):
+                continue                                    # exposed pad: connects by the pour/vias
+            if abs(dx) >= abs(dy):
+                out, length, across = (1 if dx > 0 else -1, 0), bb.GetWidth(), bb.GetHeight()
+            else:
+                out, length, across = (0, 1 if dy > 0 else -1), bb.GetHeight(), bb.GetWidth()
+            rows.append((p, out, length, across))
+        # pitch of this chip
+        coords = sorted(((r[1], (r[0].GetPosition().y if r[1][0] else r[0].GetPosition().x)) for r in rows))
+        gaps = [abs(b[1] - a[1]) for a, b in zip(coords, coords[1:]) if a[0] == b[0] and b[1] != a[1]]
+        if not gaps or min(gaps) > mm(max_pitch):
+            continue
+        pitch = min(gaps)
+        bridged = set()
+        # 1. same-net neighbours in a row: bridge them across the gap
+        for i, (p, out, length, across) in enumerate(rows):
+            net = p.GetNetname()
+            if not net or net.startswith("unconnected-"):
+                continue
+            for q, out2, _, across2 in rows[i + 1:]:
+                if out2 != out or q.GetNetname() != net:
+                    continue
+                d = ((q.GetPosition().x - p.GetPosition().x) ** 2 + (q.GetPosition().y - p.GetPosition().y) ** 2) ** 0.5
+                if d > pitch * 1.1:
+                    continue
+                w = min(width_of(p)[0], across, across2)
+                add(p.GetPosition(), q.GetPosition(), p, w)
+                bridges += 1
+                bridged.add(q.GetNumber())
+        # 2. a stub straight out from every used pin (one per bridged group is enough)
+        for p, out, length, across in rows:
+            net = p.GetNetname()
+            if not net or net.startswith("unconnected-") or p.GetNumber() in bridged:
+                continue
+            if sum(1 for q in all_pads if q.GetNetCode() == p.GetNetCode()) < 2:
+                continue
+            w, clr = width_of(p)
+            w = min(w, across)
+            pos = p.GetPosition()
+            end = pn.VECTOR2I(int(pos.x + out[0] * (length / 2 + mm(stub))), int(pos.y + out[1] * (length / 2 + mm(stub))))
+            edge = pn.VECTOR2I(int(pos.x + out[0] * length / 2), int(pos.y + out[1] * length / 2))
+            if clear(edge, end, p.GetNetCode(), w, clr):
+                add(pos, end, p, w)
+                stubs += 1
+    return stubs, bridges
+
+
+def _reset_to_fanout(board):
+    """Remove all tracks and vias, then put the fan-out stubs back (each routing attempt
+    starts from the same escape stubs, not from the previous attempt's routing)."""
+    pn = pcbnew()
+    for t in list(board.GetTracks()):
+        _delete(board, t)
+    for a, b, width, net in getattr(board, "_kipcb_fanout", []):
+        t = pn.PCB_TRACK(board)
+        t.SetStart(a)
+        t.SetEnd(b)
+        t.SetWidth(width)
+        t.SetLayer(pn.F_Cu)
+        t.SetNet(net)
+        t.SetLocked(True)
+        board.Add(t)
+
+
+def _dedupe_fanout(board):
+    """The router hands protected stubs back as ordinary wires: drop those copies."""
+    keys = {(min((a.x, a.y), (b.x, b.y)), max((a.x, a.y), (b.x, b.y)))
+            for a, b, _, _ in getattr(board, "_kipcb_fanout", [])}
+    if not keys:
+        return
+    tol = mm(0.002)
+    for t in list(board.GetTracks()):
+        if t.IsLocked() or t.GetClass() != "PCB_TRACK":
+            continue
+        a, b = t.GetStart(), t.GetEnd()
+        k = (min((a.x, a.y), (b.x, b.y)), max((a.x, a.y), (b.x, b.y)))
+        if any(abs(k[0][0] - q[0][0]) <= tol and abs(k[0][1] - q[0][1]) <= tol and
+               abs(k[1][0] - q[1][0]) <= tol and abs(k[1][1] - q[1][1]) <= tol for q in keys):
+            _delete(board, t)

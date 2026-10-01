@@ -271,6 +271,43 @@ class EstimateTests(unittest.TestCase):
         self.assertEqual(estimate.fmt(6), "6s")
 
 
+class V16PlacementTests(unittest.TestCase):
+    def test_spread_fills_roomy_board_but_not_pinned_parts(self):
+        from kipcb import pcbgen, place
+
+        class D:
+            board = {}
+            rules = {"edge_clearance": 0.5}
+        big = place.Part("U1", (-3, -3, 3, 3), [], {}, 32, 0.6)
+        cap = place.Part("C1", (-1, -0.5, 1, 0.5), [], {"near": "U1.1"}, 2, 0.5)
+        btn = place.Part("SW1", (-3, -2, 3, 2), [], {}, 2, 0.5)
+        res = pcbgen._spread(D(), [big, cap, btn], 60, 40)
+        self.assertIsNotNone(res)
+        self.assertGreater(big.spread, btn.spread)          # fine-pitch-sized chips get the most room
+        self.assertEqual(cap.spread, 0.0)                   # parts pinned near a pin stay close
+        pl = place.Placer(60, 40, [big, cap, btn], {})
+        self.assertAlmostEqual(pl._pair_gap(big, btn), big.margin + btn.margin + big.spread + btn.spread)
+        self.assertAlmostEqual(pl._pair_gap(cap, btn), cap.margin + btn.margin)
+        D.board = {"spacing": "compact"}
+        self.assertIsNone(pcbgen._spread(D(), [big, btn], 60, 40))
+
+    def test_old_generation_failures_are_ignored(self):
+        from kipcb import learn
+        rows = [{"kind": "route_final", "auto_size": True, "unconnected": 5, "gen": 1,
+                 "features": {"layers": 2, "pads": 100, "area_mm2": 2000}},
+                {"kind": "route_final", "auto_size": True, "unconnected": 0, "gen": 1,
+                 "features": {"layers": 2, "pads": 100, "area_mm2": 3000}}]
+        orig = learn.history
+        try:
+            learn.history = lambda kind=None, include_tainted=False: rows
+            ok, bad = learn._sizing_samples(2, 100)
+            self.assertEqual((len(ok), len(bad)), (1, 0))
+            rows[0]["gen"] = learn.ROUTER_GEN
+            self.assertEqual(len(learn._sizing_samples(2, 100)[1]), 1)
+        finally:
+            learn.history = orig
+
+
 if __name__ == "__main__":
     unittest.main()
 

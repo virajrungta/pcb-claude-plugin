@@ -53,10 +53,21 @@ def enabled():
     return settings().get("learning", True) is not False
 
 
+# Bumped when routing or placement changes enough that old failures no longer say anything
+# about today's pipeline (2: V1.6 fine-pitch rules, fan-out, spreading, sequential attempts).
+# Failures from older generations are ignored for sizing and footprint margins; successes
+# always count.
+ROUTER_GEN = 2
+
+
+def _current_failure(r):
+    return r.get("gen", 1) >= ROUTER_GEN
+
+
 def record(kind, **data):
     if not enabled():
         return
-    data.update({"kind": kind, "t": round(time.time())})
+    data.update({"kind": kind, "t": round(time.time()), "gen": ROUTER_GEN})
     try:
         with open(log_path(), "a") as f:
             f.write(json.dumps(data) + "\n")
@@ -192,7 +203,10 @@ def _sizing_samples(layers, pads):
         if abs(math.log(max(f.get("pads", 1), 1) / max(pads, 1))) > 1.2:
             continue
         app = f["area_mm2"] / max(f["pads"], 1)
-        (ok if r.get("unconnected", 1) == 0 else bad).append(app)
+        if r.get("unconnected", 1) == 0:
+            ok.append(app)
+        elif _current_failure(r):
+            bad.append(app)
     return ok, bad
 
 
@@ -227,7 +241,7 @@ def hard_footprints():
     fail, the cause is the board (too small, crowded), not those footprints."""
     counts = {}
     for r in history("route_final"):
-        if r.get("unconnected", 0) > 3:
+        if r.get("unconnected", 0) > 3 or not _current_failure(r):
             continue
         for fp in r.get("hard_footprints", []):
             counts[fp] = counts.get(fp, 0) + 1

@@ -134,22 +134,40 @@ be on a net or in `no_connect`, put `current_ma` on loads, give decoupling caps
 
 ## 4. Run, look, fix
 
-First tell the user what's coming. `kipcb estimate hardware/<name>.json` prints
-the approximate time per step and why a step is long; pass it on as a short
-checkpoint message before starting, e.g.:
+**Progress checklist.** As soon as the requirements are answered (end of step
+1b), create a checklist with Claude Code's task/todo list tool (TodoWrite, or
+TaskCreate/TaskUpdate where that's what's available) so the user sees the
+work as a box of steps that tick off. Use these items, with rough times, and
+refresh the times from `kipcb estimate <spec>` once the spec exists:
 
-> Starting the build: check ~1s · build ~1 min · preflight ~1s · route ~6 min ·
-> files ~6s (total ~8 min). Routing takes a while because the RP2040 has 0.4 mm
-> pins; boards like this usually need 5-8 min of autorouting.
+1. Requirements
+2. Components & circuit
+3. Schematic
+4. Placement (~N s/min)
+5. Preflight checks
+6. Routing (~N min; say why if long, e.g. "0.4 mm-pitch RP2040")
+7. DRC & noise checks
+8. Manufacturing files
+9. Review & hand-off
 
-```
-kipcb run hardware/<name>.json
-```
+Mark exactly one item in progress at a time and complete each the moment its
+stage finishes. Don't batch the ticks at the end. Run the pipeline in stages
+so there's something to tick between them; each stage ends with a
+`checkpoint:` line (what finished, what's next and how long):
 
-If the estimate is over ~2 minutes, run it in the background and tell the user
-you'll report when it finishes. After the run, give the actual times from the
-report's `Time` line next to the outcome. On later iterations, say again what
-the rerun will take (an unchanged spec returns instantly).
+| Stage | Command | Ticks |
+|---|---|---|
+| check + build | `kipcb run hardware/<name>.json --until build` | Components, Schematic, Placement |
+| preflight | `kipcb run hardware/<name>.json --resume --until preflight` | Preflight checks |
+| route | `kipcb run hardware/<name>.json --resume --until route` | Routing, DRC & noise checks |
+| files | `kipcb run hardware/<name>.json --resume` | Manufacturing files (prints the final report) |
+
+Run a stage estimated over ~2 minutes in the background and keep the item in
+progress until it ends. If a stage fails (spec errors, preflight, unrouted
+connections), leave its item open, fix, and rerun from that stage. After a
+spec edit, start again with `--until build`; an unchanged spec skips work.
+A single `kipcb run hardware/<name>.json` still does everything at once when
+no checklist is needed (e.g. a quick rerun).
 
 - **Spec errors**: fix them with Edit and rerun.
 - **Preflight failures**: apply the printed fix (spacing, place hints, board

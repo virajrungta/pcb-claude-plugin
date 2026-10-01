@@ -126,6 +126,59 @@ def part_margin(design, comp):
     return base + (ic_extra if is_ic else 0.0) + escape + learn.extra_margin(comp.footprint_id)
 
 
+FILL_TARGET = 0.45     # share of the usable board the parts (with their spacing) should cover
+
+
+def _spread(design, parts, W, H):
+    """On a board with spare room, widen the spacing so the layout uses the board instead of
+    packing into one corner (a dense cluster is what makes routing fail). Parts that must sit
+    next to a pin (decoupling, crystal caps: anything with a "near" hint) keep their spacing;
+    fine-pitch chips get the most extra room. Returns (mm added, fill before, fill after) or None."""
+    if design.board.get("spacing") == "compact":
+        return None
+    edge = design.rules["edge_clearance"]
+    usable = max(1.0, (W - 2 * edge) * (H - 2 * edge))
+
+    def size(p):
+        x0, y0, x1, y1 = p.court
+        return x1 - x0, y1 - y0
+
+    def weight(p):
+        if p.hint.get("near"):
+            return 0.0
+        return 1.5 if p.npads >= 24 else 1.0
+
+    def fill(delta):
+        tot = 0.0
+        for p in parts:
+            w, h = size(p)
+            m = p.margin + delta * weight(p)
+            tot += (w + 2 * m) * (h + 2 * m)
+        return tot / usable
+
+    before = fill(0.0)
+    if before >= FILL_TARGET:
+        return None
+    lo, hi = 0.0, 3.0
+    if fill(hi) <= FILL_TARGET:
+        lo = hi
+    else:
+        for _ in range(30):
+            mid = (lo + hi) / 2
+            if fill(mid) < FILL_TARGET:
+                lo = mid
+            else:
+                hi = mid
+    delta = round(lo, 2)
+    if delta < 0.1:
+        return None
+    for p in parts:
+        p.spread = delta * weight(p)
+    after = sum((size(p)[0] + 2 * (p.margin + p.spread)) * (size(p)[1] + 2 * (p.margin + p.spread))
+                for p in parts) / usable
+    return delta, 100 * before, 100 * after
+
+
 def compute_placement(design, sch_builder, W, H, holes, quiet=False, step=None, refine=2):
     parts = []
     net_sizes = {n: len(p) for n, p in design.nets.items()}
@@ -137,9 +190,12 @@ def compute_placement(design, sch_builder, W, H, holes, quiet=False, step=None, 
     obstacles = []
     for (x, y), r in holes:
         obstacles.append((x - r, y - r, x + r, y + r))
+    spread = _spread(design, parts, W, H)
     pl = place.Placer(W, H, parts, net_sizes, design.rules["edge_clearance"], obstacles)
     failed = pl.run(step=step or (0.5 if max(W, H) < 120 else 1.0), refine_passes=refine)
     if not quiet:
+        if spread:    # informational; not in pl.log, which auto-shrink reads as "too tight"
+            ui.say("note: spread parts by +%.1f mm per side to use the board (%.0f%% -> %.0f%% filled)" % spread)
         for line in pl.log:
             ui.say("note: " + line)
     result = {p.ref: (p.x, p.y, p.rot) for p in parts if p.x is not None}
@@ -251,6 +307,12 @@ def shrink_to_fit(design, sch_builder, W, H, step=0.92, max_steps=6):
     learned_floor = learn.min_area_per_pad(layers, pads)
     if learned_floor:
         floor = max(floor, learned_floor * pads)
+    # no denser than most real boards that routed completely at this layer count (knowledge base)
+    from . import knowledge
+    real = knowledge.routed_density(layers)
+    conns = sum(len(p) - 1 for p in design.nets.values() if len(p) > 1)
+    if real and real.get("p75"):
+        floor = max(floor, conns / real["p75"] * 100.0)
     best = None
     for _ in range(max_steps):
         W2, H2 = float(math.floor(W * step)), float(math.floor(H * step))
