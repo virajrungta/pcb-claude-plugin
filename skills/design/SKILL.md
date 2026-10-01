@@ -95,10 +95,15 @@ The user sees a progress line that ticks off as the design moves along:
 The plugin shows it automatically after every `kipcb estimate` / `kipcb run`
 command; you only have to drive the stages:
 
-1. As soon as the spec file exists, run `kipcb estimate hardware/<name>.json`.
-   This starts the checklist (Requirements ticked) and prints the times; tell
-   the user the total and why any step is long.
-2. Then run the pipeline in the stages of step 4. Each stage updates the
+1. **Immediately after the user answers the requirements questions**, before
+   anything else, pick a short board name and run
+   `kipcb progress --start <name>` (it assumes the spec goes in `hardware/`;
+   pass `--dir <folder>` otherwise). The user now sees
+   `✔ Requirements ▶ Components …`.
+2. As soon as the spec file exists, run `kipcb estimate hardware/<name>.json`.
+   It adds the times to the checklist; tell the user the total and why any
+   step is long.
+3. Then run the pipeline in the stages of step 4. Each stage updates the
    checklist and ends with a `checkpoint:` line you can relay in a few words.
 
 If your Claude Code also has a task/todo list tool (TodoWrite or TaskCreate),

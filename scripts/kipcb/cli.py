@@ -249,7 +249,7 @@ def cmd_estimate(a):
     est, _, f = estimate.estimate(d)
     why = ("%s: fine-pitch pins" % " and ".join(f["fine_parts"])) if est["route"][1] > 120 and f["fine_parts"] else ""
     progress.start(os.path.join(d.dir, d.name), d.name,
-                   {k: "~" + estimate.fmt((v[0] + v[1]) / 2) for k, v in est.items()}, why)
+                   {k: "~" + estimate.fmt((v[0] + v[1]) / 2) for k, v in est.items()}, why, keep=True)
     print("progress checklist started (shown to the user after each kipcb run stage)")
     return 0
 
@@ -257,6 +257,12 @@ def cmd_estimate(a):
 def cmd_progress(a):
     """Show the design progress checklist; --hook renders it for Claude Code (PostToolUse)."""
     from . import progress
+    if a.start:
+        name = re.sub(r"[^A-Za-z0-9_\-]+", "_", a.start).strip("_") or "board"
+        pdir = os.path.abspath(os.path.join(a.dir, name))
+        progress.start(pdir, name, {})
+        print("progress checklist started for %s (the user sees it after each kipcb step)" % name)
+        return 0
     if a.hook:
         out = progress.hook(sys.stdin.read())
         if out:
@@ -521,7 +527,10 @@ def main(argv=None):
     p = sp.add_parser("ref", help="how open-source designs wire a part (needs the knowledge base)")
     p.add_argument("part", nargs="+"); p.set_defaults(fn=cmd_ref)
     p = sp.add_parser("progress", help="show the current design's progress checklist")
-    p.add_argument("--hook", action="store_true", help=argparse.SUPPRESS); p.set_defaults(fn=cmd_progress)
+    p.add_argument("--hook", action="store_true", help=argparse.SUPPRESS)
+    p.add_argument("--start", metavar="NAME", help="start a checklist for a new board right after the requirements")
+    p.add_argument("--dir", default="hardware", help="folder the spec will go in (default: hardware)")
+    p.set_defaults(fn=cmd_progress)
     p = sp.add_parser("estimate", help="approximate time for each step of `kipcb run` on this spec, "
                       "with the reason when a step is long")
     p.add_argument("spec"); p.add_argument("--no-fab", action="store_true"); p.set_defaults(fn=cmd_estimate)

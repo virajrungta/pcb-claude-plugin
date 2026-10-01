@@ -3,7 +3,7 @@
 # checklist to the user. Any other command exits immediately (no Python started).
 input="$(cat)"
 case "$input" in
-  *"kipcb run"*|*"kipcb estimate"*) ;;
+  *"kipcb run"*|*"kipcb estimate"*|*"kipcb progress"*) ;;
   *) exit 0 ;;
 esac
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

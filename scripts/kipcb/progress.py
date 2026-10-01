@@ -55,8 +55,19 @@ def _save(pdir, state):
         pass
 
 
-def start(pdir, name, estimates, why=""):
-    """A fresh checklist: requirements done, components in progress."""
+def start(pdir, name, estimates, why="", keep=False):
+    """A fresh checklist: requirements done, components in progress. keep: if this project
+    already has one (started right after the requirements), only fill in the times."""
+    old = load(pdir) if keep else None
+    if old:
+        for it in old["items"]:
+            key = TIME_KEY.get(it["name"])
+            if key and estimates.get(key) and it["status"] in ("todo", "active"):
+                it["est"] = estimates[key]
+            if it["name"] == "Routing" and why:
+                it["note"] = why
+        _save(pdir, old)
+        return
     items = []
     for it in ITEMS:
         st = "done" if it == "Requirements" else ("active" if it == "Components & circuit" else "todo")
@@ -115,7 +126,7 @@ def render(state):
         if it["status"] == "done" and it.get("took"):
             extra = it["took"]
         elif it["status"] == "active":
-            extra = "next" + (", %s" % it["est"] if it.get("est") else "")
+            extra = "in progress" + (", %s" % it["est"] if it.get("est") else "")
         elif it["status"] in ("todo",) and it.get("est"):
             extra = it["est"]
         if it.get("note") and it["status"] in ("todo", "active", "failed"):
@@ -152,7 +163,7 @@ def hook(stdin_text):
     except ValueError:
         return None
     cmd = str((data.get("tool_input") or {}).get("command", ""))
-    if "kipcb run" not in cmd and "kipcb estimate" not in cmd:
+    if "kipcb run" not in cmd and "kipcb estimate" not in cmd and "kipcb progress" not in cmd:
         return None
     state = load()
     if not state or time.time() - state.get("updated", 0) > 3600:

@@ -9,6 +9,13 @@ release and publishes it on GitHub.
 
 _Nothing yet._
 
+## V1.8 - 2026-10-01
+
+- **Progress checklist from the start**: it now appears as soon as you've
+  answered the requirements questions (`kipcb progress --start <name>`), not
+  only once the design file exists, and fills in the step times when the
+  estimate is ready.
+
 ## V1.7 - 2026-10-01
 
 - **Progress checklist that actually shows up**: V1.6 asked Claude to use
