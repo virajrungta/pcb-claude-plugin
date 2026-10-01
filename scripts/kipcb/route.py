@@ -1,6 +1,7 @@
 """Autorouting with Freerouting (Specctra DSN/SES round trip) and ground pours."""
 
 import glob
+import json
 import os
 import re
 import shutil
@@ -210,9 +211,37 @@ def _rules_file(board, path, bottom_cost):
         f.write("\n".join(lines) + "\n")
 
 
+def _export_dsn(pn, board, dsn):
+    """Export for Freerouting with stacked duplicate pads hidden.
+
+    Connectors like USB-C stack two same-net pads at one spot (A4/B9). Freerouting
+    treats the duplicate as a separate pin in a crowded pin row and often fails
+    to reach it. Hiding the duplicate's copper layers only while the DSN is
+    written leaves the board untouched, and the stacked pad is still connected
+    because it overlaps the routed one."""
+    hidden = []
+    for fp in board.GetFootprints():
+        seen = {}
+        for pad in fp.Pads():
+            if not pad.GetNetname():
+                continue
+            key = (pad.GetPosition().x, pad.GetPosition().y, pad.GetNetname(), pad.GetSize().x, pad.GetSize().y)
+            if key in seen:
+                hidden.append((pad, pad.GetLayerSet()))
+                pad.SetLayerSet(pn.LSET())
+            else:
+                seen[key] = pad
+    try:
+        ok = pn.ExportSpecctraDSN(board, dsn)
+    finally:
+        for pad, layers in hidden:
+            pad.SetLayerSet(layers)
+    return ok
+
+
 def _freeroute(pn, board, jar, dsn, ses, out, passes, timeout, bottom_cost=None):
     """Export DSN, run Freerouting, return the number of unrouted connections."""
-    if not pn.ExportSpecctraDSN(board, dsn):
+    if not _export_dsn(pn, board, dsn):
         raise RuntimeError("DSN export failed")
     rules = dsn[:-4] + ".rules"
     if os.path.exists(rules):
@@ -373,14 +402,19 @@ def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=4):
     # Freerouting is randomized, so judge each attempt by KiCad's own connectivity
     # and keep the best. Early attempts make the bottom layer expensive so it stays
     # an unbroken ground plane (lower noise); later ones trade that for completion.
-    plan = [(base_w, BOTTOM_COST), (signal_w, BOTTOM_COST), (base_w, None), (signal_w, None)]
-    plan = plan[:max(1, attempts_max)]
+    from . import learn
+    features = learn.board_features(board)
+    narrow_ok = power is not None and signal_w < (base_w or 0)
+    arms, _ = learn.rank_arms(features, available_narrow=narrow_ok)
+    arms = arms[:max(1, attempts_max)]
+    print("routing plan (learned from %d past attempts): %s" % (
+        len(learn.history("route_attempt")), " -> ".join("[%s]" % learn.arm_label(a) for a in arms)))
+    plan = [((signal_w if narrow else base_w), bcost) for narrow, bcost in arms]
     best = None
     for i, (width, bcost) in enumerate(plan):
         if i:
-            print("retrying: %s, %s" % ("power tracks at signal width" if width == signal_w and power is not None
-                                        else "normal power tracks",
-                                        "signals kept off bottom layer" if bcost else "both layers free"))
+            print("retrying: %s" % learn.arm_label(arms[i]))
+        t_attempt = time.time()
         set_power_width(width)
         per_attempt = max(60, timeout // (len(plan) + 1))
         _freeroute(pn, board, jar, dsn, ses, out, passes, per_attempt, bottom_cost=bcost)
@@ -391,13 +425,15 @@ def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=4):
         missing = board.GetConnectivity().GetUnconnectedCount(True)
         bottom = bottom_signal_length(board)
         print("attempt %d: %d unconnected, %.0f mm of signal on the bottom layer" % (i + 1, missing, bottom))
+        learn.record("route_attempt", features=features, arm=list(arms[i]), missing=missing,
+                     bottom_mm=round(bottom, 1), seconds=round(time.time() - t_attempt))
         kept = os.path.join(out, "%s.attempt%d.ses" % (name, i + 1))
         shutil.copyfile(ses, kept)
         score = (missing, bottom)
         if best is None or score < best[0]:
-            best = (score, kept, width)
+            best = (score, kept, width, arms[i])
         if missing == 0:
-            break          # attempts run from most to least plane-friendly
+            break          # arms are ranked best-first, so the first complete route wins
         for t in list(board.GetTracks()):
             _delete(board, t)
 
@@ -439,6 +475,7 @@ def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=4):
     from . import noise
     print()
     noise.run(pdir, name, quiet=True)
+    _record_final(pdir, name, board, features, best[3])
     for p in rendermod.render(pdir, name, "pcb"):
         if p.endswith(".png"):
             print("preview:   %s" % p)
@@ -448,6 +485,49 @@ def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=4):
         print("\nFix remaining DRC issues (adjust placement/rules and re-run build + route, "
               "or finish by hand in KiCad).")
     return rc
+
+
+def _record_final(pdir, name, board, features, arm):
+    """Log the outcome so later runs learn from it (strategy, sizing, hard footprints)."""
+    from . import learn
+    out = os.path.join(pdir, "out")
+    try:
+        with open(os.path.join(out, "drc.json")) as f:
+            drc = json.load(f)
+    except (OSError, ValueError):
+        drc = {}
+    unconnected = drc.get("unconnected_items", [])
+    errors = [v for v in drc.get("violations", []) if v.get("severity") == "error"]
+    fp_of = {fp.GetReference(): fp.GetFPIDAsString() for fp in board.GetFootprints()}
+    hard = set()
+    for item in unconnected:
+        for it in item.get("items", []):
+            m = re.search(r" of (\w+)", it.get("description", ""))
+            if m and m.group(1) in fp_of:
+                hard.add(fp_of[m.group(1)])
+    try:
+        with open(os.path.join(out, "noise.json")) as f:
+            nz = json.load(f)
+    except (OSError, ValueError):
+        nz = []
+    spec = _spec(pdir, name)
+    b = spec.get("board", {})
+    learn.record("route_final", features=features, arm=list(arm), unconnected=len(unconnected),
+                 drc_errors=len(errors), hard_footprints=sorted(hard),
+                 noise_fail=sum(1 for i in nz if i["level"] == "FAIL"),
+                 noise_warn=sum(1 for i in nz if i["level"] == "WARN"),
+                 auto_size=not (b.get("width") and b.get("height")))
+
+
+def _spec(pdir, name):
+    for cand in (os.path.join(os.path.dirname(pdir), name + ".json"), os.path.join(pdir, name + ".json")):
+        if os.path.exists(cand):
+            try:
+                with open(cand) as f:
+                    return json.load(f)
+            except ValueError:
+                return {}
+    return {}
 
 
 def _guess_ground(board):

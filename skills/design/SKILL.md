@@ -25,7 +25,7 @@ Reference material (read when you reach that step, not all up front):
 
 ## 0. Preflight
 
-Run `kipcb doctor`.
+Run `kipcb doctor`. It also reports what kipcb has learned from past runs.
 - KiCad or pcbnew missing: stop and tell the user to install KiCad 9 from kicad.org.
 - Freerouting missing: routing needs it. Ask the user before running
   `kipcb setup-router`, which downloads a ~65 MB jar from the official GitHub
@@ -63,6 +63,10 @@ you'll list them again at hand-off.
 3. Use the manufacturer datasheet's reference circuit for every IC (regulators,
    MCUs, chargers, USB, RF). If unsure of a value, look it up (WebFetch the
    datasheet) rather than guess. `circuit-patterns.md` covers common blocks.
+   Also run `kipcb ref <part>` for each IC/module. If a knowledge base is
+   installed, it shows how open-source designs actually wired that part
+   (pull-ups, caps, values, per pin). Use it to catch forgotten support parts;
+   the datasheet still wins where they disagree.
 4. For a part not in KiCad's libraries, see "Custom parts" in `spec-format.md`.
 
 ## 3. Write the spec, then validate

@@ -59,9 +59,17 @@ def build(spec_path, out=None, render=True, placement=None):
     print("DRC placement issues: %d, schematic-parity issues: %d" % (len(placement_issues), len(parity)))
     for line in checks.summarize(placement_issues + parity, 20)[1]:
         print(line)
-    from . import noise
+    from . import learn, noise
     print("\nPlacement noise checks (decoupling, crystals, switch nodes):")
+    rep = noise.check(pdir, d.name)
     noise.run(pdir, d.name, quiet=True, save=False)
+    pads = sum(len(c.fp.pads) for c in d.components)
+    area = info["width"] * info["height"]
+    learn.record("build", features={"pads": pads, "parts": len(d.components), "nets": len(d.nets),
+                                    "area_mm2": round(area, 1), "layers": int(d.board.get("layers", 2)),
+                                    "pad_density": round(pads / (area / 100.0), 3)},
+                 spacing=d.board.get("spacing", "normal"), placement_failed=len(info["failed"]),
+                 noise_fail=rep.count("FAIL"), noise_warn=rep.count("WARN"))
     if render:
         for p in rendermod.render(pdir, d.name):
             if p.endswith(".png"):

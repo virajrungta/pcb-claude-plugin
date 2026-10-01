@@ -49,6 +49,11 @@ def cmd_doctor(a):
     print("java           %s" % (("OK  version %d" % java) if java else "MISSING (needed for autorouting)"))
     jar = route.find_jar()
     print("freerouting    %s" % (("OK  " + jar) if jar else "not installed (run: kipcb setup-router)"))
+    from . import knowledge, learn
+    kb = knowledge.load()
+    print("knowledge      %s" % (("%d parts from %d open-source projects" % (len(kb["parts"]), kb.get("projects", 0)))
+                                 if kb else "not installed (optional; see the pcb-knowledge repo)"))
+    print("experience     %d routed boards learned from (kipcb learn)" % len(learn.history("route_final")))
     return 0 if ok else 1
 
 
@@ -208,6 +213,16 @@ def cmd_netlist(a):
     return 0
 
 
+def cmd_ref(a):
+    from . import knowledge
+    return knowledge.print_part(" ".join(a.part))
+
+
+def cmd_learn(a):
+    from . import learn
+    return learn.reset() if a.action == "reset" else learn.status()
+
+
 def cmd_fab(a):
     from . import fab
     pdir, name = _project_paths(a.target)
@@ -263,6 +278,11 @@ def main(argv=None):
     p.set_defaults(fn=cmd_noise)
     p = sp.add_parser("netlist", help="print components and nets of a schematic (for review)")
     p.add_argument("target"); p.set_defaults(fn=cmd_netlist)
+    p = sp.add_parser("ref", help="how open-source designs wire a part (needs the knowledge base)")
+    p.add_argument("part", nargs="+"); p.set_defaults(fn=cmd_ref)
+    p = sp.add_parser("learn", help="show or reset what kipcb has learned from past runs")
+    p.add_argument("action", nargs="?", default="status", choices=["status", "reset"])
+    p.set_defaults(fn=cmd_learn)
     p = sp.add_parser("fab", help="export Gerbers, drill, BOM, pick-and-place and a zip")
     p.add_argument("target"); p.add_argument("--fab", default="jlcpcb", choices=["jlcpcb", "generic"])
     p.add_argument("--force", action="store_true", help="export even with DRC errors")

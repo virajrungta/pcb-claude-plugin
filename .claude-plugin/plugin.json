@@ -16,5 +16,7 @@
     "gerber",
     "jlcpcb",
     "freerouting"
-  ]
+  ],
+  "homepage": "https://github.com/virajrungta/pcb-plugin",
+  "repository": "https://github.com/virajrungta/pcb-plugin"
 }

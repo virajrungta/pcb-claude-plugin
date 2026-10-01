@@ -51,7 +51,20 @@ def board_size(design):
         x0, y0, x1, y1 = c.fp.courtyard
         m = 2 * part_margin(design, c)
         area += (x1 - x0 + m) * (y1 - y0 + m)
+    courtyard_area = area
     area *= float(b.get("density_factor", 1.8))
+    # learned sizing: the tightest area per pad that has routed on similar boards,
+    # seeded by open-source boards from the knowledge base
+    from . import knowledge, learn
+    layers = int(b.get("layers", 2))
+    pads = sum(len(c.fp.pads) for c in design.components)
+    learned = learn.area_per_pad(layers, pads) if "density_factor" not in b else None
+    if learned:
+        area = max(learned * pads, courtyard_area * 1.25)
+    else:
+        prior = knowledge.layout_prior(layers)
+        if prior and "density_factor" not in b:
+            area = max(area, prior["p50"] * pads)
     if b.get("mounting_holes"):
         area += 4 * 7.0 * 7.0
     w = math.ceil(math.sqrt(area * 1.4)) + 4
@@ -94,7 +107,8 @@ def part_margin(design, comp):
     base, ic_extra = SPACING.get(design.board.get("spacing", "normal"), SPACING["normal"])
     npads = len({p["number"] for p in comp.fp.pads if p["number"]})
     is_ic = comp.ref.rstrip("0123456789") in ("U", "IC") and npads >= 6
-    return base + (ic_extra if is_ic else 0.0)
+    from . import learn   # footprints that caused unrouted connections before get more room
+    return base + (ic_extra if is_ic else 0.0) + learn.extra_margin(comp.footprint_id)
 
 
 def compute_placement(design, sch_builder, W, H, holes):

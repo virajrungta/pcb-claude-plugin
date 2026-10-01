@@ -35,10 +35,8 @@ Every build produces a normal KiCad 9 project (`.kicad_pro`, `.kicad_sch`,
 
 ## Install
 
-From a clone of this repo:
-
 ```bash
-claude plugin marketplace add ~/Developer/pcb-plugin
+claude plugin marketplace add virajrungta/pcb-plugin
 ```
 
 ```bash
@@ -48,7 +46,7 @@ claude plugin install pcb@pcb-plugin
 Or try it for one session without installing:
 
 ```bash
-claude --plugin-dir ~/Developer/pcb-plugin
+claude --plugin-dir /path/to/pcb-plugin
 ```
 
 Then check the toolchain:
@@ -69,6 +67,8 @@ kipcb check spec.json             validate a design spec
 kipcb build spec.json             schematic + placed board + ERC + previews
 kipcb route <project>             Freerouting + ground pour + stitching vias + DRC
 kipcb noise <project>             basic noise / signal-integrity checks
+kipcb ref <part>                  how open-source designs wire a part
+kipcb learn [reset]               what kipcb has learned from past runs
 kipcb erc|drc|netlist|render <project>
 kipcb fab <project>               Gerbers/drill zip, BOM, CPL
 kipcb setup-router                download Freerouting
@@ -108,6 +108,23 @@ bin/kipcb fab examples/usb_blinker
    checks (decoupling distance, ground plane integrity, crosstalk, crystals,
    switch-node loops, differential pairs), 3D renders for visual review, and fab
    files referenced to the board corner.
+
+## Learning
+
+kipcb improves with use. Everything stays on your machine.
+
+- **From your own runs** (`kipcb learn`): every build and routing attempt is
+  logged to `~/.local/share/kipcb/experience.jsonl`. Routing strategies are
+  ranked by how they did on past boards of similar density (a contextual
+  bandit with exploration). Auto-sized boards use the tightest area per pad
+  that has reliably routed before. Footprints that keep causing unrouted
+  connections get extra clearance. `kipcb learn reset` forgets everything,
+  and `KIPCB_LEARN=0` turns logging off.
+- **From open-source designs** (`kipcb ref <part>`): the companion
+  [pcb-knowledge](https://github.com/virajrungta/pcb-knowledge) repo mines openly licensed KiCad projects
+  from GitHub into statistics: how real designs wire each IC's pins, plus
+  layout distributions that seed the sizing prior. Claude consults it during
+  part selection and review.
 
 ## Limits
 
