@@ -231,11 +231,23 @@ def _export_dsn(pn, board, dsn):
                 pad.SetLayerSet(pn.LSET())
             else:
                 seen[key] = pad
+    # Freerouting rounds coordinates differently from KiCad, which can leave a
+    # trace a few microns inside the clearance. Ask it for 0.01 mm extra.
+    ns = board.GetDesignSettings().m_NetSettings
+    classes = [ns.GetDefaultNetclass()] + [ns.GetNetClassByName(n) for n in ("Power", "Ground")
+                                           if ns.HasNetclass(n)]
+    saved = [(nc, nc.GetClearance()) for nc in classes]
+    for nc, clr in saved:
+        nc.SetClearance(clr + mm(0.01))
+    ns.ClearAllCaches()
     try:
         ok = pn.ExportSpecctraDSN(board, dsn)
     finally:
         for pad, layers in hidden:
             pad.SetLayerSet(layers)
+        for nc, clr in saved:
+            nc.SetClearance(clr)
+        ns.ClearAllCaches()
     return ok
 
 

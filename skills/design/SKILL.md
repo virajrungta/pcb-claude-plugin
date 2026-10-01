@@ -49,7 +49,8 @@ answered it.** Cover:
 
 If the idea is vague about function ("a smart plant monitor"), confirm the
 key features in the same round. Record the answers in the spec's
-`requirements` block. Tell the user any assumptions you still had to make;
+`requirements` block. For a noise-sensitive board, set a fixed size or
+`"auto_shrink": false` so the board keeps room to route on the top layer. Tell the user any assumptions you still had to make;
 you'll list them again at hand-off.
 
 ## 2. Architecture and part selection
@@ -81,6 +82,11 @@ kipcb check <name>.json
 Fix every ERROR. Every pin must be on a net or listed in `no_connect`, which is
 deliberate: decide each unused pin. Read every WARNING and fix it or justify it.
 Repeat until clean.
+
+Put `current_ma` on the main loads (MCU or radio module, LEDs, motors) so the
+check can add up each rail and flag a linear regulator that will overheat
+(`regulator heat`), and treat `logic levels` warnings seriously: a 3.3 V part
+driven by a 5 V part needs a 5V-tolerant pin or a level shifter.
 
 For anything beyond a trivial board, get an independent review before
 building: dispatch the `pcb:circuit-reviewer` agent with the spec path and the

@@ -53,13 +53,38 @@ def record(kind, **data):
         pass
 
 
-def history(kind=None):
+def _load():
     try:
         with open(log_path()) as f:
-            rows = [json.loads(l) for l in f if l.strip()]
+            return [json.loads(l) for l in f if l.strip()]
     except (OSError, ValueError):
         return []
-    return [r for r in rows if kind is None or r.get("kind") == kind]
+
+
+def _mark_tainted(rows):
+    """Flag routing records that came from a broken placement.
+
+    If a build left a part off the board, every route that follows it (for
+    the same board, until the next clean build) fails for reasons that have
+    nothing to do with the routing strategy or the footprints involved.
+    Learning from those runs would teach the wrong lessons."""
+    broken = []          # pad counts of boards whose latest build stranded a part
+    for r in rows:
+        pads = (r.get("features") or {}).get("pads", 0)
+        same = lambda p: abs(p - pads) <= 6
+        if r.get("kind") == "build":
+            broken = [p for p in broken if not same(p)]
+            if r.get("placement_failed"):
+                broken.append(pads)
+        elif r.get("kind", "").startswith("route"):
+            r["_tainted"] = any(same(p) for p in broken)
+    return rows
+
+
+def history(kind=None, include_tainted=False):
+    rows = _mark_tainted(_load())
+    return [r for r in rows if (kind is None or r.get("kind") == kind)
+            and (include_tainted or not r.get("_tainted"))]
 
 
 # ------------------------------------------------------------------ features
@@ -122,31 +147,53 @@ def arm_label(arm):
 
 # ------------------------------------------------------------------ 2. board sizing
 
-def area_per_pad(layers, pads):
-    """Learned area (mm² per pad) that reliably routes; None if nothing learned yet."""
-    ok = []
+def _sizing_samples(layers, pads):
+    """(successes, failures) as area-per-pad values for similar auto-sized boards."""
+    ok, bad = [], []
     for r in history("route_final"):
         f = r["features"]
-        if f.get("layers") != layers or r.get("unconnected", 1) != 0 or not r.get("auto_size"):
+        if f.get("layers") != layers or not r.get("auto_size"):
             continue
-        if abs(math.log(max(f["pads"], 1) / max(pads, 1))) > 1.2:
+        if abs(math.log(max(f.get("pads", 1), 1) / max(pads, 1))) > 1.2:
             continue
-        ok.append(f["area_mm2"] / max(f["pads"], 1))
-    bad = [r["features"]["area_mm2"] / max(r["features"]["pads"], 1) for r in history("route_final")
-           if r["features"].get("layers") == layers and r.get("unconnected", 0) > 0 and r.get("auto_size")]
+        app = f["area_mm2"] / max(f["pads"], 1)
+        (ok if r.get("unconnected", 1) == 0 else bad).append(app)
+    return ok, bad
+
+
+def area_per_pad(layers, pads):
+    """Learned area (mm² per pad) that reliably routes; None if nothing learned yet.
+
+    The tightest size that has routed wins. A failure only matters if it was
+    at a tighter size than every success; a failure at a size that has also
+    routed fine was bad luck or a different problem, not the size."""
+    ok, bad = _sizing_samples(layers, pads)
     if not ok:
         return None
     best = min(ok)
-    # never go tighter than anything that failed, plus 10% headroom
-    floor = max([b for b in bad if b <= best * 1.3] or [0])
-    return max(best, floor * 1.1)
+    closer = [b for b in bad if b < best]
+    return max(best, max(closer) * 1.1) if closer else best
+
+
+def min_area_per_pad(layers, pads):
+    """Area per pad known to be too tight for similar boards (a floor), or None."""
+    ok, bad = _sizing_samples(layers, pads)
+    if ok:
+        bad = [b for b in bad if b < min(ok)]
+    return max(bad) * 1.1 if bad else None
 
 
 # ------------------------------------------------------------------ 3. hard footprints
 
 def hard_footprints():
+    """Footprints that repeatedly sat at the end of an unrouted connection.
+
+    Only boards that came close (a few misses) count: when many connections
+    fail, the cause is the board (too small, crowded), not those footprints."""
     counts = {}
     for r in history("route_final"):
+        if r.get("unconnected", 0) > 3:
+            continue
         for fp in r.get("hard_footprints", []):
             counts[fp] = counts.get(fp, 0) + 1
     return counts
@@ -165,6 +212,9 @@ def status():
     builds = history("build")
     print("experience: %s" % log_path())
     print("  %d builds, %d routed boards, %d routing attempts" % (len(builds), len(fin), len(att)))
+    ignored = len(history("route_attempt", include_tainted=True)) - len(att)
+    if ignored:
+        print("  %d attempts ignored: they followed a build that left a part off the board" % ignored)
     if att:
         print("  routing strategies (all boards):")
         for arm in ARMS:

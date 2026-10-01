@@ -9,12 +9,18 @@ import json
 import os
 
 
+BUNDLED = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                       "data", "knowledge.json")
+
+
 def kb_path():
+    """KIPCB_KNOWLEDGE, else a locally built/installed base, else the copy shipped with the plugin."""
     env = os.environ.get("KIPCB_KNOWLEDGE")
     if env:
         return env
     base = os.environ.get("XDG_DATA_HOME", os.path.expanduser("~/.local/share"))
-    return os.path.join(base, "kipcb", "knowledge.json")
+    local = os.path.join(base, "kipcb", "knowledge.json")
+    return local if os.path.exists(local) else BUNDLED
 
 
 _cache = {}

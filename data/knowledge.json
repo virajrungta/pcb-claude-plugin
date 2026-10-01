@@ -1,0 +1,13582 @@
+{
+ "version": 1,
+ "built": "2026-09-30",
+ "projects": 391,
+ "repositories": 147,
+ "parts": {
+  "74HC04": {
+   "designs": 2,
+   "lib": "74xx:74HC04",
+   "footprints": [
+    "Package_DIP:DIP-14_W7.62mm_Socket",
+    "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm"
+   ],
+   "pins": {
+    "1": [
+     [
+      "tied to GND",
+      1
+     ],
+     [
+      "D 1N4148WS -> signal",
+      1
+     ]
+    ],
+    "4": [
+     [
+      "to MC44144",
+      1
+     ]
+    ],
+    "3": [
+     [
+      "to LM1881",
+      1
+     ]
+    ],
+    "VCC": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "L 22uH -> +5V",
+      1
+     ],
+     [
+      "C 100uF -> GND",
+      1
+     ],
+     [
+      "tied to VCC",
+      1
+     ],
+     [
+      "tied to +12V",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ]
+    ],
+    "2": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "to 74HC4024",
+      1
+     ]
+    ],
+    "6": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "8": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "to 74HC4024",
+      1
+     ]
+    ],
+    "10": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "12": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      1
+     ]
+    ],
+    "5": [
+     [
+      "D 1N4148WS -> signal",
+      1
+     ]
+    ]
+   }
+  },
+  "74HC14": {
+   "designs": 3,
+   "lib": "74xx:74HC14",
+   "footprints": [
+    "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm"
+   ],
+   "pins": {
+    "VCC": [
+     [
+      "C 100nF -> GND",
+      3
+     ],
+     [
+      "tied to +3V3",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      3
+     ]
+    ],
+    "1": [
+     [
+      "R 10k -> signal",
+      2
+     ]
+    ],
+    "3": [
+     [
+      "R 10k -> signal",
+      2
+     ]
+    ],
+    "5": [
+     [
+      "R 10k -> signal",
+      2
+     ]
+    ]
+   }
+  },
+  "74HC165": {
+   "designs": 2,
+   "lib": "74xx:74HC165",
+   "footprints": [
+    "Package_SO:SO-16_3.9x9.9mm_P1.27mm",
+    "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm"
+   ],
+   "pins": {
+    "VCC": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "tied to +5V",
+      1
+     ],
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ],
+     [
+      "C 4.7uF -> GND",
+      1
+     ],
+     [
+      "tied to VCC",
+      1
+     ]
+    ],
+    "D3": [
+     [
+      "R 10k -> +5V",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "D2": [
+     [
+      "R 10k -> +5V",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "D1": [
+     [
+      "R 10k -> +5V",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "D0": [
+     [
+      "R 10k -> +5V",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "~{LOAD}": [
+     [
+      "to ATMEGA328P-AU",
+      1
+     ],
+     [
+      "R 10k -> +5V",
+      1
+     ]
+    ],
+    "CLK": [
+     [
+      "to TPIC6B595",
+      1
+     ],
+     [
+      "to 74HC595",
+      1
+     ],
+     [
+      "to ATMEGA328P-AU",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "Q7": [
+     [
+      "R 10k -> signal",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to 74HC165",
+      1
+     ]
+    ],
+    "SER": [
+     [
+      "tied to GND",
+      1
+     ]
+    ],
+    "~{Q7}": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "D4": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "D5": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "D6": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "D7": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      1
+     ]
+    ],
+    "CP": [
+     [
+      "to 74HC165",
+      1
+     ],
+     [
+      "R ? -> signal",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "DS": [
+     [
+      "to 74HC165",
+      1
+     ]
+    ],
+    "~{PL}": [
+     [
+      "to 74HC165",
+      1
+     ],
+     [
+      "R ? -> signal",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "~{CE}": [
+     [
+      "to 74HC165",
+      1
+     ],
+     [
+      "R 0 -> GND",
+      1
+     ]
+    ]
+   }
+  },
+  "74HC595": {
+   "designs": 6,
+   "lib": "74xx:74HC595",
+   "footprints": [
+    "Package_SO:SO-16_3.9x9.9mm_P1.27mm",
+    "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm",
+    "Package_DIP:DIP-16_W7.62mm"
+   ],
+   "pins": {
+    "SER": [
+     [
+      "to 74HC595",
+      3
+     ],
+     [
+      "to TPIC6B595",
+      2
+     ]
+    ],
+    "~{OE}": [
+     [
+      "tied to GND",
+      4
+     ]
+    ],
+    "QE": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "QF": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "QG": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "QH'": [
+     [
+      "not connected",
+      6
+     ],
+     [
+      "to 74HC595",
+      3
+     ]
+    ],
+    "SRCLK": [
+     [
+      "to connector",
+      4
+     ],
+     [
+      "to 74HC595",
+      3
+     ],
+     [
+      "to TPIC6B595",
+      2
+     ]
+    ],
+    "~{SRCLR}": [
+     [
+      "C 100nF -> GND",
+      3
+     ],
+     [
+      "tied to +5V",
+      3
+     ],
+     [
+      "tied to +3V3",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ]
+    ],
+    "RCLK": [
+     [
+      "to 74HC595",
+      3
+     ],
+     [
+      "to TPIC6B595",
+      2
+     ],
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      3
+     ]
+    ],
+    "VCC": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ]
+    ]
+   }
+  },
+  "74LS125": {
+   "designs": 2,
+   "lib": "74xx:74LS125",
+   "footprints": [
+    "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm",
+    "Package_DIP:DIP-14_W7.62mm_LongPads"
+   ],
+   "pins": {
+    "11": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "tied to PA5(SD_~{CS})_3V",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ],
+     [
+      "tied to PA7(TFT_~{CS})_3V",
+      1
+     ]
+    ],
+    "12": [
+     [
+      "to PIC16F54",
+      1
+     ],
+     [
+      "to 24C16",
+      1
+     ],
+     [
+      "R 470 -> own pin 6",
+      1
+     ],
+     [
+      "to PIC12C508A",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to AT90S8583-P",
+      1
+     ]
+    ],
+    "1": [
+     [
+      "tied to GND",
+      1
+     ],
+     [
+      "to 74LS125",
+      1
+     ],
+     [
+      "to AT90S8583-P",
+      1
+     ],
+     [
+      "R 10k -> +5V",
+      1
+     ]
+    ],
+    "2": [
+     [
+      "D BAT43 -> VCC",
+      1
+     ],
+     [
+      "R 10k -> signal",
+      1
+     ],
+     [
+      "D BAT43 -> GND",
+      1
+     ],
+     [
+      "to AT90S8583-P",
+      1
+     ],
+     [
+      "tied to MISO_3V",
+      1
+     ]
+    ],
+    "5": [
+     [
+      "D BAT43 -> VCC",
+      1
+     ],
+     [
+      "R 10k -> signal",
+      1
+     ],
+     [
+      "D BAT43 -> GND",
+      1
+     ],
+     [
+      "to AT90S8583-P",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "tied to PD2(MISO2)_3V",
+      1
+     ]
+    ],
+    "9": [
+     [
+      "D BAT43 -> VCC",
+      1
+     ],
+     [
+      "R 10k -> signal",
+      1
+     ],
+     [
+      "D BAT43 -> GND",
+      1
+     ],
+     [
+      "to AT90S8583-P",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "3": [
+     [
+      "R 1k -> signal",
+      1
+     ],
+     [
+      "tied to PA6(FLASH_~{CS})_3V",
+      1
+     ],
+     [
+      "tied to PB1(RAM_~{CS})_3V",
+      1
+     ],
+     [
+      "to AT90S8583-P",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "tied to PC6(TFT_D~{C})_3V",
+      1
+     ]
+    ],
+    "6": [
+     [
+      "R 470 -> own pin 12",
+      1
+     ],
+     [
+      "tied to MOSI_3V",
+      1
+     ],
+     [
+      "tied to PD4(SCK2)_3V",
+      1
+     ],
+     [
+      "to AT90S8583-P",
+      1
+     ],
+     [
+      "tied to PC7(TFT_~{RST})_3V",
+      1
+     ]
+    ],
+    "8": [
+     [
+      "R 470 -> signal",
+      1
+     ],
+     [
+      "tied to SCK_3V",
+      1
+     ],
+     [
+      "tied to PD3(MOSI2)_3V",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ],
+     [
+      "tied to PB3(TFT_BL)_3V",
+      1
+     ]
+    ],
+    "VCC": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 100uF -> GND",
+      1
+     ],
+     [
+      "tied to VCC",
+      1
+     ],
+     [
+      "tied to +3.3V",
+      1
+     ],
+     [
+      "C 33uF -> GND",
+      1
+     ],
+     [
+      "tied to +5V",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      1
+     ]
+    ]
+   }
+  },
+  "74LS244": {
+   "designs": 2,
+   "lib": "74xx:74LS244",
+   "footprints": [
+    "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm",
+    "Package_DIP:DIP-20_W7.62mm_Socket"
+   ],
+   "pins": {
+    "VCC": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ],
+     [
+      "tied to +3.3V",
+      1
+     ],
+     [
+      "C 22uF -> GND",
+      1
+     ],
+     [
+      "Y 28.37516MHz (pal -> GND",
+      1
+     ],
+     [
+      "C 47uF -> GND",
+      1
+     ]
+    ],
+    "I0a": [
+     [
+      "D BAT54S -> +3.3V",
+      1
+     ],
+     [
+      "to AGNUS8372",
+      1
+     ],
+     [
+      "R 10k -> +5V",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to DENISE8373",
+      1
+     ]
+    ],
+    "I1a": [
+     [
+      "D BAT54S -> +3.3V",
+      1
+     ],
+     [
+      "to AGNUS8372",
+      1
+     ],
+     [
+      "to DENISE8373",
+      1
+     ]
+    ],
+    "I2a": [
+     [
+      "D BAT54S -> +3.3V",
+      1
+     ],
+     [
+      "to AGNUS8372",
+      1
+     ],
+     [
+      "to DENISE8373",
+      1
+     ]
+    ],
+    "I3a": [
+     [
+      "D BAT54S -> +3.3V",
+      1
+     ],
+     [
+      "to AGNUS8372",
+      1
+     ],
+     [
+      "to DENISE8373",
+      1
+     ]
+    ],
+    "I0b": [
+     [
+      "D BAT54S -> +3.3V",
+      1
+     ],
+     [
+      "to AGNUS8372",
+      1
+     ],
+     [
+      "to DENISE8373",
+      1
+     ]
+    ],
+    "I1b": [
+     [
+      "D BAT54S -> +3.3V",
+      1
+     ],
+     [
+      "to AGNUS8372",
+      1
+     ],
+     [
+      "to DENISE8373",
+      1
+     ]
+    ],
+    "I2b": [
+     [
+      "D BAT54S -> +3.3V",
+      1
+     ],
+     [
+      "to AGNUS8372",
+      1
+     ],
+     [
+      "to DENISE8373",
+      1
+     ]
+    ],
+    "I3b": [
+     [
+      "D BAT54S -> +3.3V",
+      1
+     ],
+     [
+      "to AGNUS8372",
+      1
+     ],
+     [
+      "to DENISE8373",
+      1
+     ]
+    ],
+    "O0a": [
+     [
+      "to MCP23017_SO",
+      1
+     ],
+     [
+      "to CIA8520",
+      1
+     ]
+    ],
+    "O1a": [
+     [
+      "to MCP23017_SO",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "O2a": [
+     [
+      "to MCP23017_SO",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "O3a": [
+     [
+      "to MCP23017_SO",
+      1
+     ],
+     [
+      "FB Ferrite_Bead_Sma -> signal",
+      1
+     ],
+     [
+      "C 100pF -> GND",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "O1b": [
+     [
+      "to MCP23017_SO",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "O2b": [
+     [
+      "to MCP23017_SO",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "O3b": [
+     [
+      "to MCP23017_SO",
+      1
+     ]
+    ],
+    "O0b": [
+     [
+      "to MCP23017_SO",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "OEa": [
+     [
+      "tied to GND",
+      2
+     ]
+    ]
+   }
+  },
+  "74LS245": {
+   "designs": 2,
+   "lib": "74xx:74LS245",
+   "footprints": [
+    "Package_DIP:DIP-20_W7.62mm_Socket",
+    "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm"
+   ],
+   "pins": {
+    "A->B": [
+     [
+      "C 22uF -> GND",
+      1
+     ],
+     [
+      "Y 28.37516MHz (pal -> GND",
+      1
+     ],
+     [
+      "C 47uF -> GND",
+      1
+     ],
+     [
+      "tied to +5V",
+      1
+     ],
+     [
+      "C 330nF -> GND",
+      1
+     ],
+     [
+      "C 10nF -> GND",
+      1
+     ]
+    ],
+    "A0": [
+     [
+      "to 74LS245",
+      1
+     ],
+     [
+      "to 68000D",
+      1
+     ],
+     [
+      "to 62402",
+      1
+     ],
+     [
+      "to CIA8520",
+      1
+     ],
+     [
+      "to 74LS373",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "A1": [
+     [
+      "to 74LS245",
+      1
+     ],
+     [
+      "to 68000D",
+      1
+     ],
+     [
+      "to 62402",
+      1
+     ],
+     [
+      "to CIA8520",
+      1
+     ],
+     [
+      "to 74LS373",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "A2": [
+     [
+      "to 74LS245",
+      1
+     ],
+     [
+      "to 68000D",
+      1
+     ],
+     [
+      "to 62402",
+      1
+     ],
+     [
+      "to CIA8520",
+      1
+     ],
+     [
+      "to 74LS373",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "A3": [
+     [
+      "to 74LS245",
+      1
+     ],
+     [
+      "to 68000D",
+      1
+     ],
+     [
+      "to 62402",
+      1
+     ],
+     [
+      "to CIA8520",
+      1
+     ],
+     [
+      "to 74LS373",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "A4": [
+     [
+      "to 74LS245",
+      1
+     ],
+     [
+      "to 68000D",
+      1
+     ],
+     [
+      "to 62402",
+      1
+     ],
+     [
+      "to CIA8520",
+      1
+     ],
+     [
+      "to 74LS373",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "A5": [
+     [
+      "to 74LS245",
+      1
+     ],
+     [
+      "to 68000D",
+      1
+     ],
+     [
+      "to 62402",
+      1
+     ],
+     [
+      "to CIA8520",
+      1
+     ],
+     [
+      "to 74LS373",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "A6": [
+     [
+      "to 74LS245",
+      1
+     ],
+     [
+      "to 68000D",
+      1
+     ],
+     [
+      "to 62402",
+      1
+     ],
+     [
+      "to CIA8520",
+      1
+     ],
+     [
+      "to 74LS373",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "A7": [
+     [
+      "to 74LS245",
+      1
+     ],
+     [
+      "to 68000D",
+      1
+     ],
+     [
+      "to 62402",
+      1
+     ],
+     [
+      "to CIA8520",
+      1
+     ],
+     [
+      "to 74LS373",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "B0": [
+     [
+      "to DENISE8373",
+      1
+     ],
+     [
+      "to PAULA",
+      1
+     ],
+     [
+      "to AGNUS8372",
+      1
+     ],
+     [
+      "to XX4256-15",
+      1
+     ],
+     [
+      "to 74LS373",
+      1
+     ],
+     [
+      "C 1nF -> signal",
+      1
+     ]
+    ],
+    "B1": [
+     [
+      "to DENISE8373",
+      1
+     ],
+     [
+      "to PAULA",
+      1
+     ],
+     [
+      "to AGNUS8372",
+      1
+     ],
+     [
+      "to XX4256-15",
+      1
+     ],
+     [
+      "to 74LS373",
+      1
+     ],
+     [
+      "C 1nF -> signal",
+      1
+     ]
+    ],
+    "B2": [
+     [
+      "to DENISE8373",
+      1
+     ],
+     [
+      "to PAULA",
+      1
+     ],
+     [
+      "to AGNUS8372",
+      1
+     ],
+     [
+      "to XX4256-15",
+      1
+     ],
+     [
+      "to 74LS373",
+      1
+     ],
+     [
+      "C 1nF -> signal",
+      1
+     ]
+    ],
+    "B3": [
+     [
+      "to DENISE8373",
+      1
+     ],
+     [
+      "to PAULA",
+      1
+     ],
+     [
+      "to AGNUS8372",
+      1
+     ],
+     [
+      "to XX4256-15",
+      1
+     ],
+     [
+      "to 74LS373",
+      1
+     ],
+     [
+      "C 1nF -> signal",
+      1
+     ]
+    ],
+    "B4": [
+     [
+      "to DENISE8373",
+      1
+     ],
+     [
+      "to PAULA",
+      1
+     ],
+     [
+      "to AGNUS8372",
+      1
+     ],
+     [
+      "to XX4256-15",
+      1
+     ],
+     [
+      "to 74LS373",
+      1
+     ],
+     [
+      "C 1nF -> signal",
+      1
+     ]
+    ],
+    "B5": [
+     [
+      "to DENISE8373",
+      1
+     ],
+     [
+      "to PAULA",
+      1
+     ],
+     [
+      "to AGNUS8372",
+      1
+     ],
+     [
+      "to XX4256-15",
+      1
+     ],
+     [
+      "to 74LS373",
+      1
+     ],
+     [
+      "C 1nF -> signal",
+      1
+     ]
+    ],
+    "B6": [
+     [
+      "to DENISE8373",
+      1
+     ],
+     [
+      "to PAULA",
+      1
+     ],
+     [
+      "to AGNUS8372",
+      1
+     ],
+     [
+      "to XX4256-15",
+      1
+     ],
+     [
+      "to 74LS373",
+      1
+     ],
+     [
+      "C 1nF -> signal",
+      1
+     ]
+    ],
+    "B7": [
+     [
+      "to DENISE8373",
+      1
+     ],
+     [
+      "to PAULA",
+      1
+     ],
+     [
+      "to AGNUS8372",
+      1
+     ],
+     [
+      "to XX4256-15",
+      1
+     ],
+     [
+      "to 74LS373",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "CE": [
+     [
+      "to 74LS245",
+      1
+     ],
+     [
+      "to GARY5719",
+      1
+     ],
+     [
+      "to BUSTER5721",
+      1
+     ],
+     [
+      "to 74LS245_2",
+      1
+     ],
+     [
+      "to 74LS245_1",
+      1
+     ],
+     [
+      "to XC4003-VQ100",
+      1
+     ]
+    ],
+    "VCC": [
+     [
+      "tied to +5V",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 4.7uF -> GND",
+      2
+     ],
+     [
+      "C 22uF -> GND",
+      1
+     ],
+     [
+      "Y 28.37516MHz (pal -> GND",
+      1
+     ],
+     [
+      "C 47uF -> GND",
+      1
+     ]
+    ]
+   }
+  },
+  "74LS32": {
+   "designs": 3,
+   "lib": "74xx:74LS32",
+   "footprints": [
+    "Package_DIP:DIP-14_W7.62mm_Socket",
+    "Package_DIP:DIP-14_W7.62mm",
+    "modules:SOIC-14_3.9x8.7mm_P1.27mm"
+   ],
+   "pins": {
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "10": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "VCC": [
+     [
+      "C 100nF -> GND",
+      3
+     ]
+    ]
+   }
+  },
+  "74LVC1G08": {
+   "designs": 2,
+   "lib": "74xGxx:74LVC1G08",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-353_SC-70-5",
+    "Package_TO_SOT_SMD:Texas_R-PDSO-G5_DCK-5"
+   ],
+   "pins": {
+    "VCC": [
+     [
+      "tied to +3V3",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 10uF -> GND",
+      2
+     ],
+     [
+      "C 2.2uF -> GND",
+      1
+     ]
+    ],
+    "2": [
+     [
+      "to IS62WV1288DBLL-45H",
+      1
+     ],
+     [
+      "to 74LVCH245APW",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "R 5.1k -> +3V3",
+      1
+     ]
+    ],
+    "1": [
+     [
+      "to MX29LV640EXT",
+      1
+     ],
+     [
+      "to 74LVC1G17",
+      1
+     ],
+     [
+      "to T113-S3",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "4": [
+     [
+      "to 74LVC1G02",
+      1
+     ],
+     [
+      "R 22 -> signal",
+      1
+     ]
+    ]
+   }
+  },
+  "74LVC1G17": {
+   "designs": 2,
+   "lib": "74xGxx:74LVC1G17",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-23-5",
+    "Package_TO_SOT_SMD:SOT-353_SC-70-5"
+   ],
+   "pins": {
+    "VCC": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "tied to +3V3",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ],
+     [
+      "C 4.7uF -> signal",
+      1
+     ],
+     [
+      "to W25Q128JVS_1",
+      1
+     ],
+     [
+      "R ? -> signal",
+      1
+     ]
+    ],
+    "2": [
+     [
+      "R 100k -> +3V3",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "R 470k -> own pin VCC",
+      1
+     ],
+     [
+      "R 100k -> signal",
+      1
+     ],
+     [
+      "C 4.7uF -> own pin VCC",
+      1
+     ]
+    ],
+    "4": [
+     [
+      "to 74LVC1G08",
+      1
+     ],
+     [
+      "to MX29LV640EXT",
+      1
+     ],
+     [
+      "C 100nF -> signal",
+      1
+     ],
+     [
+      "R 4.7k -> signal",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "NC": [
+     [
+      "not connected",
+      1
+     ]
+    ]
+   }
+  },
+  "74LVC245ABQ,115": {
+   "designs": 2,
+   "lib": "000_Symbols:74LVC245ABQ,115",
+   "footprints": [
+    "74LVC245ABQ115",
+    "000_Footprints:74LVC245ABQ115"
+   ],
+   "pins": {
+    "VCC": [
+     [
+      "tied to +3V3",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "C 10uF -> GND",
+      2
+     ]
+    ],
+    "A0": [
+     [
+      "to LCMXO2-256HC-4MG132C",
+      2
+     ],
+     [
+      "tied to ORA0_5V",
+      1
+     ]
+    ],
+    "B0": [
+     [
+      "tied to A5_5V",
+      1
+     ],
+     [
+      "tied to ORA7_5V",
+      1
+     ],
+     [
+      "tied to ~{PRAS}_5V",
+      1
+     ],
+     [
+      "tied to A13_5V",
+      1
+     ],
+     [
+      "tied to VID6_5V",
+      1
+     ],
+     [
+      "to LCMXO2-256HC-4MG132C",
+      1
+     ]
+    ],
+    "A1": [
+     [
+      "to LCMXO2-256HC-4MG132C",
+      2
+     ],
+     [
+      "tied to ORA1_5V",
+      1
+     ]
+    ],
+    "B1": [
+     [
+      "tied to A6_5V",
+      1
+     ],
+     [
+      "tied to ORA6_5V",
+      1
+     ],
+     [
+      "tied to Q3_5V",
+      1
+     ],
+     [
+      "tied to A14_5V",
+      1
+     ],
+     [
+      "tied to VID7_5V",
+      1
+     ],
+     [
+      "to LCMXO2-256HC-4MG132C",
+      1
+     ]
+    ],
+    "A2": [
+     [
+      "to LCMXO2-256HC-4MG132C",
+      2
+     ],
+     [
+      "tied to ORA2_5V",
+      1
+     ]
+    ],
+    "B2": [
+     [
+      "tied to A7_5V",
+      1
+     ],
+     [
+      "tied to ORA5_5V",
+      1
+     ],
+     [
+      "tied to PHI_0_5V",
+      1
+     ],
+     [
+      "tied to A15_5V",
+      1
+     ],
+     [
+      "tied to KSTRB_5V",
+      1
+     ],
+     [
+      "to LCMXO2-256HC-4MG132C",
+      1
+     ]
+    ],
+    "A3": [
+     [
+      "to LCMXO2-256HC-4MG132C",
+      2
+     ],
+     [
+      "tied to ORA3_5V",
+      1
+     ]
+    ],
+    "B3": [
+     [
+      "tied to A8_5V",
+      1
+     ],
+     [
+      "tied to ORA4_5V",
+      1
+     ],
+     [
+      "tied to A0_5V",
+      1
+     ],
+     [
+      "tied to AKD_5V",
+      1
+     ],
+     [
+      "to LCMXO2-256HC-4MG132C",
+      1
+     ]
+    ],
+    "A4": [
+     [
+      "to LCMXO2-256HC-4MG132C",
+      2
+     ],
+     [
+      "tied to ORA4_5V",
+      1
+     ]
+    ],
+    "B4": [
+     [
+      "tied to A9_5V",
+      1
+     ],
+     [
+      "tied to ORA3_5V",
+      1
+     ],
+     [
+      "tied to A1_5V",
+      1
+     ],
+     [
+      "tied to C0XX_5V",
+      1
+     ],
+     [
+      "to LCMXO2-256HC-4MG132C",
+      1
+     ]
+    ],
+    "A5": [
+     [
+      "to LCMXO2-256HC-4MG132C",
+      2
+     ],
+     [
+      "tied to ORA5_5V",
+      1
+     ]
+    ],
+    "B5": [
+     [
+      "tied to A10_5V",
+      1
+     ],
+     [
+      "tied to ORA2_5V",
+      1
+     ],
+     [
+      "tied to A2_5V",
+      1
+     ],
+     [
+      "tied to ~{DMA}_5V",
+      1
+     ],
+     [
+      "tied to A6_5V",
+      1
+     ],
+     [
+      "to LCMXO2-256HC-4MG132C",
+      1
+     ]
+    ],
+    "A6": [
+     [
+      "to LCMXO2-256HC-4MG132C",
+      2
+     ],
+     [
+      "tied to ORA6_5V",
+      1
+     ]
+    ],
+    "B6": [
+     [
+      "tied to A11_5V",
+      1
+     ],
+     [
+      "tied to ORA1_5V",
+      1
+     ],
+     [
+      "tied to A3_5V",
+      1
+     ],
+     [
+      "tied to ~{INH}_5V",
+      1
+     ],
+     [
+      "tied to Q3_5V",
+      1
+     ],
+     [
+      "to LCMXO2-256HC-4MG132C",
+      1
+     ]
+    ],
+    "A7": [
+     [
+      "to LCMXO2-256HC-4MG132C",
+      2
+     ],
+     [
+      "tied to ORA7_5V",
+      1
+     ]
+    ],
+    "B7": [
+     [
+      "tied to A12_5V",
+      1
+     ],
+     [
+      "tied to ORA0_5V",
+      1
+     ],
+     [
+      "tied to A4_5V",
+      1
+     ],
+     [
+      "tied to R{SLASH}~{W}_5V",
+      1
+     ],
+     [
+      "tied to PHI_0_5V",
+      1
+     ],
+     [
+      "to LCMXO2-256HC-4MG132C",
+      1
+     ]
+    ],
+    "DIR": [
+     [
+      "tied to GND",
+      2
+     ],
+     [
+      "tied to +3V3",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ],
+     [
+      "to LCMXO2-256HC-4MG132C",
+      1
+     ]
+    ],
+    "GND_1": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "~{OE}": [
+     [
+      "to LCMXO2-256HC-4MG132C",
+      1
+     ]
+    ]
+   }
+  },
+  "ADS1115IDGS": {
+   "designs": 2,
+   "lib": "Analog_ADC:ADS1115IDGS",
+   "footprints": [
+    "Package_SO:TSSOP-10_3x3mm_P0.5mm"
+   ],
+   "pins": {
+    "VDD": [
+     [
+      "tied to +3.3V",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "C 100uF -> GND",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      1
+     ]
+    ],
+    "AIN3": [
+     [
+      "tied to GND",
+      1
+     ],
+     [
+      "R 100k -> +24V",
+      1
+     ],
+     [
+      "tied to VIN",
+      1
+     ],
+     [
+      "R 4.7k -> GND",
+      1
+     ]
+    ],
+    "SCL": [
+     [
+      "to ESP32-WROOM-32",
+      1
+     ],
+     [
+      "to SAMD21_BREAKOUT",
+      1
+     ]
+    ],
+    "SDA": [
+     [
+      "to ESP32-WROOM-32",
+      1
+     ],
+     [
+      "to SAMD21_BREAKOUT",
+      1
+     ]
+    ],
+    "AIN2": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to INA826",
+      1
+     ],
+     [
+      "to SAMD21_BREAKOUT",
+      1
+     ]
+    ],
+    "AIN1": [
+     [
+      "R 560 -> GND",
+      1
+     ],
+     [
+      "tied to VCC_ADC",
+      1
+     ],
+     [
+      "R 22k -> VCC",
+      1
+     ],
+     [
+      "R 4.7k -> signal",
+      1
+     ],
+     [
+      "to SAMD21_BREAKOUT",
+      1
+     ]
+    ],
+    "ADDR": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "tied to GND",
+      1
+     ]
+    ],
+    "AIN0": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "to INA826",
+      1
+     ],
+     [
+      "to SAMD21_BREAKOUT",
+      1
+     ]
+    ],
+    "ALERT/RDY": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "R 4.7k -> +3.3V",
+      1
+     ],
+     [
+      "to SAMD21_BREAKOUT",
+      1
+     ]
+    ]
+   }
+  },
+  "AMS1117-3.3": {
+   "designs": 12,
+   "lib": "Regulator_Linear:AMS1117-3.3",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-223-3_TabPin2",
+    "footprints:SOT-223-3_TabPin2",
+    "Package_TO_SOT_SMD:SOT-223"
+   ],
+   "pins": {
+    "GND": [
+     [
+      "tied to GND",
+      12
+     ]
+    ],
+    "VI": [
+     [
+      "tied to +5V",
+      11
+     ],
+     [
+      "C 100nF -> GND",
+      7
+     ],
+     [
+      "C 10uF -> GND",
+      5
+     ],
+     [
+      "C 22uF -> GND",
+      4
+     ]
+    ],
+    "VO": [
+     [
+      "C 100nF -> GND",
+      9
+     ],
+     [
+      "tied to +3V3",
+      6
+     ],
+     [
+      "C 22uF -> GND",
+      5
+     ],
+     [
+      "C 10uF -> GND",
+      5
+     ],
+     [
+      "tied to +3.3V",
+      4
+     ]
+    ]
+   }
+  },
+  "AP2112K-3.3": {
+   "designs": 2,
+   "lib": "Regulator_Linear:AP2112K-3.3",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-23-5",
+    "jiran-ble-lite:SOT-23-5"
+   ],
+   "pins": {
+    "VOUT": [
+     [
+      "to MCP23S17_ML",
+      1
+     ],
+     [
+      "to W25Q128JVS_1",
+      1
+     ],
+     [
+      "R ? -> signal",
+      1
+     ],
+     [
+      "R 5.1k -> signal",
+      1
+     ],
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "R 1.8k -> signal",
+      1
+     ]
+    ],
+    "VIN": [
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "tied to VIN",
+      1
+     ],
+     [
+      "tied to +5V",
+      1
+     ],
+     [
+      "C 470nF -> GND",
+      1
+     ],
+     [
+      "to AP1117-33",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "NC": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "EN": [
+     [
+      "tied to 3V3_EN",
+      1
+     ],
+     [
+      "R 4.7k -> own pin VIN",
+      1
+     ]
+    ]
+   }
+  },
+  "AP2204R-3.3": {
+   "designs": 3,
+   "lib": "Regulator_Linear:AP2204R-3.3",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-89-3"
+   ],
+   "pins": {
+    "VOUT": [
+     [
+      "tied to +3V3",
+      3
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "C 4.7uF -> GND",
+      2
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      3
+     ]
+    ],
+    "VIN": [
+     [
+      "tied to VBUS",
+      3
+     ],
+     [
+      "C 10uF -> GND",
+      2
+     ],
+     [
+      "C 4.7uF -> GND",
+      2
+     ]
+    ]
+   }
+  },
+  "AP63203WU": {
+   "designs": 3,
+   "lib": "Regulator_Switching:AP63203WU",
+   "footprints": [
+    "Package_TO_SOT_SMD:TSOT-23-6"
+   ],
+   "pins": {
+    "EN": [
+     [
+      "C 10uF -> GND",
+      3
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      3
+     ]
+    ],
+    "BST": [
+     [
+      "C 100nF -> own pin SW",
+      3
+     ]
+    ],
+    "SW": [
+     [
+      "C 100nF -> own pin BST",
+      3
+     ]
+    ],
+    "FB": [
+     [
+      "C 22uF -> GND",
+      3
+     ],
+     [
+      "C 100nF -> GND",
+      3
+     ]
+    ]
+   }
+  },
+  "APDS-9306-065": {
+   "designs": 2,
+   "lib": "00-kiml-optical:APDS-9306-065",
+   "footprints": [
+    "00-kiml-optical:Broadcom_DFN-6_2x2mm_P0.65mm",
+    "Broadcom:Broadcom_DFN-6_2x2mm_P0.65mm"
+   ],
+   "pins": {
+    "VDD": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "tied to +3V3",
+      1
+     ],
+     [
+      "C 22uF -> GND",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ],
+     [
+      "Y Current -> +1V8",
+      1
+     ]
+    ],
+    "SCL": [
+     [
+      "R 10k -> +3V3",
+      1
+     ],
+     [
+      "to ESP32-S3-WROOM-1-N16R8",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to LIS2MDLTR",
+      1
+     ],
+     [
+      "to BMI270",
+      1
+     ],
+     [
+      "to PCA9306JK",
+      1
+     ]
+    ],
+    "SDA": [
+     [
+      "R 10k -> +3V3",
+      1
+     ],
+     [
+      "to ESP32-S3-WROOM-1-N16R8",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to LIS2MDLTR",
+      1
+     ],
+     [
+      "to BMI270",
+      1
+     ],
+     [
+      "to PCA9306JK",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "INT": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC": [
+     [
+      "not connected",
+      2
+     ]
+    ]
+   }
+  },
+  "ARDUINO_UNO_R3": {
+   "designs": 3,
+   "lib": "MCU_Module:Arduino_UNO_R3",
+   "footprints": [
+    "footprints:Arduino_UNO_R3_WithMountingHoles_Profiled",
+    "footprints:Arduino_UNO_R3_WithMountingHoles_Profiled_no_SPI"
+   ],
+   "pins": {
+    "+5V": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "A0": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "A1": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "D2": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "D12": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "D11": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "D6": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "A2": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "A3": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "D0/RX": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "D13": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "SCL/A5": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "SDA/A4": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "D9": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "D1/TX": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "D10": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "D7": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "~{RESET}": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      3
+     ]
+    ],
+    "AREF": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "NC": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "VIN": [
+     [
+      "not connected",
+      3
+     ]
+    ]
+   }
+  },
+  "BQ24075RGT": {
+   "designs": 2,
+   "lib": "Battery_Management:BQ24075RGT",
+   "footprints": [
+    "footprints:VQFN-16-1EP_3x3mm_P0.5mm_EP1.6x1.6mm",
+    "Package_DFN_QFN:VQFN-16-1EP_3x3mm_P0.5mm_EP1.6x1.6mm"
+   ],
+   "pins": {
+    "SYSOFF": [
+     [
+      "tied to GND",
+      1
+     ]
+    ],
+    "~{CHG}": [
+     [
+      "D ORANGE -> signal",
+      1
+     ],
+     [
+      "R 10k -> signal",
+      1
+     ]
+    ],
+    "IN": [
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "tied to +5V",
+      1
+     ],
+     [
+      "C 4.7uF -> GND",
+      1
+     ]
+    ],
+    "ISET": [
+     [
+      "R 3.9k -> signal",
+      1
+     ],
+     [
+      "R 10k -> signal",
+      1
+     ],
+     [
+      "R 3.9k -> GND",
+      1
+     ]
+    ],
+    "TS": [
+     [
+      "R 10k -> GND",
+      2
+     ]
+    ],
+    "BAT": [
+     [
+      "C 4.7uF -> GND",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "tied to VBAT",
+      1
+     ],
+     [
+      "R 100k -> signal",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "OUT": [
+     [
+      "C 4.7uF -> GND",
+      2
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ],
+     [
+      "tied to VDDH",
+      1
+     ],
+     [
+      "D Orange -> signal",
+      1
+     ],
+     [
+      "to NRF52840_E73-2G4M08S1C",
+      1
+     ]
+    ],
+    "ILIM": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "R 1.5k -> GND",
+      1
+     ]
+    ],
+    "TMR": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "R 47k -> GND",
+      1
+     ]
+    ],
+    "~{PGOOD}": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "VSS": [
+     [
+      "tied to GND",
+      1
+     ]
+    ]
+   }
+  },
+  "CH340C": {
+   "designs": 3,
+   "lib": "Interface_USB:CH340C",
+   "footprints": [
+    "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm",
+    "local_lib:SOIC-16_3.9x9.9mm_P1.27mm"
+   ],
+   "pins": {
+    "VCC": [
+     [
+      "tied to +3V3",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ]
+    ],
+    "UD+": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "UD-": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      3
+     ]
+    ],
+    "RXD": [
+     [
+      "to ESP32-WROOM-32",
+      2
+     ],
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "TXD": [
+     [
+      "to ESP32-WROOM-32",
+      2
+     ],
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "NC": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "R232": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "~{CTS}": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "~{DCD}": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "~{DSR}": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "~{RI}": [
+     [
+      "not connected",
+      3
+     ]
+    ]
+   }
+  },
+  "DS3231MZ": {
+   "designs": 2,
+   "lib": "Timer_RTC:DS3231MZ",
+   "footprints": [
+    "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
+   ],
+   "pins": {
+    "VCC": [
+     [
+      "C 22uF -> GND",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "tied to +3.3V",
+      1
+     ],
+     [
+      "tied to GND",
+      1
+     ]
+    ],
+    "SCL": [
+     [
+      "to FM24C64C",
+      1
+     ],
+     [
+      "R 4.7k -> +3.3V",
+      1
+     ],
+     [
+      "to ESP32-WROOM-32",
+      1
+     ],
+     [
+      "to TPD4E1U06DBVR",
+      1
+     ],
+     [
+      "to ESP32-S3-WROOM-1",
+      1
+     ],
+     [
+      "R 2.2k -> 3V3",
+      1
+     ]
+    ],
+    "SDA": [
+     [
+      "to FM24C64C",
+      1
+     ],
+     [
+      "R 4.7k -> +3.3V",
+      1
+     ],
+     [
+      "to ESP32-WROOM-32",
+      1
+     ],
+     [
+      "to TPD4E1U06DBVR",
+      1
+     ],
+     [
+      "to ESP32-S3-WROOM-1",
+      1
+     ],
+     [
+      "R 2.2k -> 3V3",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      1
+     ]
+    ],
+    "32KHZ": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "~{INT}/SQW": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "~{RST}": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "VBAT": [
+     [
+      "C 22uF -> GND",
+      1
+     ],
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "tied to 3V3",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "C 4.7uF -> GND",
+      1
+     ]
+    ]
+   }
+  },
+  "E73-2G4M08S1C": {
+   "designs": 2,
+   "lib": "ErgoSNM_Keyboard_Library:E73-2G4M08S1C",
+   "footprints": [
+    "ErgoSNM_Keyboard:E73-2G4M08S1C-52840",
+    "calcite:E73-2G4M08S1C-52840",
+    "calcite:E73-2G4M08S1C nRF52840 (PCBA soldering)"
+   ],
+   "pins": {
+    "VBUS": [
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "tied to +5V",
+      2
+     ],
+     [
+      "C 10uF -> GND",
+      2
+     ],
+     [
+      "R 100k -> GND",
+      1
+     ]
+    ],
+    "P0.04": [
+     [
+      "R 2M -> GND",
+      1
+     ],
+     [
+      "R 820k -> signal",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "P0.00/XL1": [
+     [
+      "C 12pF -> GND",
+      2
+     ],
+     [
+      "Y 32.768kHz -> own pin P0.01/XL2",
+      2
+     ]
+    ],
+    "P0.01/XL2": [
+     [
+      "C 12pF -> GND",
+      2
+     ],
+     [
+      "Y 32.768kHz -> own pin P0.00/XL1",
+      2
+     ]
+    ],
+    "P0.15": [
+     [
+      "D 1N4148 -> signal",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "P0.10/NFC2": [
+     [
+      "D 1N4148 -> signal",
+      2
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "P0.17": [
+     [
+      "D 1N4148 -> signal",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "P0.20": [
+     [
+      "D 1N4148 -> signal",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "P0.22": [
+     [
+      "D 1N4148 -> signal",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "SWCLK": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "SWDIO": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "D+": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to SRV05-4",
+      1
+     ]
+    ],
+    "D-": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to SRV05-4",
+      1
+     ]
+    ],
+    "VDD": [
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "C 10uF -> GND",
+      2
+     ],
+     [
+      "tied to VDD",
+      2
+     ],
+     [
+      "tied to +3.3V",
+      1
+     ]
+    ],
+    "P0.05": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "P0.08": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "P0.09/NFC1": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "P0.13": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "P0.24": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "P1.09": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "P0.18/RST": [
+     [
+      "R 10k -> VDD",
+      2
+     ],
+     [
+      "to connector",
+      2
+     ],
+     [
+      "R 10k -> +3.3V",
+      1
+     ]
+    ],
+    "P1.11": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "D 1N4148 -> signal",
+      1
+     ]
+    ],
+    "P1.10": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "D 1N4148 -> signal",
+      1
+     ]
+    ],
+    "P0.03": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "D 1N4148 -> signal",
+      1
+     ]
+    ],
+    "P0.28": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "D 1N4148 -> signal",
+      1
+     ]
+    ],
+    "P1.04": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "P1.06": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "P0.30": [
+     [
+      "D 1N4148 -> signal",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "P0.31": [
+     [
+      "D 1N4148 -> signal",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "P0.29": [
+     [
+      "D 1N4148 -> signal",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "P0.02": [
+     [
+      "D 1N4148 -> signal",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "P1.13": [
+     [
+      "D 1N4148 -> signal",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "P0.07": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "P0.12": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "P0.26": [
+     [
+      "not connected",
+      1
+     ]
+    ]
+   }
+  },
+  "EMC2101": {
+   "designs": 2,
+   "lib": "bitaxe:EMC2101",
+   "footprints": [
+    "Package_SO:TSSOP-8_3x3mm_P0.65mm"
+   ],
+   "pins": {
+    "VDD": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "C 10uF -> GND",
+      2
+     ],
+     [
+      "tied to 3V3",
+      2
+     ]
+    ],
+    "FAN": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "R 10k -> 3V3",
+      1
+     ],
+     [
+      "R 10k -> 5V",
+      1
+     ]
+    ],
+    "ALERT/TACH": [
+     [
+      "R 5.6k -> 3V3",
+      2
+     ],
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "SMCLK": [
+     [
+      "to ESP32-S3-WROOM-1",
+      2
+     ],
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to INA260",
+      1
+     ],
+     [
+      "to DS4432U+",
+      1
+     ],
+     [
+      "to TPS546D24",
+      1
+     ]
+    ],
+    "SMDATA": [
+     [
+      "to ESP32-S3-WROOM-1",
+      2
+     ],
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to INA260",
+      1
+     ],
+     [
+      "to DS4432U+",
+      1
+     ],
+     [
+      "to TPS546D24",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "DN": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "C 470pF -> own pin DP",
+      1
+     ],
+     [
+      "R 100 -> signal",
+      1
+     ]
+    ],
+    "DP": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "C 470pF -> own pin DN",
+      1
+     ],
+     [
+      "R 100 -> signal",
+      1
+     ]
+    ]
+   }
+  },
+  "ESP32-S3": {
+   "designs": 2,
+   "lib": "MCU_Espressif:ESP32-S3",
+   "footprints": [
+    "Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP4x4mm",
+    "OpenMuscleDevKit:ESP32-S3-Super Mini"
+   ],
+   "pins": {
+    "XTAL_32K_P": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "XTAL_32K_N": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "SPICLK_N": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPIO1": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPIO2": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPIO4": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPIO45": [
+     [
+      "R 80.6 -> signal",
+      1
+     ]
+    ],
+    "CHIP_PU": [
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "R 10k -> VDD",
+      1
+     ]
+    ],
+    "GPIO11": [
+     [
+      "to BQ24780SRUYR",
+      1
+     ],
+     [
+      "to BQ76905RGRR",
+      1
+     ],
+     [
+      "R 10k -> VDD",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPIO10": [
+     [
+      "to BQ24780SRUYR",
+      1
+     ],
+     [
+      "to BQ76905RGRR",
+      1
+     ],
+     [
+      "R 10k -> VDD",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "VDD3P3": [
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "FB 120ohm imp @100m -> VDD",
+      1
+     ]
+    ],
+    "GPIO3": [
+     [
+      "R 100k -> GND",
+      1
+     ]
+    ],
+    "GPIO19/USB_D-": [
+     [
+      "to 74HC595",
+      1
+     ]
+    ],
+    "GPIO20/USB_D+": [
+     [
+      "to 74HC595",
+      1
+     ]
+    ],
+    "GPIO21": [
+     [
+      "to 74HC595",
+      1
+     ]
+    ],
+    "MTCK": [
+     [
+      "R 33 -> signal",
+      1
+     ]
+    ],
+    "MTDI": [
+     [
+      "R 33 -> signal",
+      1
+     ]
+    ],
+    "MTDO": [
+     [
+      "R 33 -> signal",
+      1
+     ]
+    ],
+    "XTAL_N": [
+     [
+      "C 16pF -> GND",
+      1
+     ],
+     [
+      "Y 40mhz, 10ppm -> GND",
+      1
+     ]
+    ],
+    "XTAL_P": [
+     [
+      "C 16pF -> GND",
+      1
+     ],
+     [
+      "Y 40mhz, 10ppm -> GND",
+      1
+     ]
+    ],
+    "VDD3P3_RTC": [
+     [
+      "C 22uF -> GND",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "tied to VDD",
+      1
+     ]
+    ],
+    "GPIO5": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "GPIO6": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "GPIO7": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "GPIO8": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "GPIO12": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "GPIO13": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "GPIO14": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "GPIO17": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "LNA_IN": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "SPICLK": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "SPICLK_P": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "SPICS0": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "SPICS1": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "SPID": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "SPIHD": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "SPIQ": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "SPIWP": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "3V3": [
+     [
+      "tied to +3V3",
+      1
+     ],
+     [
+      "C 4.7uF -> GND",
+      1
+     ]
+    ],
+    "5V": [
+     [
+      "tied to +5V",
+      1
+     ],
+     [
+      "C 2.2? -> GND",
+      1
+     ]
+    ],
+    "14": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "15": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "16": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "46": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "47": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GP9": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GP8": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GP1": [
+     [
+      "C 100? -> GND",
+      1
+     ]
+    ],
+    "GP2": [
+     [
+      "C 100? -> GND",
+      1
+     ]
+    ],
+    "GP3": [
+     [
+      "C 100? -> GND",
+      1
+     ]
+    ],
+    "GP4": [
+     [
+      "C 100? -> GND",
+      1
+     ]
+    ],
+    "17": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "18": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "21": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "35": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "36": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "37": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "38": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "39": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "40": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "41": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "42": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "45": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "48": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "RX": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "TX": [
+     [
+      "not connected",
+      1
+     ]
+    ]
+   }
+  },
+  "ESP32-S3-WROOM-1": {
+   "designs": 5,
+   "lib": "bitaxe:ESP32-S3-WROOM-1",
+   "footprints": [
+    "RF_Module:ESP32-S3-WROOM-1",
+    "bitaxe:ESP32-S3-WROOM-1",
+    "PCM_Espressif:ESP32-S3-WROOM-1"
+   ],
+   "pins": {
+    "GPIO3/TOUCH3/ADC1_CH2*": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "C 10uF -> GND",
+      2
+     ],
+     [
+      "tied to 3V3",
+      2
+     ]
+    ],
+    "EN": [
+     [
+      "C 1uF -> GND",
+      3
+     ],
+     [
+      "R 10k -> 3V3",
+      3
+     ],
+     [
+      "to connector",
+      3
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ]
+    ],
+    "GPIO0/BOOT*": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "GPIO10/TOUCH10/ADC1_CH9/FSPICS0/FSPIIO4/SUBSPICS0": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "U0RXD/GPIO44/CLK_OUT2": [
+     [
+      "to connector",
+      3
+     ]
+    ],
+    "U0TXD/GPIO43/CLK_OUT1": [
+     [
+      "to connector",
+      3
+     ]
+    ],
+    "GPIO15/U0RTS/ADC2_CH4/XTAL_32K_P": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "GPIO16/U0CTS/ADC2_CH5/XTAL_32K_NH5": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "GPIO12/TOUCH12/ADC2_CH1/FSPICLK/FSPIIO6/SUBSPICLK": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "GPIO11/TOUCH11/ADC2_CH0/FSPID/FSPIIO5/SUBSPID": [
+     [
+      "R 10k -> 3V3",
+      2
+     ]
+    ],
+    "GPIO48/SPICLK_N/SUBSPICLK_N_DIFF": [
+     [
+      "to EMC2101",
+      2
+     ],
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "GPIO47/SPICLK_P/SUBSPICLK_P_DIFF": [
+     [
+      "to EMC2101",
+      2
+     ],
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "GPIO2/TOUCH2/ADC1_CH1": [
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "C 100uF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> VDD1_0",
+      2
+     ],
+     [
+      "C 1uF -> VDD1_1",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "tied to VDD",
+      2
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      5
+     ]
+    ],
+    "GPIO19/U1RTS/ADC2_CH8/CLK_OUT2/USB_D-": [
+     [
+      "to connector",
+      3
+     ]
+    ],
+    "GPIO20/U1CTS/ADC2_CH9/CLK_OUT1/USB_D+": [
+     [
+      "to connector",
+      3
+     ]
+    ],
+    "*GPIO45": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "*GPIO46": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "GPIO4/TOUCH4/ADC1_CH3": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "GPIO5/TOUCH5/ADC1_CH4": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "GPIO6/TOUCH6/ADC1_CH5": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "GPIO7/TOUCH7/ADC1_CH6": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "GPIO8/TOUCH8/ADC1_CH7/SUBSPICS1": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "GPIO9/TOUCH9/ADC1_CH8/FSPIHD/SUBSPIHD": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "GPIO14/TOUCH14/ADC2_CH3/FSPIWP/FSPIDQS/SUBSPIWP": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "GPIO21": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "GPIO38/FSPIWP/SUBSPIWP": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "MTCK/GPIO39/CLK_OUT3/SUBSPICS1": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "MTDI/GPIO41/CLK_OUT1": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "MTDO/GPIO40/CLK_OUT2": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "MTMS/GPIO42": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "SPIDQS/GPIO37/FSPIQ/SUBSPIQ": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "SPIIO6/GPIO35/FSPID/SUBSPID": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "SPIIO7/GPIO36/FSPICLK/SUBSPICLK": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "3V3": [
+     [
+      "C 22uF -> GND",
+      3
+     ],
+     [
+      "C 100nF -> GND",
+      3
+     ],
+     [
+      "D WS2812B -> GND",
+      2
+     ]
+    ],
+    "IO35": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "IO36": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "IO37": [
+     [
+      "not connected",
+      2
+     ]
+    ]
+   }
+  },
+  "ESP32-S3-WROOM-1-N16R8": {
+   "designs": 3,
+   "lib": "00-kiml-rf-module:ESP32-S3-WROOM-1-N16R8",
+   "footprints": [
+    "00-kiml-rf-module:ESP32-S3-WROOM-1",
+    "footprints:ESP32-S3-WROOM-1-N16R8",
+    "footprints:ESP32-S3-WROOM-1_EXP"
+   ],
+   "pins": {
+    "3V3": [
+     [
+      "tied to +3V3",
+      3
+     ],
+     [
+      "C 4.7uF -> GND",
+      2
+     ]
+    ],
+    "EN": [
+     [
+      "C 100? -> GND",
+      2
+     ],
+     [
+      "R 5.1k -> +3V3",
+      2
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      3
+     ]
+    ],
+    "IO14": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "IO20": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "IO19": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "IO40": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "IO13": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "IO12": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "IO35": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "IO36": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "IO37": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "IO38": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "IO39": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "IO46": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "IO47": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "IO48": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "IO41": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "RXD0": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "TXD0": [
+     [
+      "to connector",
+      2
+     ]
+    ]
+   }
+  },
+  "ESP32-WROOM-32": {
+   "designs": 5,
+   "lib": "RF_Module:ESP32-WROOM-32",
+   "footprints": [
+    "RF_Module:ESP32-WROOM-32",
+    "local_lib:ESP32-WROOM-32"
+   ],
+   "pins": {
+    "VDD": [
+     [
+      "C 100nF -> GND",
+      4
+     ],
+     [
+      "tied to +3V3",
+      3
+     ],
+     [
+      "C 22uF -> GND",
+      2
+     ],
+     [
+      "tied to +3.3V",
+      2
+     ]
+    ],
+    "IO22": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "IO23": [
+     [
+      "not connected",
+      2
+     ],
+     [
+      "D LED -> signal",
+      2
+     ]
+    ],
+    "IO25": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "EN": [
+     [
+      "C 100nF -> GND",
+      3
+     ],
+     [
+      "R 10k -> +3.3V",
+      2
+     ],
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "IO0": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      5
+     ]
+    ],
+    "IO12": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "IO13": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "IO18": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "IO15": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "TXD0/IO1": [
+     [
+      "to connector",
+      3
+     ],
+     [
+      "to CH340C",
+      2
+     ]
+    ],
+    "RXD0/IO3": [
+     [
+      "to connector",
+      3
+     ],
+     [
+      "to CH340C",
+      2
+     ]
+    ],
+    "IO17": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "IO16": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "IO2": [
+     [
+      "not connected",
+      4
+     ]
+    ],
+    "IO4": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "IO5": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "IO14": [
+     [
+      "not connected",
+      4
+     ]
+    ],
+    "IO26": [
+     [
+      "not connected",
+      4
+     ]
+    ],
+    "IO27": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "IO32": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "IO33": [
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "IO34": [
+     [
+      "not connected",
+      4
+     ]
+    ],
+    "IO35": [
+     [
+      "not connected",
+      4
+     ]
+    ],
+    "NC": [
+     [
+      "not connected",
+      5
+     ]
+    ],
+    "SCK/CLK": [
+     [
+      "not connected",
+      5
+     ]
+    ],
+    "SCS/CMD": [
+     [
+      "not connected",
+      5
+     ]
+    ],
+    "SDI/SD1": [
+     [
+      "not connected",
+      5
+     ]
+    ],
+    "SDO/SD0": [
+     [
+      "not connected",
+      5
+     ]
+    ],
+    "SENSOR_VN": [
+     [
+      "not connected",
+      4
+     ]
+    ],
+    "SENSOR_VP": [
+     [
+      "not connected",
+      4
+     ]
+    ],
+    "SHD/SD2": [
+     [
+      "not connected",
+      5
+     ]
+    ],
+    "SWP/SD3": [
+     [
+      "not connected",
+      5
+     ]
+    ]
+   }
+  },
+  "FT230XQ": {
+   "designs": 2,
+   "lib": "Interface_USB:FT230XQ",
+   "footprints": [
+    "Package_DFN_QFN:QFN-16-1EP_4x4mm_P0.65mm_EP2.5x2.5mm",
+    "Package_DFN_QFN:QFN-16-1EP_4x4mm_P0.65mm_EP2.1x2.1mm"
+   ],
+   "pins": {
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "CBUS1": [
+     [
+      "R 4.7k -> signal",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "CBUS2": [
+     [
+      "R 4.7k -> signal",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "RXD": [
+     [
+      "to ISO7742",
+      1
+     ],
+     [
+      "to SC14CVMDECT",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "TXD": [
+     [
+      "to ISO7742",
+      1
+     ],
+     [
+      "to SC14CVMDECT",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "USBDM": [
+     [
+      "R 27 -> signal",
+      2
+     ]
+    ],
+    "USBDP": [
+     [
+      "R 27 -> signal",
+      2
+     ]
+    ],
+    "~{CTS}": [
+     [
+      "R 4.7k -> signal",
+      1
+     ],
+     [
+      "to ISO7742",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "~{RTS}": [
+     [
+      "R 4.7k -> signal",
+      1
+     ],
+     [
+      "to ISO7742",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "VCCIO": [
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "tied to VCCIO",
+      1
+     ],
+     [
+      "to MIC5317-1.8XM5",
+      1
+     ]
+    ],
+    "VCC": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 10uF -> GND",
+      2
+     ],
+     [
+      "to NME0505SC",
+      1
+     ],
+     [
+      "L ? -> VBUS",
+      1
+     ],
+     [
+      "tied to +3V3",
+      1
+     ],
+     [
+      "C 47pF -> GND",
+      1
+     ]
+    ],
+    "CBUS0": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "CBUS3": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ]
+   }
+  },
+  "FT231XQ": {
+   "designs": 2,
+   "lib": "Interface_USB:FT231XQ",
+   "footprints": [
+    "Package_DFN_QFN:QFN-20-1EP_4x4mm_P0.5mm_EP2.5x2.5mm"
+   ],
+   "pins": {
+    "3V3OUT": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "tied to +3V3",
+      1
+     ],
+     [
+      "R 270 -> signal",
+      1
+     ]
+    ],
+    "VCC": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "tied to +5V",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ],
+     [
+      "D M4 -> GND",
+      1
+     ],
+     [
+      "C 4.7uF -> GND",
+      1
+     ],
+     [
+      "tied to VBUS",
+      1
+     ]
+    ],
+    "~{CTS}": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "~{DCD}": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "~{DSR}": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "~{DTR}": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "~{RI}": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "~{RTS}": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "CBUS0": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "R 10 -> signal",
+      1
+     ]
+    ],
+    "CBUS3": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "R 10 -> signal",
+      1
+     ]
+    ],
+    "USBDM": [
+     [
+      "to USBLC6-2SC6",
+      1
+     ],
+     [
+      "R 27 -> signal",
+      1
+     ],
+     [
+      "C 47pF -> GND",
+      1
+     ]
+    ],
+    "USBDP": [
+     [
+      "to USBLC6-2SC6",
+      1
+     ],
+     [
+      "R 27 -> signal",
+      1
+     ],
+     [
+      "C 47pF -> GND",
+      1
+     ]
+    ],
+    "RXD": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "R 10 -> signal",
+      1
+     ]
+    ],
+    "CBUS1": [
+     [
+      "R 270 -> signal",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "D LED_Small -> signal",
+      1
+     ]
+    ],
+    "TXD": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "R 10 -> signal",
+      1
+     ]
+    ],
+    "CBUS2": [
+     [
+      "R 270 -> signal",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "D LED_Small -> signal",
+      1
+     ]
+    ],
+    "VCCIO": [
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "tied to VCCIO",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "~{RESET}": [
+     [
+      "R 4.7k -> +5V",
+      1
+     ],
+     [
+      "R 10k -> GND",
+      1
+     ]
+    ]
+   }
+  },
+  "L7805": {
+   "designs": 5,
+   "lib": "Regulator_Linear:L7805",
+   "footprints": [
+    "Package_TO_SOT_THT:TO-220-3_Horizontal_TabDown",
+    "Package_TO_SOT_THT:TO-220-3_Vertical",
+    "Library:TO-220-3_Horizontal_TabDown"
+   ],
+   "pins": {
+    "OUT": [
+     [
+      "tied to +5V",
+      4
+     ],
+     [
+      "C 100nF -> GND",
+      3
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      5
+     ]
+    ],
+    "IN": [
+     [
+      "C 100uF -> GND",
+      2
+     ]
+    ]
+   }
+  },
+  "L78L05_SOT89": {
+   "designs": 2,
+   "lib": "Regulator_Linear:L78L05_SOT89",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-89-3"
+   ],
+   "pins": {
+    "OUT": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "tied to +5V",
+      2
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "IN": [
+     [
+      "C 470nF -> GND",
+      2
+     ],
+     [
+      "FB 100R @ 100MHz -> +9V",
+      1
+     ],
+     [
+      "tied to +12V",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ]
+    ]
+   }
+  },
+  "L78L33_SOT89": {
+   "designs": 2,
+   "lib": "Regulator_Linear:L78L33_SOT89",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-89-3",
+    "Local:SOT-89-3"
+   ],
+   "pins": {
+    "OUT": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ],
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "tied to +3.3V",
+      1
+     ],
+     [
+      "tied to +3V3",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "IN": [
+     [
+      "C 2.2uF -> GND",
+      1
+     ],
+     [
+      "FB 100R @ 100MHz -> +5V",
+      1
+     ],
+     [
+      "C 330nF -> GND",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ]
+   }
+  },
+  "LCMXO2-256HC-4MG132C": {
+   "designs": 2,
+   "lib": "000_Symbols:LCMXO2-256HC-4MG132C",
+   "footprints": [
+    "000_Footprints:BGA132C50P14X14_800X800X135"
+   ],
+   "pins": {
+    "VCC_1": [
+     [
+      "tied to +3V3",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "C 10uF -> GND",
+      2
+     ]
+    ],
+    "PT6B": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ],
+     [
+      "to IOU-PINS",
+      1
+     ]
+    ],
+    "PT8A/CLK": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ],
+     [
+      "to IOU-PINS",
+      1
+     ]
+    ],
+    "PT8B": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ],
+     [
+      "to IOU-PINS",
+      1
+     ]
+    ],
+    "PR3A": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ],
+     [
+      "to IOU-PINS",
+      1
+     ]
+    ],
+    "PR2B": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ],
+     [
+      "to IOU-PINS",
+      1
+     ]
+    ],
+    "PR5B": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ],
+     [
+      "to IOU-PINS",
+      1
+     ]
+    ],
+    "PR3C": [
+     [
+      "to 74LVC245ABQ,115",
+      2
+     ]
+    ],
+    "PR5C": [
+     [
+      "to 74LVC245ABQ,115",
+      2
+     ]
+    ],
+    "PR5D": [
+     [
+      "to 74LVC245ABQ,115",
+      2
+     ]
+    ],
+    "PR6A": [
+     [
+      "to 74LVC245ABQ,115",
+      2
+     ]
+    ],
+    "PR6B": [
+     [
+      "to 74LVC245ABQ,115",
+      2
+     ]
+    ],
+    "PR6D": [
+     [
+      "to 74LVC245ABQ,115",
+      2
+     ]
+    ],
+    "PR6C": [
+     [
+      "to 74LVC245ABQ,115",
+      2
+     ]
+    ],
+    "PB7C": [
+     [
+      "to 74LVC245ABQ,115",
+      2
+     ]
+    ],
+    "PB7B": [
+     [
+      "to 74LVC245ABQ,115",
+      2
+     ]
+    ],
+    "PB7D": [
+     [
+      "to 74LVC245ABQ,115",
+      2
+     ]
+    ],
+    "PB7A": [
+     [
+      "to MMU-PINS",
+      1
+     ],
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ]
+    ],
+    "PT9D/DONE": [
+     [
+      "to PROGRAMMINGCONNECTOR",
+      2
+     ],
+     [
+      "R 4.7k -> +3V3",
+      2
+     ]
+    ],
+    "GND_1": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "PT9C/INITN": [
+     [
+      "to PROGRAMMINGCONNECTOR",
+      2
+     ],
+     [
+      "R 4.7k -> +3V3",
+      2
+     ]
+    ],
+    "PT9A/JTAGEN": [
+     [
+      "to PROGRAMMINGCONNECTOR",
+      2
+     ],
+     [
+      "R 1k -> +3V3",
+      2
+     ]
+    ],
+    "PB4B": [
+     [
+      "to TXU0101DRYR",
+      1
+     ],
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ]
+    ],
+    "PR3D": [
+     [
+      "to TXU0101DRYR",
+      1
+     ],
+     [
+      "R 5.1k -> +3V3",
+      1
+     ]
+    ],
+    "PB9A/SN": [
+     [
+      "R 4.7k -> +3V3",
+      2
+     ]
+    ],
+    "PT8C/SCL/CLK": [
+     [
+      "R 4.7k -> +3V3",
+      2
+     ]
+    ],
+    "PL2B": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ],
+     [
+      "to TXU0204BQAR",
+      1
+     ]
+    ],
+    "PL2A": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ],
+     [
+      "to TXU0204BQAR",
+      1
+     ]
+    ],
+    "PL2D": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ],
+     [
+      "to IOU-PINS",
+      1
+     ]
+    ],
+    "PL3A": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ],
+     [
+      "to IOU-PINS",
+      1
+     ]
+    ],
+    "PL3B": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ],
+     [
+      "to IOU-PINS",
+      1
+     ]
+    ],
+    "PL3C/CLK": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ],
+     [
+      "to IOU-PINS",
+      1
+     ]
+    ],
+    "PL5B": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ],
+     [
+      "to IOU-PINS",
+      1
+     ]
+    ],
+    "PL5A": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ],
+     [
+      "to IOU-PINS",
+      1
+     ]
+    ],
+    "PR3B": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ]
+    ],
+    "PT6A": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ],
+     [
+      "to IOU-PINS",
+      1
+     ]
+    ],
+    "PT9B/PROGRAMN": [
+     [
+      "to PROGRAMMINGCONNECTOR",
+      2
+     ],
+     [
+      "R 4.7k -> +3V3",
+      2
+     ]
+    ],
+    "PR5A/CLK": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "PL6B": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ],
+     [
+      "to TXU0101DRYR",
+      1
+     ]
+    ],
+    "PB4C/CLK": [
+     [
+      "to MMU-PINS",
+      1
+     ],
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ]
+    ],
+    "PT7A/TCK": [
+     [
+      "to PROGRAMMINGCONNECTOR",
+      2
+     ],
+     [
+      "R 4.7k -> GND",
+      2
+     ],
+     [
+      "to PROGRAMINGPADS",
+      2
+     ]
+    ],
+    "PT6D/TDI": [
+     [
+      "to PROGRAMMINGCONNECTOR",
+      2
+     ],
+     [
+      "R 4.7k -> +3V3",
+      2
+     ],
+     [
+      "to PROGRAMINGPADS",
+      2
+     ]
+    ],
+    "PT6C/TDO": [
+     [
+      "to PROGRAMMINGCONNECTOR",
+      2
+     ],
+     [
+      "R 4.7k -> +3V3",
+      2
+     ],
+     [
+      "to PROGRAMINGPADS",
+      2
+     ]
+    ],
+    "PT7B/TMS": [
+     [
+      "to PROGRAMMINGCONNECTOR",
+      2
+     ],
+     [
+      "R 4.7k -> +3V3",
+      2
+     ],
+     [
+      "to PROGRAMINGPADS",
+      2
+     ]
+    ],
+    "NC_1": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_2": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_3": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_4": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_5": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_6": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_7": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_8": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_9": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_10": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_11": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_12": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_13": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_14": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_15": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_16": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_17": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_18": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_19": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_20": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_21": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_22": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_23": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_24": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_25": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_26": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_27": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_28": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_29": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_30": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_31": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_32": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_33": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_34": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_35": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_36": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_37": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_38": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_39": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_40": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_41": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_42": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_43": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_44": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_45": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_46": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_47": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_48": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_49": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_50": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_51": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_52": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_53": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_54": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_55": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_56": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_57": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC_58": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "PB2A/CSSPIN": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "PB2C/MCLK/CCLK": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "PB2D/SO/SPISO": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "PB9B/SI/SISPI": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "PR2A": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "to IOU-PINS",
+      1
+     ]
+    ],
+    "PT8D/SDA": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "PB4D": [
+     [
+      "to MMU-PINS",
+      1
+     ],
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ]
+    ],
+    "PB4A/CLK": [
+     [
+      "to 74LVC245ABQ,115",
+      2
+     ]
+    ],
+    "PL5C/CLK": [
+     [
+      "to MMU-PINS",
+      1
+     ],
+     [
+      "to IOU-PINS",
+      1
+     ]
+    ],
+    "PB2B": [
+     [
+      "to 74LVC245ABQ,115",
+      2
+     ]
+    ],
+    "PL3D": [
+     [
+      "to MMU-PINS",
+      1
+     ],
+     [
+      "to TXU0204BQAR",
+      1
+     ]
+    ],
+    "PL2C/CLK": [
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ],
+     [
+      "to TXU0204BQAR",
+      1
+     ]
+    ],
+    "PL5D": [
+     [
+      "to MMU-PINS",
+      1
+     ],
+     [
+      "to 74LVC245ABQ,115",
+      1
+     ]
+    ],
+    "PL6A": [
+     [
+      "to MMU-PINS",
+      1
+     ],
+     [
+      "to TXU0101DRYR",
+      1
+     ]
+    ]
+   }
+  },
+  "LM386": {
+   "designs": 2,
+   "lib": "Amplifier_Audio:LM386",
+   "footprints": [
+    "Package_DIP:DIP-8_W7.62mm",
+    "Package_DIP:DIP-8_W7.62mm_Socket"
+   ],
+   "pins": {
+    "-": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "GAIN": [
+     [
+      "C 10uF -> own pin GAIN",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ],
+     [
+      "C 10? -> own pin GAIN",
+      1
+     ]
+    ],
+    "5": [
+     [
+      "C 1uF -> signal",
+      1
+     ],
+     [
+      "R 10 -> signal",
+      1
+     ],
+     [
+      "C 470? -> signal",
+      1
+     ]
+    ],
+    "+": [
+     [
+      "C 1uF -> signal",
+      1
+     ],
+     [
+      "R 1M -> GND",
+      1
+     ],
+     [
+      "R 68k -> signal",
+      1
+     ],
+     [
+      "C 4.7nF -> GND",
+      1
+     ],
+     [
+      "C 4.7? -> signal",
+      1
+     ],
+     [
+      "R 10k -> GND",
+      1
+     ]
+    ],
+    "BYPASS": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "C ? -> GND",
+      1
+     ]
+    ],
+    "V+": [
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "C 100uF -> GND",
+      1
+     ],
+     [
+      "tied to VCC",
+      1
+     ],
+     [
+      "tied to +9V",
+      1
+     ],
+     [
+      "C 0.1? -> GND",
+      1
+     ],
+     [
+      "C 100? -> GND",
+      1
+     ]
+    ]
+   }
+  },
+  "LM4040DBZ-2.5": {
+   "designs": 2,
+   "lib": "Reference_Voltage:LM4040DBZ-2.5",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-23"
+   ],
+   "pins": {
+    "K": [
+     [
+      "to SSI2130",
+      2
+     ],
+     [
+      "R 1k -> +5V",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "R 12k -> signal",
+      2
+     ],
+     [
+      "R 39k -> signal",
+      1
+     ],
+     [
+      "R 470k -> signal",
+      1
+     ]
+    ],
+    "A": [
+     [
+      "tied to GND",
+      2
+     ]
+    ]
+   }
+  },
+  "LM4040DBZ-5": {
+   "designs": 2,
+   "lib": "Reference_Voltage:LM4040DBZ-5",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-23"
+   ],
+   "pins": {
+    "K": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "R 100k -> signal",
+      2
+     ],
+     [
+      "R 1.8k -> +12V",
+      1
+     ],
+     [
+      "R 10k -> signal",
+      1
+     ],
+     [
+      "R 2.7k -> +12V",
+      1
+     ],
+     [
+      "R 4.7k -> +12V",
+      1
+     ]
+    ],
+    "A": [
+     [
+      "tied to GND",
+      2
+     ]
+    ]
+   }
+  },
+  "LT3467A": {
+   "designs": 2,
+   "lib": "custom_symbols:LT3467A",
+   "footprints": [
+    "Package_TO_SOT_SMD:TSOT-23-6"
+   ],
+   "pins": {
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "FB": [
+     [
+      "R 13.3k -> GND",
+      2
+     ],
+     [
+      "R 114k -> +12V",
+      1
+     ],
+     [
+      "R 114k -> signal",
+      1
+     ]
+    ],
+    "SS": [
+     [
+      "C 100nF -> GND",
+      2
+     ]
+    ],
+    "SW": [
+     [
+      "C 1uF -> signal",
+      2
+     ],
+     [
+      "L 10uH -> own pin ~{SHDN}",
+      2
+     ]
+    ],
+    "~{SHDN}": [
+     [
+      "C 4.7uF -> GND",
+      2
+     ],
+     [
+      "L 10uH -> own pin SW",
+      2
+     ],
+     [
+      "FB 100R @ 100MHz -> +9V",
+      1
+     ],
+     [
+      "FB 100R @ 100MHz -> signal",
+      1
+     ]
+    ]
+   }
+  },
+  "LTC4054ES5-4.2": {
+   "designs": 2,
+   "lib": "Battery_Management:LTC4054ES5-4.2",
+   "footprints": [
+    "Package_TO_SOT_SMD:TSOT-23-5"
+   ],
+   "pins": {
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "~{CHRG}": [
+     [
+      "D CHRG LED -> signal",
+      2
+     ],
+     [
+      "D LED GREEN -> signal",
+      1
+     ]
+    ],
+    "PROG": [
+     [
+      "R 2k -> GND",
+      2
+     ],
+     [
+      "R 2.7k -> GND",
+      1
+     ]
+    ],
+    "BAT": [
+     [
+      "tied to VBAT",
+      2
+     ]
+    ],
+    "V_{CC}": [
+     [
+      "R 100k -> GND",
+      2
+     ],
+     [
+      "C 2.2? -> GND",
+      2
+     ],
+     [
+      "D 1N5819 -> VIN",
+      2
+     ],
+     [
+      "tied to VBUS",
+      2
+     ],
+     [
+      "tied to +5V",
+      1
+     ]
+    ]
+   }
+  },
+  "LTV-817S": {
+   "designs": 2,
+   "lib": "Isolator:LTV-817S",
+   "footprints": [
+    "footprints:SOP-4_4.4x2.6mm_P1.27mm",
+    "footprints:SMDIP-4_W9.53mm"
+   ],
+   "pins": {
+    "2": [
+     [
+      "tied to GND",
+      2
+     ],
+     [
+      "D 1N4148W -> signal",
+      2
+     ],
+     [
+      "R 100 -> own pin 1",
+      2
+     ],
+     [
+      "D 13V -> signal",
+      2
+     ],
+     [
+      "D 4V7 -> signal",
+      2
+     ],
+     [
+      "D 4V3 -> signal",
+      2
+     ]
+    ],
+    "4": [
+     [
+      "R 330 -> signal",
+      2
+     ],
+     [
+      "D 13V -> signal",
+      2
+     ],
+     [
+      "C 10uF -> GND",
+      2
+     ],
+     [
+      "tied to VCC",
+      2
+     ],
+     [
+      "R 5.1k -> VCC",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "3": [
+     [
+      "D 4V3 -> signal",
+      2
+     ],
+     [
+      "R 10k -> GND",
+      2
+     ],
+     [
+      "R 5.1k -> signal",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "R 1.1k -> signal",
+      1
+     ],
+     [
+      "to ARDUINO_UNO_R3",
+      1
+     ]
+    ],
+    "1": [
+     [
+      "R 560 -> signal",
+      2
+     ],
+     [
+      "R 100 -> own pin 2",
+      2
+     ],
+     [
+      "R 220 -> signal",
+      2
+     ],
+     [
+      "D PF -> signal",
+      1
+     ],
+     [
+      "D TX -> signal",
+      1
+     ]
+    ]
+   }
+  },
+  "MCP1824": {
+   "designs": 2,
+   "lib": "bitaxe:MCP1824",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-23-5"
+   ],
+   "pins": {
+    "VIN": [
+     [
+      "C 47uF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "tied to 5V",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 220uF -> GND",
+      1
+     ],
+     [
+      "C 4.7nF -> GND",
+      1
+     ]
+    ],
+    "VOUT": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "tied to 1V8",
+      1
+     ],
+     [
+      "tied to 1V2",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "PG": [
+     [
+      "not connected",
+      2
+     ]
+    ]
+   }
+  },
+  "MCP1824_1": {
+   "designs": 2,
+   "lib": "",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-23-5"
+   ],
+   "pins": {
+    "VIN": [
+     [
+      "C 47uF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "tied to 5V",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 220uF -> GND",
+      1
+     ],
+     [
+      "C 4.7nF -> GND",
+      1
+     ]
+    ],
+    "VOUT": [
+     [
+      "tied to 0V8",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "PG": [
+     [
+      "not connected",
+      2
+     ]
+    ]
+   }
+  },
+  "MCP23017_SO": {
+   "designs": 2,
+   "lib": "Interface_Expansion:MCP23017_SO",
+   "footprints": [
+    "Package_SO:SSOP-28_5.3x10.2mm_P0.65mm",
+    "Package_SO:SOIC-28W_7.5x17.9mm_P1.27mm"
+   ],
+   "pins": {
+    "~{RESET}": [
+     [
+      "tied to +3.3V",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ]
+    ],
+    "SCK": [
+     [
+      "to MCP23017_SO",
+      2
+     ],
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "SDA": [
+     [
+      "to MCP23017_SO",
+      2
+     ],
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "GPA6": [
+     [
+      "to 74LS244",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPA7": [
+     [
+      "to 74LS244",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPB0": [
+     [
+      "to 74LS244",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPB1": [
+     [
+      "to 74LS244",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPB2": [
+     [
+      "to 74LS244",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPB3": [
+     [
+      "to 74LS244",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPA5": [
+     [
+      "to 74LS244",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPA1": [
+     [
+      "to 74LS244",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPB5": [
+     [
+      "to 74LS244",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPB6": [
+     [
+      "to 74LS244",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPB7": [
+     [
+      "to 74LS244",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPA2": [
+     [
+      "to 74LS244",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPA3": [
+     [
+      "to 74LS244",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPA4": [
+     [
+      "to 74LS244",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPA0": [
+     [
+      "to 74LS244",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "GPB4": [
+     [
+      "to 74LS244",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "VSS": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "INTA": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "INTB": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NC": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "A0": [
+     [
+      "tied to +3.3V",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ]
+    ]
+   }
+  },
+  "NCP1117-3.3_SOT223": {
+   "designs": 4,
+   "lib": "Regulator_Linear:NCP1117-3.3_SOT223",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-223-3_TabPin2"
+   ],
+   "pins": {
+    "VO": [
+     [
+      "tied to +3V3",
+      4
+     ],
+     [
+      "C 100nF -> GND",
+      3
+     ],
+     [
+      "C 10uF -> GND",
+      3
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      4
+     ]
+    ],
+    "VI": [
+     [
+      "tied to VBUS",
+      3
+     ],
+     [
+      "C 10uF -> GND",
+      3
+     ]
+    ]
+   }
+  },
+  "NICE_NANO": {
+   "designs": 3,
+   "lib": "dumta:nice_nano",
+   "footprints": [
+    "dumta:ProMicro_jumpers",
+    "urchin-footprints:nice_nano"
+   ],
+   "pins": {
+    "D1/P0.06": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      3
+     ]
+    ],
+    "D2/P0.17": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "D3/P0.20": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "VCC": [
+     [
+      "tied to VCC",
+      2
+     ]
+    ],
+    "D4/P0.22": [
+     [
+      "D D -> signal",
+      2
+     ]
+    ],
+    "D5/P0.24": [
+     [
+      "D D -> signal",
+      2
+     ]
+    ],
+    "D6/P1.00": [
+     [
+      "D D -> signal",
+      2
+     ]
+    ],
+    "D7/P0.11": [
+     [
+      "D D -> signal",
+      2
+     ]
+    ],
+    "D0/P0.08": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "D8/P1.04": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "D9/P1.06": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "D10/P0.09": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "D14/P1.11": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "D16/P0.10": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "BATTERY+": [
+     [
+      "tied to VBAT",
+      2
+     ]
+    ]
+   }
+  },
+  "OSCILLATOR": {
+   "designs": 2,
+   "lib": "bitaxe:oscillator",
+   "footprints": [
+    "bitaxe:O 25,0-JO32-B-1V3-1-T1-LF",
+    "bitaxe:SMD3225-4P"
+   ],
+   "pins": {
+    "EN": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "tied to 1V8",
+      1
+     ],
+     [
+      "tied to 1V2",
+      1
+     ]
+    ],
+    "OUT": [
+     [
+      "to BM1366_MODE1",
+      1
+     ],
+     [
+      "to BM1370_MODE1",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ]
+   }
+  },
+  "OTTER_USBLC6-4": {
+   "designs": 2,
+   "lib": "otter:otter_USBLC6-4",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-23-6"
+   ],
+   "pins": {
+    "IO2": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to STM32F042F6PX",
+      1
+     ],
+     [
+      "to STM32G474CCUX",
+      1
+     ]
+    ],
+    "IO1": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to STM32F042F6PX",
+      1
+     ],
+     [
+      "to STM32G474CCUX",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "VBUS": [
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "R 5.1k -> DIN_5V",
+      1
+     ],
+     [
+      "tied to VBUS",
+      1
+     ],
+     [
+      "R 5.1k -> DCLK_5V",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "R 5.1k -> DOUT_5V",
+      1
+     ]
+    ],
+    "IO3": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "to STM32G474CCUX",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "IO4": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "to STM32G474CCUX",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ]
+   }
+  },
+  "PCF8574": {
+   "designs": 2,
+   "lib": "Interface_Expansion:PCF8574",
+   "footprints": [
+    "Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm",
+    "Package_SO:TSSOP-16_4.4x5mm_P0.65mm"
+   ],
+   "pins": {
+    "VDD": [
+     [
+      "tied to +3V3",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ]
+    ],
+    "P0": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "R 0 -> signal",
+      1
+     ]
+    ],
+    "P1": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "R 0 -> signal",
+      1
+     ]
+    ],
+    "P2": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "R 0 -> signal",
+      1
+     ]
+    ],
+    "VSS": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "P5": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "R 0 -> signal",
+      1
+     ]
+    ],
+    "~{INT}": [
+     [
+      "R ? -> signal",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "P3": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "R 0 -> signal",
+      1
+     ]
+    ],
+    "SCL": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to QSFP_CONN",
+      1
+     ],
+     [
+      "R 4.7k -> +3V3",
+      1
+     ],
+     [
+      "R 500 -> signal",
+      1
+     ]
+    ],
+    "SDA": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to QSFP_CONN",
+      1
+     ],
+     [
+      "R 4.7k -> +3V3",
+      1
+     ],
+     [
+      "R 500 -> signal",
+      1
+     ]
+    ],
+    "P4": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "R 0 -> signal",
+      1
+     ]
+    ],
+    "A0": [
+     [
+      "tied to +3V3",
+      2
+     ],
+     [
+      "C 22uF -> GND",
+      1
+     ],
+     [
+      "L 1uH -> VCC1",
+      1
+     ],
+     [
+      "L 1uH -> VCCTX",
+      1
+     ],
+     [
+      "L 1uH -> VCCRX",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ]
+    ],
+    "P6": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "R 0 -> signal",
+      1
+     ]
+    ],
+    "P7": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "R 0 -> signal",
+      1
+     ]
+    ]
+   }
+  },
+  "PICO": {
+   "designs": 4,
+   "lib": "KiCad-RP-Pico:Pico",
+   "footprints": [
+    "RPi_Pico:RPi_Pico_SMD_TH",
+    "modules:raspberrypi_pico",
+    "MCU_RaspberryPi_and_Boards:RPi_Pico_SMD_TH"
+   ],
+   "pins": {
+    "GND": [
+     [
+      "tied to GND",
+      4
+     ],
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "3V3": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "3V3_EN": [
+     [
+      "not connected",
+      4
+     ]
+    ],
+    "ADC_VREF": [
+     [
+      "not connected",
+      4
+     ]
+    ],
+    "GPIO21": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "GPIO22": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "RUN": [
+     [
+      "not connected",
+      4
+     ]
+    ],
+    "SWCLK": [
+     [
+      "not connected",
+      4
+     ]
+    ],
+    "SWDIO": [
+     [
+      "not connected",
+      4
+     ]
+    ],
+    "VSYS": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "GPIO26_ADC0": [
+     [
+      "not connected",
+      2
+     ]
+    ]
+   }
+  },
+  "PMW3360DM-T2QU": {
+   "designs": 2,
+   "lib": "PMW3360_PCB:PMW3360DM-T2QU",
+   "footprints": [
+    "PMW3360_PCB:PMW3360DM-T2QU 16Pin",
+    "PMW3360_PCB:16pin\u2010DIP(PMW3360DM-T2QU)",
+    "LKBD_OpticalSensor:PMW3360DM-T2QU"
+   ],
+   "pins": {
+    "~{CS}": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to XIAO-RP2040",
+      1
+     ]
+    ],
+    "MISO": [
+     [
+      "R 10k -> own pin VDDIO",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "R 10k -> +3.3V",
+      1
+     ],
+     [
+      "to XIAO-RP2040",
+      1
+     ]
+    ],
+    "MOSI": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to XIAO-RP2040",
+      1
+     ]
+    ],
+    "MOTION": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to XIAO-RP2040",
+      1
+     ]
+    ],
+    "~{RESET}": [
+     [
+      "R 10k -> own pin VDDIO",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "SCLK": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to XIAO-RP2040",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "LED_P": [
+     [
+      "R 39 -> VDD",
+      1
+     ],
+     [
+      "R 39 -> +1V8",
+      1
+     ]
+    ],
+    "VDDPIX": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 4.7uF -> GND",
+      2
+     ]
+    ],
+    "VDD": [
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "tied to VDD",
+      1
+     ],
+     [
+      "tied to +1V8",
+      1
+     ],
+     [
+      "C 4.7uF -> GND",
+      1
+     ]
+    ],
+    "VDDIO": [
+     [
+      "R 10k -> own pin MISO",
+      1
+     ],
+     [
+      "R 10k -> own pin ~{RESET}",
+      1
+     ],
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "tied to +3.3V",
+      1
+     ]
+    ],
+    "NC": [
+     [
+      "not connected",
+      2
+     ]
+    ]
+   }
+  },
+  "PMW3610DM-SUDU": {
+   "designs": 2,
+   "lib": "pmw3610_pcb:PMW3610DM-SUDU",
+   "footprints": [
+    "pmw3610_pcb:PMW3610DM-SUDU 16Pin"
+   ],
+   "pins": {
+    "VDD": [
+     [
+      "C 3.3uF -> GND",
+      2
+     ],
+     [
+      "tied to +1V8",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "MOTION": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "+VCSEL": [
+     [
+      "C 10nF -> GND",
+      2
+     ]
+    ],
+    "CN": [
+     [
+      "C 100nF -> own pin CP",
+      2
+     ]
+    ],
+    "CP": [
+     [
+      "C 100nF -> own pin CN",
+      2
+     ]
+    ],
+    "NRESET": [
+     [
+      "R 10k -> VIN",
+      1
+     ],
+     [
+      "R 10k -> VDDIO",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "VCP": [
+     [
+      "C 10uF -> GND",
+      2
+     ],
+     [
+      "C 10nF -> GND",
+      2
+     ]
+    ],
+    "SCLK": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "SDIO": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "VDDIO": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "tied to VIN",
+      1
+     ],
+     [
+      "tied to VDDIO",
+      1
+     ]
+    ],
+    "NCS": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "NC": [
+     [
+      "not connected",
+      2
+     ]
+    ]
+   }
+  },
+  "PROGRAMINGPADS": {
+   "designs": 2,
+   "lib": "000_Symbols:ProgramingPads",
+   "footprints": [
+    "000_Footprints:ProgrammingPads"
+   ],
+   "pins": {
+    "TCK": [
+     [
+      "to PROGRAMMINGCONNECTOR",
+      2
+     ],
+     [
+      "to LCMXO2-256HC-4MG132C",
+      2
+     ],
+     [
+      "R 4.7k -> GND",
+      2
+     ]
+    ],
+    "TDI": [
+     [
+      "to PROGRAMMINGCONNECTOR",
+      2
+     ],
+     [
+      "R 4.7k -> +3V3",
+      2
+     ],
+     [
+      "to LCMXO2-256HC-4MG132C",
+      2
+     ]
+    ],
+    "TDO": [
+     [
+      "to PROGRAMMINGCONNECTOR",
+      2
+     ],
+     [
+      "R 4.7k -> +3V3",
+      2
+     ],
+     [
+      "to LCMXO2-256HC-4MG132C",
+      2
+     ]
+    ],
+    "TMS": [
+     [
+      "to PROGRAMMINGCONNECTOR",
+      2
+     ],
+     [
+      "R 4.7k -> +3V3",
+      2
+     ],
+     [
+      "to LCMXO2-256HC-4MG132C",
+      2
+     ]
+    ]
+   }
+  },
+  "PROMICRO": {
+   "designs": 2,
+   "lib": "Common Library:ProMicro",
+   "footprints": [
+    "Common Library:ProMicro",
+    "Keebio-Parts:ArduinoProMicro-BackSide",
+    "Keebio:ArduinoProMicro"
+   ],
+   "pins": {
+    "A0/PF7": [
+     [
+      "C ? -> GND",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ]
+    ],
+    "A1/PF6": [
+     [
+      "C ? -> GND",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "RST": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "VCC": [
+     [
+      "tied to VCC",
+      1
+     ],
+     [
+      "D SK6812MINI-E -> GND",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "2/PD1": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "R 4.7k -> GND",
+      1
+     ]
+    ],
+    "3/PD0": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "R 4.7k -> GND",
+      1
+     ]
+    ],
+    "10/PB6": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "14/PB3": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "15/PB1": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ]
+    ],
+    "16/PB2": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "A3/PF4": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "TX0/PD3": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "RX1/PD2": [
+     [
+      "D SK6812MINI-E -> GND",
+      1
+     ]
+    ],
+    "4/PD4": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "D D -> signal",
+      1
+     ]
+    ],
+    "5/PC6": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "D D -> signal",
+      1
+     ]
+    ],
+    "A2/PF5": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "RAW": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "7/PE6": [
+     [
+      "D D -> signal",
+      1
+     ]
+    ],
+    "6/PD7": [
+     [
+      "D D -> signal",
+      1
+     ]
+    ],
+    "(A)F7": [
+     [
+      "C ? -> GND",
+      1
+     ]
+    ],
+    "(A)F6": [
+     [
+      "C ? -> GND",
+      1
+     ]
+    ],
+    "(A)F4": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "(MISO)B3": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "(MOSI)B2": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "(SCLK)B1": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "B6": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "D0(SCL)": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "D1(SDA)": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "D3(TX)": [
+     [
+      "not connected",
+      1
+     ]
+    ]
+   }
+  },
+  "RC4558": {
+   "designs": 2,
+   "lib": "Amplifier_Operational:RC4558",
+   "footprints": [
+    "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+    "Package_DIP:DIP-8_W7.62mm_Socket"
+   ],
+   "pins": {
+    "V+": [
+     [
+      "tied to +12V",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ],
+     [
+      "R 47k -> own pin +",
+      1
+     ],
+     [
+      "C 100uF -> GND",
+      1
+     ],
+     [
+      "D 1n5817 -> +9V",
+      1
+     ]
+    ],
+    "V-": [
+     [
+      "FB 100R @ 100MHz -> signal",
+      1
+     ],
+     [
+      "to TL072",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ],
+     [
+      "to RC4558",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "to SSI2162",
+      1
+     ]
+    ],
+    "7": [
+     [
+      "C 6.8nF -> signal",
+      1
+     ],
+     [
+      "C 1nF -> own pin -",
+      1
+     ],
+     [
+      "R 4.7k -> own pin -",
+      1
+     ],
+     [
+      "R 4.7k -> signal",
+      1
+     ],
+     [
+      "C 6.8nF -> own pin +",
+      1
+     ],
+     [
+      "R 220k -> own pin -",
+      1
+     ]
+    ],
+    "1": [
+     [
+      "R 390k -> own pin -",
+      1
+     ],
+     [
+      "C 100nF -> own pin -",
+      1
+     ],
+     [
+      "R 12k -> signal",
+      1
+     ],
+     [
+      "R 4.7k -> own pin -",
+      1
+     ],
+     [
+      "C 470nF -> signal",
+      1
+     ],
+     [
+      "C 6.8nF -> signal",
+      1
+     ]
+    ],
+    "+": [
+     [
+      "C 22pF -> GND",
+      1
+     ],
+     [
+      "R 3.9k -> signal",
+      1
+     ],
+     [
+      "C 3.3nF -> GND",
+      1
+     ],
+     [
+      "R 4.7k -> GND",
+      1
+     ],
+     [
+      "R 4.7k -> signal",
+      1
+     ],
+     [
+      "C 6.8nF -> signal",
+      1
+     ]
+    ],
+    "-": [
+     [
+      "R 390k -> own pin 1",
+      1
+     ],
+     [
+      "C 100nF -> own pin 1",
+      1
+     ],
+     [
+      "R 4.7k -> own pin 1",
+      1
+     ],
+     [
+      "R 4.7k -> own pin 7",
+      1
+     ],
+     [
+      "C 1nF -> own pin 7",
+      1
+     ],
+     [
+      "R 4.7k -> signal",
+      1
+     ]
+    ]
+   }
+  },
+  "RP2040": {
+   "designs": 8,
+   "lib": "MCU_RaspberryPi:RP2040",
+   "footprints": [
+    "Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP3.2x3.2mm",
+    "RP2040_minimal:RP2040-QFN-56",
+    "Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP3.2x3.2mm_ThermalVias"
+   ],
+   "pins": {
+    "DVDD": [
+     [
+      "C 100nF -> GND",
+      8
+     ],
+     [
+      "C 1uF -> GND",
+      8
+     ],
+     [
+      "tied to +1V1",
+      8
+     ]
+    ],
+    "IOVDD": [
+     [
+      "C 1uF -> GND",
+      8
+     ],
+     [
+      "C 100nF -> GND",
+      8
+     ],
+     [
+      "tied to +3V3",
+      8
+     ],
+     [
+      "C 10uF -> GND",
+      3
+     ],
+     [
+      "C 22uF -> GND",
+      3
+     ]
+    ],
+    "GPIO5": [
+     [
+      "to connector",
+      5
+     ]
+    ],
+    "GPIO2": [
+     [
+      "to connector",
+      5
+     ],
+     [
+      "D 1N4148 -> signal",
+      2
+     ]
+    ],
+    "GPIO3": [
+     [
+      "to connector",
+      4
+     ]
+    ],
+    "GPIO6": [
+     [
+      "to connector",
+      5
+     ]
+    ],
+    "GPIO7": [
+     [
+      "not connected",
+      3
+     ],
+     [
+      "to connector",
+      3
+     ]
+    ],
+    "GPIO4": [
+     [
+      "to connector",
+      5
+     ]
+    ],
+    "GPIO26_ADC0": [
+     [
+      "to connector",
+      5
+     ],
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "GPIO27_ADC1": [
+     [
+      "to connector",
+      6
+     ]
+    ],
+    "GPIO28_ADC2": [
+     [
+      "to connector",
+      6
+     ],
+     [
+      "not connected",
+      3
+     ],
+     [
+      "D 1N4148 -> signal",
+      2
+     ]
+    ],
+    "GPIO29_ADC3": [
+     [
+      "to connector",
+      6
+     ],
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "GPIO17": [
+     [
+      "to connector",
+      4
+     ],
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "GPIO16": [
+     [
+      "to connector",
+      4
+     ],
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "GPIO10": [
+     [
+      "to connector",
+      3
+     ],
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "GPIO11": [
+     [
+      "to connector",
+      3
+     ]
+    ],
+    "GPIO19": [
+     [
+      "to connector",
+      3
+     ],
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "GPIO20": [
+     [
+      "to connector",
+      5
+     ]
+    ],
+    "GPIO21": [
+     [
+      "to connector",
+      5
+     ],
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "GPIO22": [
+     [
+      "to connector",
+      5
+     ],
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "GPIO23": [
+     [
+      "to connector",
+      5
+     ],
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "GPIO24": [
+     [
+      "to connector",
+      5
+     ],
+     [
+      "not connected",
+      3
+     ],
+     [
+      "D 1N4148 -> signal",
+      2
+     ]
+    ],
+    "GPIO25": [
+     [
+      "to connector",
+      4
+     ],
+     [
+      "D 1N4148 -> signal",
+      2
+     ]
+    ],
+    "RUN": [
+     [
+      "R 10k -> +3V3",
+      4
+     ],
+     [
+      "to connector",
+      3
+     ]
+    ],
+    "GPIO8": [
+     [
+      "to connector",
+      3
+     ],
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "TESTEN": [
+     [
+      "tied to GND",
+      8
+     ]
+    ],
+    "SWD": [
+     [
+      "not connected",
+      4
+     ],
+     [
+      "to connector",
+      3
+     ]
+    ],
+    "SWCLK": [
+     [
+      "not connected",
+      4
+     ],
+     [
+      "to connector",
+      3
+     ]
+    ],
+    "GPIO0": [
+     [
+      "to connector",
+      6
+     ]
+    ],
+    "GPIO1": [
+     [
+      "to connector",
+      4
+     ],
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "USB_DM": [
+     [
+      "R 27 -> signal",
+      6
+     ],
+     [
+      "R 22 -> signal",
+      3
+     ]
+    ],
+    "USB_DP": [
+     [
+      "R 27 -> signal",
+      6
+     ],
+     [
+      "R 22 -> signal",
+      3
+     ]
+    ],
+    "GPIO18": [
+     [
+      "to connector",
+      4
+     ],
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "GPIO13": [
+     [
+      "to connector",
+      4
+     ],
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "GPIO15": [
+     [
+      "not connected",
+      4
+     ],
+     [
+      "to connector",
+      3
+     ]
+    ],
+    "GPIO14": [
+     [
+      "to connector",
+      4
+     ],
+     [
+      "not connected",
+      4
+     ]
+    ],
+    "QSPI_SCLK": [
+     [
+      "to W25Q128JVS",
+      6
+     ]
+    ],
+    "QSPI_SD0": [
+     [
+      "to W25Q128JVS",
+      6
+     ]
+    ],
+    "QSPI_SD1": [
+     [
+      "to W25Q128JVS",
+      6
+     ]
+    ],
+    "QSPI_SD2": [
+     [
+      "to W25Q128JVS",
+      6
+     ]
+    ],
+    "QSPI_SD3": [
+     [
+      "to W25Q128JVS",
+      6
+     ]
+    ],
+    "QSPI_SS": [
+     [
+      "R 1k -> signal",
+      7
+     ],
+     [
+      "to W25Q128JVS",
+      5
+     ],
+     [
+      "R 10k -> +3V3",
+      5
+     ]
+    ],
+    "XIN": [
+     [
+      "Y 12MHz -> GND",
+      6
+     ],
+     [
+      "C 20pF -> GND",
+      4
+     ]
+    ],
+    "XOUT": [
+     [
+      "R 1k -> signal",
+      7
+     ]
+    ],
+    "GPIO12": [
+     [
+      "to connector",
+      4
+     ],
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "GPIO9": [
+     [
+      "to connector",
+      4
+     ]
+    ]
+   }
+  },
+  "RT9013-33GB": {
+   "designs": 5,
+   "lib": "rp-micro:RT9013-33GB",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-23-5"
+   ],
+   "pins": {
+    "VOUT": [
+     [
+      "C 100nF -> GND",
+      5
+     ],
+     [
+      "C 1uF -> GND",
+      5
+     ],
+     [
+      "tied to +3V3",
+      4
+     ],
+     [
+      "C 10uF -> GND",
+      2
+     ],
+     [
+      "tied to VDD",
+      2
+     ]
+    ],
+    "VIN": [
+     [
+      "C 1uF -> GND",
+      5
+     ],
+     [
+      "tied to +5V",
+      4
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      5
+     ]
+    ],
+    "NC": [
+     [
+      "not connected",
+      5
+     ]
+    ]
+   }
+  },
+  "RT9080-33GJ5": {
+   "designs": 2,
+   "lib": "bitaxe:RT9080-33GJ5",
+   "footprints": [
+    "bitaxe:RT9080-33GJ5"
+   ],
+   "pins": {
+    "VOUT": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "C 10uF -> GND",
+      2
+     ],
+     [
+      "tied to 3V3",
+      2
+     ]
+    ],
+    "VIN": [
+     [
+      "C 47uF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "tied to 5V",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 220uF -> GND",
+      1
+     ],
+     [
+      "C 4.7nF -> GND",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "NC": [
+     [
+      "not connected",
+      2
+     ]
+    ]
+   }
+  },
+  "SL2.1A": {
+   "designs": 2,
+   "lib": "sl21a:SL2.1A",
+   "footprints": [
+    "Package_SO:SO-16_3.9x9.9mm_P1.27mm",
+    "SL2.1a:SOP-16_L10.0-W3.9-P1.27-LS6.0-BL"
+   ],
+   "pins": {
+    "VDD5": [
+     [
+      "tied to +3V3",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "C 100nF -> +5V",
+      1
+     ],
+     [
+      "tied to +3.3V",
+      1
+     ],
+     [
+      "C 22uF -> GND",
+      1
+     ]
+    ],
+    "VDD18": [
+     [
+      "tied to UH_1V8",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ]
+    ],
+    "DM1": [
+     [
+      "to TPD4E02B04DQA",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "D USBLC6-2SC6 -> signal",
+      1
+     ],
+     [
+      "R 0 -> own pin DM",
+      1
+     ],
+     [
+      "to ALTMODEFRIEND",
+      1
+     ],
+     [
+      "to RP2040_STAMP",
+      1
+     ]
+    ],
+    "DP1": [
+     [
+      "to TPD4E02B04DQA",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "D USBLC6-2SC6 -> signal",
+      1
+     ],
+     [
+      "R 0 -> own pin DP",
+      1
+     ],
+     [
+      "to ALTMODEFRIEND",
+      1
+     ],
+     [
+      "to RP2040_STAMP",
+      1
+     ]
+    ],
+    "DM2": [
+     [
+      "to TPD4E02B04DQA",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "D USBLC6-2SC6 -> signal",
+      1
+     ],
+     [
+      "R 0 -> own pin DP",
+      1
+     ],
+     [
+      "D USBLC6-2SC6 -> GND",
+      1
+     ],
+     [
+      "R 27 -> signal",
+      1
+     ]
+    ],
+    "DP2": [
+     [
+      "to TPD4E02B04DQA",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "D USBLC6-2SC6 -> signal",
+      1
+     ],
+     [
+      "R 0 -> own pin DM",
+      1
+     ],
+     [
+      "D USBLC6-2SC6 -> GND",
+      1
+     ],
+     [
+      "R 27 -> signal",
+      1
+     ]
+    ],
+    "DM3": [
+     [
+      "to TPD4E02B04DQA",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to RP2040_STAMP",
+      1
+     ],
+     [
+      "D USBLC6-2SC6 -> GND",
+      1
+     ],
+     [
+      "to USBLC6-2SC6",
+      1
+     ],
+     [
+      "R 22 -> signal",
+      1
+     ]
+    ],
+    "DP3": [
+     [
+      "to TPD4E02B04DQA",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to RP2040_STAMP",
+      1
+     ],
+     [
+      "D USBLC6-2SC6 -> GND",
+      1
+     ],
+     [
+      "to USBLC6-2SC6",
+      1
+     ],
+     [
+      "R 22 -> signal",
+      1
+     ]
+    ],
+    "DM": [
+     [
+      "to FSUSB42MUX",
+      1
+     ],
+     [
+      "D USBLC6-2SC6 -> own pin DP",
+      1
+     ],
+     [
+      "R 0 -> own pin DM1",
+      1
+     ],
+     [
+      "R 0 -> own pin DP2",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "D USBLC6-2SC6 -> GND",
+      1
+     ]
+    ],
+    "DP": [
+     [
+      "to FSUSB42MUX",
+      1
+     ],
+     [
+      "D USBLC6-2SC6 -> own pin DM",
+      1
+     ],
+     [
+      "R 0 -> own pin DP1",
+      1
+     ],
+     [
+      "R 0 -> own pin DM2",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "D USBLC6-2SC6 -> GND",
+      1
+     ]
+    ],
+    "DM4": [
+     [
+      "to FSUSB42MUX",
+      1
+     ],
+     [
+      "D USBLC6-2SC6 -> signal",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "D USBLC6-2SC6 -> GND",
+      1
+     ],
+     [
+      "to USBLC6-2SC6",
+      1
+     ]
+    ],
+    "DP4": [
+     [
+      "to FSUSB42MUX",
+      1
+     ],
+     [
+      "D USBLC6-2SC6 -> signal",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "D USBLC6-2SC6 -> GND",
+      1
+     ],
+     [
+      "to USBLC6-2SC6",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "XIN": [
+     [
+      "Y 12MHz -> GND",
+      1
+     ],
+     [
+      "Y 12MHz -> own pin XOUT",
+      1
+     ],
+     [
+      "R 0 -> GND",
+      1
+     ]
+    ],
+    "XOUT": [
+     [
+      "Y 12MHz -> GND",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ],
+     [
+      "Y 12MHz -> own pin XIN",
+      1
+     ]
+    ],
+    "VDD33": [
+     [
+      "C 10uF -> GND",
+      1
+     ],
+     [
+      "R 0 -> UH_5V",
+      1
+     ],
+     [
+      "tied to UH_3V3",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "R 0 -> +3V3",
+      1
+     ]
+    ]
+   }
+  },
+  "SRV05-4": {
+   "designs": 5,
+   "lib": "Power_Protection:SRV05-4",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-23-6"
+   ],
+   "pins": {
+    "IO1": [
+     [
+      "to connector",
+      3
+     ],
+     [
+      "not connected",
+      3
+     ]
+    ],
+    "IO3": [
+     [
+      "to connector",
+      4
+     ],
+     [
+      "R 27 -> signal",
+      3
+     ],
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "VN": [
+     [
+      "tied to GND",
+      5
+     ]
+    ],
+    "VP": [
+     [
+      "tied to +5V",
+      2
+     ],
+     [
+      "tied to VBUS",
+      2
+     ]
+    ],
+    "IO4": [
+     [
+      "not connected",
+      3
+     ],
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "IO2": [
+     [
+      "R 27 -> signal",
+      3
+     ],
+     [
+      "to connector",
+      3
+     ],
+     [
+      "not connected",
+      2
+     ]
+    ]
+   }
+  },
+  "SSI2130": {
+   "designs": 2,
+   "lib": "custom_symbols:SSI2130",
+   "footprints": [
+    "Package_DFN_QFN:QFN-32-1EP_4x4mm_P0.4mm_EP2.9x2.9mm",
+    "custom_footprints:PQN32_HandSoldering"
+   ],
+   "pins": {
+    "V+": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "tied to +5V",
+      2
+     ]
+    ],
+    "V-": [
+     [
+      "to SSI2130",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "to LF398_SOIC14",
+      1
+     ],
+     [
+      "to TL072",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ],
+     [
+      "D B5819W -> signal",
+      1
+     ]
+    ],
+    "pwm_in_+": [
+     [
+      "to SSI2130",
+      2
+     ],
+     [
+      "R 56k -> +5V",
+      1
+     ],
+     [
+      "R 10k -> signal",
+      1
+     ],
+     [
+      "R 6.8k -> GND",
+      1
+     ],
+     [
+      "R 10k -> own pin vref",
+      1
+     ],
+     [
+      "R 10k -> GND",
+      1
+     ]
+    ],
+    "vref": [
+     [
+      "R 1k -> +5V",
+      2
+     ],
+     [
+      "to LM4040DBZ-2.5",
+      2
+     ],
+     [
+      "R 12k -> own pin sine_in_-",
+      2
+     ],
+     [
+      "R 470k -> own pin lin_freq",
+      1
+     ],
+     [
+      "R 39k -> own pin expo_freq",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ]
+    ],
+    "mix_out": [
+     [
+      "R 18k -> GND",
+      1
+     ],
+     [
+      "R 27k -> signal",
+      1
+     ],
+     [
+      "R 20k -> signal",
+      1
+     ]
+    ],
+    "dgnd": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "hard_sync": [
+     [
+      "R 10k -> GND",
+      2
+     ],
+     [
+      "R 10k -> signal",
+      1
+     ],
+     [
+      "C 10nF -> GND",
+      1
+     ],
+     [
+      "C 10nF -> signal",
+      1
+     ]
+    ],
+    "lin_freq": [
+     [
+      "R 470k -> own pin vref",
+      1
+     ],
+     [
+      "R 1M -> own pin vref",
+      1
+     ],
+     [
+      "R 470k -> signal",
+      1
+     ]
+    ],
+    "soft_sync": [
+     [
+      "C 10nF -> GND",
+      2
+     ],
+     [
+      "C 10nF -> signal",
+      2
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "tcap": [
+     [
+      "C 3? -> GND",
+      2
+     ],
+     [
+      "C 47nF -> GND",
+      1
+     ]
+    ],
+    "tri_out": [
+     [
+      "R 3.9k -> own pin sine_in_+",
+      2
+     ]
+    ],
+    "bw_comp": [
+     [
+      "R 270 -> signal",
+      2
+     ]
+    ],
+    "expo_freq": [
+     [
+      "R 270k -> signal",
+      2
+     ],
+     [
+      "R 100k -> signal",
+      2
+     ],
+     [
+      "R 2.2M -> signal",
+      2
+     ],
+     [
+      "R 39k -> own pin vref",
+      1
+     ],
+     [
+      "R 200k -> signal",
+      1
+     ],
+     [
+      "R 27k -> own pin vref",
+      1
+     ]
+    ],
+    "expo_scale": [
+     [
+      "R 47k -> signal",
+      2
+     ]
+    ],
+    "sine_in_+": [
+     [
+      "R 3.9k -> own pin tri_out",
+      2
+     ],
+     [
+      "R 4.7k -> GND",
+      2
+     ]
+    ],
+    "sine_in_-": [
+     [
+      "R 12k -> own pin vref",
+      2
+     ],
+     [
+      "R 4.7k -> GND",
+      2
+     ]
+    ],
+    "square_out": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "to MCP6002-XSN",
+      1
+     ],
+     [
+      "R 10k -> +3.3V",
+      1
+     ],
+     [
+      "to 4013",
+      1
+     ],
+     [
+      "R 4.7k -> +5V",
+      1
+     ]
+    ],
+    "time_rev": [
+     [
+      "not connected",
+      2
+     ],
+     [
+      "to SSI2130",
+      1
+     ],
+     [
+      "to LM311",
+      1
+     ],
+     [
+      "C 100pF -> signal",
+      1
+     ],
+     [
+      "R 10k -> +5V",
+      1
+     ]
+    ],
+    "aux_1_mix": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "aux_in_1": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "aux_in_2": [
+     [
+      "to TL072",
+      1
+     ],
+     [
+      "C 100pF -> signal",
+      1
+     ],
+     [
+      "R 200k -> signal",
+      1
+     ]
+    ],
+    "saw_out": [
+     [
+      "R 100k -> signal",
+      1
+     ],
+     [
+      "to TL072",
+      1
+     ]
+    ],
+    "pulse_out": [
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "tri_mix": [
+     [
+      "not connected",
+      1
+     ]
+    ]
+   }
+  },
+  "SSI2162": {
+   "designs": 2,
+   "lib": "custom_symbols:SSI2162",
+   "footprints": [
+    "Package_SO:SSOP-10_3.9x4.9mm_P1.00mm"
+   ],
+   "pins": {
+    "V+": [
+     [
+      "C 10uF -> GND",
+      2
+     ],
+     [
+      "tied to +12V",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 4.7uF -> GND",
+      1
+     ]
+    ],
+    "V-": [
+     [
+      "to TL072",
+      2
+     ],
+     [
+      "C 10uF -> GND",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "to SSI2130",
+      1
+     ],
+     [
+      "to LF398_SOIC14",
+      1
+     ],
+     [
+      "D B5819W -> signal",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "8": [
+     [
+      "R 4.7k -> own pin 3",
+      1
+     ],
+     [
+      "to TL072",
+      1
+     ],
+     [
+      "C 1nF -> own pin 7",
+      1
+     ],
+     [
+      "C 1nF -> signal",
+      1
+     ],
+     [
+      "R 39k -> signal",
+      1
+     ],
+     [
+      "D BAT48ZFILM -> signal",
+      1
+     ]
+    ],
+    "9": [
+     [
+      "R 100k -> signal",
+      2
+     ],
+     [
+      "R 270 -> signal",
+      2
+     ],
+     [
+      "R 22k -> signal",
+      1
+     ]
+    ],
+    "2": [
+     [
+      "R 270 -> signal",
+      2
+     ],
+     [
+      "R 27k -> signal",
+      1
+     ],
+     [
+      "R 100k -> signal",
+      1
+     ],
+     [
+      "R 22k -> signal",
+      1
+     ]
+    ],
+    "3": [
+     [
+      "R 4.7k -> own pin 8",
+      1
+     ],
+     [
+      "C 1nF -> signal",
+      1
+     ],
+     [
+      "R 56k -> signal",
+      1
+     ],
+     [
+      "to TL072",
+      1
+     ],
+     [
+      "D BAT48ZFILM -> signal",
+      1
+     ]
+    ],
+    "4": [
+     [
+      "to TL072",
+      2
+     ],
+     [
+      "R 12k -> signal",
+      1
+     ],
+     [
+      "C 100pF -> signal",
+      1
+     ],
+     [
+      "R 100k -> signal",
+      1
+     ],
+     [
+      "C 47nF -> signal",
+      1
+     ]
+    ],
+    "7": [
+     [
+      "to TL072",
+      2
+     ],
+     [
+      "R 100k -> signal",
+      2
+     ],
+     [
+      "R 10M -> signal",
+      1
+     ],
+     [
+      "R 150k -> signal",
+      1
+     ],
+     [
+      "C 1nF -> own pin 8",
+      1
+     ],
+     [
+      "C 10nF -> signal",
+      1
+     ]
+    ],
+    "MODE": [
+     [
+      "not connected",
+      2
+     ]
+    ]
+   }
+  },
+  "SSM2017P": {
+   "designs": 2,
+   "lib": "Amplifier_Audio:SSM2017P",
+   "footprints": [
+    "Package_DIP:DIP-8_W7.62mm"
+   ],
+   "pins": {
+    "V-": [
+     [
+      "tied to GND",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "+": [
+     [
+      "D 1N4004 -> own pin V+",
+      1
+     ],
+     [
+      "R 10 -> signal",
+      1
+     ],
+     [
+      "D 1N4148 -> own pin RG2",
+      1
+     ],
+     [
+      "R 1.2k -> signal",
+      1
+     ],
+     [
+      "D 1N4004 -> GND",
+      1
+     ],
+     [
+      "R 1k -> GND",
+      1
+     ]
+    ],
+    "-": [
+     [
+      "D 1N4004 -> own pin V+",
+      1
+     ],
+     [
+      "R 10 -> signal",
+      1
+     ],
+     [
+      "R 1.2k -> signal",
+      1
+     ],
+     [
+      "D 1N4004 -> GND",
+      1
+     ],
+     [
+      "D 1N4148 -> own pin RG1",
+      1
+     ],
+     [
+      "R 1k -> GND",
+      1
+     ]
+    ],
+    "RG1": [
+     [
+      "R 10 -> signal",
+      1
+     ],
+     [
+      "D 1N4148 -> own pin -",
+      1
+     ],
+     [
+      "C 3.3mF -> signal",
+      1
+     ]
+    ],
+    "RG2": [
+     [
+      "C 3.3mF -> signal",
+      1
+     ],
+     [
+      "D 1N4148 -> own pin +",
+      1
+     ],
+     [
+      "C 6.8mF -> signal",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "V+": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "D 1N4004 -> own pin -",
+      1
+     ],
+     [
+      "C 47uF -> GND",
+      1
+     ],
+     [
+      "R 4.7k -> signal",
+      1
+     ],
+     [
+      "D 1N4004 -> own pin +",
+      1
+     ],
+     [
+      "D 1N4148 -> signal",
+      1
+     ]
+    ],
+    "REF": [
+     [
+      "C 1mF -> GND",
+      1
+     ],
+     [
+      "R 22k -> signal",
+      1
+     ],
+     [
+      "R 100 -> signal",
+      1
+     ],
+     [
+      "D 18V -> GND",
+      1
+     ],
+     [
+      "D LED -> signal",
+      1
+     ],
+     [
+      "tied to GND",
+      1
+     ]
+    ],
+    "6": [
+     [
+      "R 100 -> signal",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "C 22uF -> signal",
+      1
+     ]
+    ]
+   }
+  },
+  "SST39SF040": {
+   "designs": 2,
+   "lib": "Memory_Flash:SST39SF040",
+   "footprints": [
+    "Package_DIP:DIP-32_W15.24mm",
+    "Socket:DIP_Socket-32_W11.9_W12.7_W15.24_W17.78_W18.5_3M_232-1285-00-0602J",
+    "Package_LCC:PLCC-32_11.4x14.0mm_P1.27mm"
+   ],
+   "pins": {
+    "/WE": [
+     [
+      "tied to +5V",
+      1
+     ],
+     [
+      "C 1mF -> GND",
+      1
+     ],
+     [
+      "Y CXO_DIP14 -> GND",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ]
+    ],
+    "A0": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ],
+     [
+      "to XR68C681",
+      1
+     ],
+     [
+      "to SST39SF040",
+      1
+     ]
+    ],
+    "A1": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to XR68C681",
+      1
+     ],
+     [
+      "to ATF22V10C",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ]
+    ],
+    "A2": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to XR68C681",
+      1
+     ],
+     [
+      "to ATF22V10C",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ]
+    ],
+    "A3": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to XR68C681",
+      1
+     ],
+     [
+      "to ATF22V10C",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ]
+    ],
+    "A4": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to XR68C681",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ],
+     [
+      "to SST39SF040",
+      1
+     ]
+    ],
+    "A5": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ],
+     [
+      "to SST39SF040",
+      1
+     ],
+     [
+      "to 68010D",
+      1
+     ]
+    ],
+    "A6": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ],
+     [
+      "to SST39SF040",
+      1
+     ],
+     [
+      "to 68010D",
+      1
+     ]
+    ],
+    "A7": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ],
+     [
+      "to SST39SF040",
+      1
+     ],
+     [
+      "to 68010D",
+      1
+     ]
+    ],
+    "A8": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ],
+     [
+      "to SST39SF040",
+      1
+     ],
+     [
+      "to 68010D",
+      1
+     ]
+    ],
+    "A9": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ],
+     [
+      "to SST39SF040",
+      1
+     ],
+     [
+      "to 68010D",
+      1
+     ]
+    ],
+    "A10": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ],
+     [
+      "to SST39SF040",
+      1
+     ],
+     [
+      "to 68010D",
+      1
+     ]
+    ],
+    "A11": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ],
+     [
+      "to SST39SF040",
+      1
+     ],
+     [
+      "to 68010D",
+      1
+     ]
+    ],
+    "A12": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ],
+     [
+      "to SST39SF040",
+      1
+     ],
+     [
+      "to 68010D",
+      1
+     ]
+    ],
+    "A13": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to ATF22V10C",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ],
+     [
+      "to SST39SF040",
+      1
+     ]
+    ],
+    "A14": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to ATF22V10C",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ],
+     [
+      "to SST39SF040",
+      1
+     ]
+    ],
+    "A15": [
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to ATF22V10C",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ],
+     [
+      "to 68010D",
+      1
+     ]
+    ],
+    "A16": [
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to ATF22V10C",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ],
+     [
+      "to 68010D",
+      1
+     ]
+    ],
+    "A17": [
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to ATF22V10C",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ],
+     [
+      "to 68010D",
+      1
+     ]
+    ],
+    "A18": [
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to ATF22V10C",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to EPM7128SLC",
+      1
+     ],
+     [
+      "to 68010D",
+      1
+     ]
+    ],
+    "D0": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to XR68C681",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to SIMM30",
+      1
+     ],
+     [
+      "to 74HC245",
+      1
+     ]
+    ],
+    "D1": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to XR68C681",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to SIMM30",
+      1
+     ],
+     [
+      "to 74HC245",
+      1
+     ]
+    ],
+    "D2": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to XR68C681",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to SIMM30",
+      1
+     ],
+     [
+      "to 74HC245",
+      1
+     ]
+    ],
+    "D3": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to XR68C681",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to SIMM30",
+      1
+     ],
+     [
+      "to 74HC245",
+      1
+     ]
+    ],
+    "D4": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to XR68C681",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to SIMM30",
+      1
+     ],
+     [
+      "to 74HC245",
+      1
+     ]
+    ],
+    "D5": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to XR68C681",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to SIMM30",
+      1
+     ],
+     [
+      "to 74HC245",
+      1
+     ]
+    ],
+    "D6": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to XR68C681",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to SIMM30",
+      1
+     ],
+     [
+      "to 74HC245",
+      1
+     ]
+    ],
+    "D7": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to MC68008",
+      1
+     ],
+     [
+      "to XR68C681",
+      1
+     ],
+     [
+      "to AS6C4008-55PCN",
+      1
+     ],
+     [
+      "to SIMM30",
+      1
+     ],
+     [
+      "to 74HC245",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "/CE": [
+     [
+      "to ATF22V10C",
+      1
+     ]
+    ],
+    "PGM": [
+     [
+      "tied to +5V",
+      1
+     ],
+     [
+      "C 1mF -> GND",
+      1
+     ],
+     [
+      "Y 3.6864MHz -> GND",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "C 470uF -> GND",
+      1
+     ]
+    ],
+    "CE": [
+     [
+      "to EPM7128SLC",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "OE": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "VCC": [
+     [
+      "tied to +5V",
+      1
+     ],
+     [
+      "C 1mF -> GND",
+      1
+     ],
+     [
+      "Y 3.6864MHz -> GND",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "C 470uF -> GND",
+      1
+     ]
+    ]
+   }
+  },
+  "STM32F030F4PX": {
+   "designs": 2,
+   "lib": "MCU_ST_STM32F0:STM32F030F4Px",
+   "footprints": [
+    "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm"
+   ],
+   "pins": {
+    "VDD": [
+     [
+      "tied to +3V3",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 4.7uF -> GND",
+      1
+     ],
+     [
+      "C 1uF -> GND",
+      1
+     ]
+    ],
+    "VSS": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "PA6": [
+     [
+      "to AL8843",
+      1
+     ],
+     [
+      "to STSPIN220",
+      1
+     ]
+    ],
+    "NRST": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "PF0": [
+     [
+      "D LED -> signal",
+      1
+     ],
+     [
+      "D RED -> signal",
+      1
+     ]
+    ],
+    "BOOT0": [
+     [
+      "R 5.1k -> GND",
+      2
+     ],
+     [
+      "R ? -> +3V3",
+      1
+     ]
+    ],
+    "PA0": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "R 5.1k -> own pin PA5",
+      1
+     ],
+     [
+      "to STSPIN220",
+      1
+     ]
+    ],
+    "PA1": [
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "to STSPIN220",
+      1
+     ]
+    ],
+    "PA2": [
+     [
+      "to DRV8231",
+      1
+     ],
+     [
+      "to STSPIN220",
+      1
+     ]
+    ],
+    "PA3": [
+     [
+      "to DRV8231",
+      1
+     ],
+     [
+      "R 5.1k -> GND",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "tied to ADC_VBUS",
+      1
+     ],
+     [
+      "R 22.1k -> VBUS",
+      1
+     ]
+    ],
+    "PA4": [
+     [
+      "R 5.1k -> signal",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "PA5": [
+     [
+      "R 5.1k -> +3V3",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "R ? -> GND",
+      1
+     ],
+     [
+      "R 5.1k -> own pin PA0",
+      1
+     ]
+    ],
+    "PA14": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "PA13": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "PA10": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "R 5.1k -> +3V3",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "PB1": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "to STSPIN220",
+      1
+     ]
+    ],
+    "PF1": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "D GREEN -> signal",
+      1
+     ]
+    ],
+    "VDDA": [
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "FB FERRET -> +3V3",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "PA7": [
+     [
+      "R 5.1k -> signal",
+      1
+     ]
+    ],
+    "PA9": [
+     [
+      "R 5.1k -> +3V3",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ]
+   }
+  },
+  "STM32G431CBUX": {
+   "designs": 3,
+   "lib": "MCU_ST_STM32G4:STM32G431CBUx",
+   "footprints": [
+    "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.6x5.6mm",
+    "Mylibrary:STM32G431CBU6"
+   ],
+   "pins": {
+    "VBAT": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "tied to +3.3V",
+      2
+     ],
+     [
+      "C 4.7uF -> GND",
+      2
+     ]
+    ],
+    "PA12": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "PA11": [
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "VSS": [
+     [
+      "tied to GND",
+      3
+     ]
+    ],
+    "PA14": [
+     [
+      "to connector",
+      3
+     ]
+    ],
+    "PA13": [
+     [
+      "to connector",
+      3
+     ]
+    ],
+    "PG10": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "PA15": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "PC4": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "PC14": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "PB6": [
+     [
+      "to connector",
+      2
+     ]
+    ]
+   }
+  },
+  "TL071": {
+   "designs": 2,
+   "lib": "Amplifier_Operational:TL071",
+   "footprints": [
+    "Package_DIP:DIP-8_W7.62mm_LongPads",
+    "Package_DIP:DIP-8_W7.62mm"
+   ],
+   "pins": {
+    "V+": [
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "tied to +15V",
+      1
+     ],
+     [
+      "tied to +12V",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ]
+    ],
+    "V-": [
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "to TL074",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to LF398_DIP8-ANALOG",
+      1
+     ],
+     [
+      "C 100nF -> +12V",
+      1
+     ],
+     [
+      "D 1N5817 -> signal",
+      1
+     ]
+    ],
+    "+": [
+     [
+      "tied to GND",
+      1
+     ],
+     [
+      "R 100k -> GND",
+      1
+     ],
+     [
+      "R 100k -> signal",
+      1
+     ]
+    ],
+    "6": [
+     [
+      "R 10k -> signal",
+      1
+     ],
+     [
+      "R 10k -> own pin -",
+      1
+     ],
+     [
+      "C 1nF -> signal",
+      1
+     ]
+    ],
+    "-": [
+     [
+      "R 10k -> signal",
+      1
+     ],
+     [
+      "R 10k -> own pin 6",
+      1
+     ],
+     [
+      "R 100k -> +12V",
+      1
+     ],
+     [
+      "R 1k -> GND",
+      1
+     ]
+    ],
+    "NC": [
+     [
+      "not connected",
+      2
+     ]
+    ],
+    "NULL": [
+     [
+      "not connected",
+      2
+     ]
+    ]
+   }
+  },
+  "TL072": {
+   "designs": 5,
+   "lib": "Amplifier_Operational:TL072",
+   "footprints": [
+    "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+    "Package_DIP:DIP-8_W7.62mm",
+    "Package_DIP:DIP-8_W7.62mm_LongPads"
+   ],
+   "pins": {
+    "V+": [
+     [
+      "C 100nF -> GND",
+      5
+     ],
+     [
+      "C 10uF -> GND",
+      4
+     ],
+     [
+      "tied to +12V",
+      4
+     ]
+    ],
+    "V-": [
+     [
+      "to TL072",
+      4
+     ],
+     [
+      "C 10uF -> GND",
+      4
+     ],
+     [
+      "C 100nF -> GND",
+      4
+     ],
+     [
+      "to SSI2162",
+      2
+     ],
+     [
+      "to connector",
+      2
+     ]
+    ],
+    "1": [
+     [
+      "C 100pF -> own pin -",
+      3
+     ],
+     [
+      "R 100k -> own pin -",
+      3
+     ],
+     [
+      "C 1nF -> own pin -",
+      3
+     ],
+     [
+      "to connector",
+      2
+     ],
+     [
+      "R 22k -> signal",
+      2
+     ],
+     [
+      "R 220k -> own pin +",
+      2
+     ]
+    ],
+    "+": [
+     [
+      "tied to GND",
+      4
+     ],
+     [
+      "R 100k -> GND",
+      3
+     ],
+     [
+      "R 10k -> signal",
+      3
+     ],
+     [
+      "R 100k -> signal",
+      3
+     ],
+     [
+      "R 100k -> own pin 7",
+      2
+     ],
+     [
+      "R 220k -> own pin 1",
+      2
+     ]
+    ],
+    "7": [
+     [
+      "C 100pF -> own pin -",
+      4
+     ],
+     [
+      "R 100k -> own pin -",
+      4
+     ],
+     [
+      "C 1nF -> own pin -",
+      3
+     ],
+     [
+      "R 1k -> signal",
+      3
+     ],
+     [
+      "C 100nF -> own pin -",
+      3
+     ],
+     [
+      "R 4.7k -> signal",
+      2
+     ]
+    ],
+    "-": [
+     [
+      "R 100k -> signal",
+      5
+     ],
+     [
+      "R 100k -> own pin 7",
+      4
+     ],
+     [
+      "C 100pF -> own pin 7",
+      4
+     ],
+     [
+      "R 10k -> signal",
+      4
+     ],
+     [
+      "R 100k -> own pin 1",
+      3
+     ],
+     [
+      "C 100pF -> own pin 1",
+      3
+     ]
+    ]
+   }
+  },
+  "TL074": {
+   "designs": 4,
+   "lib": "Amplifier_Operational:TL074",
+   "footprints": [
+    "Package_DIP:DIP-14_W7.62mm_LongPads",
+    "Package_DIP:DIP-14_W7.62mm",
+    "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm"
+   ],
+   "pins": {
+    "V+": [
+     [
+      "C 100nF -> GND",
+      2
+     ]
+    ],
+    "-": [
+     [
+      "R 10k -> signal",
+      2
+     ],
+     [
+      "R 100 -> signal",
+      2
+     ],
+     [
+      "R 10k -> own pin 7",
+      2
+     ]
+    ],
+    "V-": [
+     [
+      "tied to GND",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ]
+    ],
+    "7": [
+     [
+      "R 10k -> own pin -",
+      2
+     ],
+     [
+      "R 1k -> signal",
+      2
+     ]
+    ],
+    "8": [
+     [
+      "R 1k -> signal",
+      2
+     ]
+    ],
+    "+": [
+     [
+      "R 1k -> signal",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "R 1M -> GND",
+      2
+     ],
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "14": [
+     [
+      "R 1k -> signal",
+      2
+     ]
+    ]
+   }
+  },
+  "TLV74318PDBVR": {
+   "designs": 4,
+   "lib": "PMW3360_PCB:TLV74318PDBVR",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-23-5",
+    "Package_TO_SOT_SMD:SOT-23-5_HandSoldering"
+   ],
+   "pins": {
+    "GND": [
+     [
+      "tied to GND",
+      4
+     ]
+    ],
+    "NC": [
+     [
+      "C 22nF -> GND",
+      4
+     ]
+    ],
+    "OUT": [
+     [
+      "C 1uF -> GND",
+      4
+     ],
+     [
+      "C 100nF -> GND",
+      3
+     ],
+     [
+      "tied to +1V8",
+      3
+     ],
+     [
+      "C 3.3uF -> GND",
+      2
+     ]
+    ],
+    "IN": [
+     [
+      "C 1uF -> GND",
+      4
+     ],
+     [
+      "tied to VIN",
+      3
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ]
+    ]
+   }
+  },
+  "TLV75733PDBVR": {
+   "designs": 2,
+   "lib": "000_Symbols:TLV75733PDBVR",
+   "footprints": [
+    "000_Footprints:SOT95P280X145-5N"
+   ],
+   "pins": {
+    "OUT": [
+     [
+      "tied to +3V3",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "C 10uF -> GND",
+      2
+     ]
+    ],
+    "IN": [
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "tied to +5V",
+      2
+     ],
+     [
+      "R 5.1k -> ~{RESET}_5V",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "NC": [
+     [
+      "not connected",
+      2
+     ]
+    ]
+   }
+  },
+  "TLV76701DRVX": {
+   "designs": 2,
+   "lib": "Regulator_Linear:TLV76701DRVx",
+   "footprints": [
+    "Package_SON:WSON-6-1EP_2x2mm_P0.65mm_EP1x1.6mm",
+    "Package_SON:WSON-6-1EP_2x2mm_P0.65mm_EP1x1.6mm_ThermalVias"
+   ],
+   "pins": {
+    "OUT": [
+     [
+      "C 2.2uF -> GND",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "to LM66200",
+      1
+     ],
+     [
+      "R 1.2M -> own pin FB",
+      1
+     ],
+     [
+      "tied to +3V3",
+      1
+     ],
+     [
+      "C 22uF -> GND",
+      1
+     ]
+    ],
+    "EN": [
+     [
+      "C 2.2uF -> GND",
+      2
+     ],
+     [
+      "D ESD5Z24 -> GND",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ],
+     [
+      "tied to +5V",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "FB": [
+     [
+      "R 200k -> GND",
+      1
+     ],
+     [
+      "R 1.2M -> own pin OUT",
+      1
+     ],
+     [
+      "R 150k -> GND",
+      1
+     ],
+     [
+      "R 470k -> +3V3",
+      1
+     ],
+     [
+      "R 56k -> +1V1",
+      1
+     ],
+     [
+      "R 330k -> +2V6",
+      1
+     ]
+    ]
+   }
+  },
+  "TP4057": {
+   "designs": 2,
+   "lib": "ErgoSNM_Keybaord_Library:TP4057",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-23-6_Handsoldering",
+    "Package_TO_SOT_SMD:SOT-23-6"
+   ],
+   "pins": {
+    "BAT": [
+     [
+      "C 10uF -> GND",
+      2
+     ],
+     [
+      "tied to VCC_BATT",
+      1
+     ],
+     [
+      "R 5.1k -> +5V",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "Vcc": [
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "tied to VIN",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ],
+     [
+      "to PRO_MICRO",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "CHRG": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "STDBY": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "PROG": [
+     [
+      "R 4.7k -> GND",
+      1
+     ],
+     [
+      "R 2k -> GND",
+      1
+     ]
+    ],
+    "VCC": [
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "tied to +5V",
+      1
+     ]
+    ],
+    "~{STDBY}": [
+     [
+      "D GREEN -> signal",
+      1
+     ]
+    ],
+    "~{CHRG}": [
+     [
+      "D RED -> signal",
+      1
+     ]
+    ]
+   }
+  },
+  "TPIC6B595": {
+   "designs": 2,
+   "lib": "mtg_life_counter:TPIC6B595",
+   "footprints": [
+    "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm",
+    "Package_DIP:DIP-20_W7.62mm_LongPads"
+   ],
+   "pins": {
+    "VCC": [
+     [
+      "tied to +5V",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "C 10uF -> GND",
+      1
+     ],
+     [
+      "C 4.7uF -> GND",
+      1
+     ],
+     [
+      "C 33uF -> GND",
+      1
+     ]
+    ],
+    "RCLK": [
+     [
+      "to 74HC595",
+      2
+     ],
+     [
+      "to TPIC6B595",
+      1
+     ],
+     [
+      "R 10k -> GND",
+      1
+     ],
+     [
+      "to ATMEGA328P-AU",
+      1
+     ],
+     [
+      "to AT90S2323",
+      1
+     ],
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "SRCK": [
+     [
+      "to 74HC595",
+      2
+     ],
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to 74HC165",
+      1
+     ],
+     [
+      "to TPIC6B595",
+      1
+     ],
+     [
+      "to ATMEGA328P-AU",
+      1
+     ],
+     [
+      "to AT90S2323",
+      1
+     ]
+    ],
+    "SER_IN": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to TPIC6B595",
+      1
+     ],
+     [
+      "to ATMEGA328P-AU",
+      1
+     ],
+     [
+      "to AT90S2323",
+      1
+     ]
+    ],
+    "SER_OUT": [
+     [
+      "to 74HC595",
+      2
+     ],
+     [
+      "to TPIC6B595",
+      1
+     ]
+    ],
+    "NC": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "DRAIN0": [
+     [
+      "D KW4-S561CVB RED  -> own pin DRAIN1",
+      1
+     ],
+     [
+      "D KW4-S561CAB YELL -> own pin DRAIN1",
+      1
+     ],
+     [
+      "D blue opaque -> signal",
+      1
+     ]
+    ],
+    "DRAIN1": [
+     [
+      "D KW4-S561CVB RED  -> own pin DRAIN0",
+      1
+     ],
+     [
+      "D KW4-S561CAB YELL -> own pin DRAIN0",
+      1
+     ],
+     [
+      "D blue opaque -> signal",
+      1
+     ]
+    ],
+    "DRAIN2": [
+     [
+      "D KW4-S561CVB RED  -> own pin DRAIN0",
+      1
+     ],
+     [
+      "D KW4-S561CAB YELL -> own pin DRAIN0",
+      1
+     ],
+     [
+      "D blue opaque -> signal",
+      1
+     ]
+    ],
+    "DRAIN3": [
+     [
+      "D KW4-S561CVB RED  -> own pin DRAIN0",
+      1
+     ],
+     [
+      "D KW4-S561CAB YELL -> own pin DRAIN0",
+      1
+     ],
+     [
+      "D blue opaque -> signal",
+      1
+     ]
+    ],
+    "DRAIN4": [
+     [
+      "D KW4-S561CGB GREE -> own pin DRAIN5",
+      1
+     ],
+     [
+      "D KW4-S561CBB BLUE -> own pin DRAIN5",
+      1
+     ],
+     [
+      "D blue opaque -> signal",
+      1
+     ]
+    ],
+    "DRAIN5": [
+     [
+      "D KW4-S561CGB GREE -> own pin DRAIN4",
+      1
+     ],
+     [
+      "D KW4-S561CBB BLUE -> own pin DRAIN4",
+      1
+     ],
+     [
+      "D blue opaque -> signal",
+      1
+     ]
+    ],
+    "DRAIN6": [
+     [
+      "D KW4-S561CGB GREE -> own pin DRAIN4",
+      1
+     ],
+     [
+      "D KW4-S561CBB BLUE -> own pin DRAIN4",
+      1
+     ],
+     [
+      "D blue opaque -> signal",
+      1
+     ]
+    ],
+    "DRAIN7": [
+     [
+      "D KW4-S561CGB GREE -> own pin DRAIN4",
+      1
+     ],
+     [
+      "D KW4-S561CBB BLUE -> own pin DRAIN4",
+      1
+     ],
+     [
+      "D blue opaque -> signal",
+      1
+     ]
+    ],
+    "~{SRCLR}": [
+     [
+      "R 10k -> +5V",
+      1
+     ]
+    ]
+   }
+  },
+  "TPS3839DBZ": {
+   "designs": 2,
+   "lib": "Power_Supervisor:TPS3839DBZ",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-23"
+   ],
+   "pins": {
+    "VDD": [
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "tied to +5V",
+      1
+     ],
+     [
+      "C 33uF -> GND",
+      1
+     ],
+     [
+      "tied to +3V3",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "~{RESET}": [
+     [
+      "D BAV99 -> signal",
+      2
+     ],
+     [
+      "R 100k -> GND",
+      1
+     ]
+    ]
+   }
+  },
+  "TPS61040DBV": {
+   "designs": 2,
+   "lib": "Regulator_Switching:TPS61040DBV",
+   "footprints": [
+    "footprints:SOT-23-5"
+   ],
+   "pins": {
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "SW": [
+     [
+      "L 10uH -> VCC",
+      2
+     ],
+     [
+      "D 1N5819W -> +24V",
+      2
+     ]
+    ],
+    "FB": [
+     [
+      "R 240k -> +24V",
+      2
+     ],
+     [
+      "R 13k -> GND",
+      2
+     ],
+     [
+      "C 22pF -> +24V",
+      2
+     ]
+    ],
+    "EN": [
+     [
+      "C 10uF -> GND",
+      2
+     ],
+     [
+      "tied to VCC",
+      2
+     ]
+    ]
+   }
+  },
+  "TPS7A0508PDBV": {
+   "designs": 2,
+   "lib": "Regulator_Linear:TPS7A0508PDBV",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-23-5"
+   ],
+   "pins": {
+    "OUT": [
+     [
+      "tied to +3V3",
+      2
+     ],
+     [
+      "C 4.7uF -> GND",
+      2
+     ],
+     [
+      "C 0.1? -> GND",
+      1
+     ],
+     [
+      "C 2.2? -> GND",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "EN": [
+     [
+      "D BAT54C -> signal",
+      1
+     ]
+    ],
+    "IN": [
+     [
+      "tied to VIN",
+      2
+     ],
+     [
+      "C 4.7uF -> GND",
+      2
+     ],
+     [
+      "D 1N5819 -> VBUS",
+      2
+     ],
+     [
+      "tied to +3V8",
+      1
+     ]
+    ],
+    "NC": [
+     [
+      "not connected",
+      2
+     ]
+    ]
+   }
+  },
+  "TXU0101DRYR": {
+   "designs": 2,
+   "lib": "000_Symbols:TXU0101DRYR",
+   "footprints": [
+    "000_Footprints:TXU0101DRYR"
+   ],
+   "pins": {
+    "VCCA": [
+     [
+      "tied to +3V3",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "C 10uF -> GND",
+      2
+     ]
+    ],
+    "VCCB": [
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "tied to +5V",
+      2
+     ],
+     [
+      "R 5.1k -> ~{RESET}_5V",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "A": [
+     [
+      "to LCMXO2-256HC-4MG132C",
+      2
+     ]
+    ],
+    "BY": [
+     [
+      "tied to MD7_5V",
+      2
+     ]
+    ],
+    "OE": [
+     [
+      "to LCMXO2-256HC-4MG132C",
+      2
+     ]
+    ]
+   }
+  },
+  "USBLC6-2SC6": {
+   "designs": 6,
+   "lib": "Power_Protection:USBLC6-2SC6",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-23-6"
+   ],
+   "pins": {
+    "I/O2": [
+     [
+      "to connector",
+      6
+     ]
+    ],
+    "I/O1": [
+     [
+      "to connector",
+      6
+     ]
+    ],
+    "VBUS": [
+     [
+      "tied to VBUS",
+      3
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 4.7uF -> GND",
+      2
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      6
+     ]
+    ]
+   }
+  },
+  "W25Q128JVS": {
+   "designs": 9,
+   "lib": "Memory_Flash:W25Q128JVS",
+   "footprints": [
+    "Package_SO:SOIC-8_5.23x5.23mm_P1.27mm",
+    "Package_SO:SOIC-8_5.3x5.3mm_P1.27mm",
+    "Package_SON:WSON-8-1EP_8x6mm_P1.27mm_EP3.4x4.3mm"
+   ],
+   "pins": {
+    "VCC": [
+     [
+      "C 100nF -> GND",
+      8
+     ],
+     [
+      "tied to +3V3",
+      7
+     ],
+     [
+      "C 1uF -> GND",
+      6
+     ],
+     [
+      "C 4.7uF -> GND",
+      3
+     ],
+     [
+      "C 10uF -> GND",
+      2
+     ],
+     [
+      "C 22uF -> GND",
+      2
+     ]
+    ],
+    "~{CS}": [
+     [
+      "to RP2040",
+      6
+     ],
+     [
+      "R 10k -> +3V3",
+      5
+     ],
+     [
+      "R 1k -> signal",
+      4
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      9
+     ]
+    ],
+    "CLK": [
+     [
+      "to RP2040",
+      6
+     ]
+    ],
+    "DI(IO0)": [
+     [
+      "to RP2040",
+      6
+     ]
+    ],
+    "DO(IO1)": [
+     [
+      "to RP2040",
+      6
+     ]
+    ],
+    "IO2": [
+     [
+      "to RP2040",
+      6
+     ]
+    ],
+    "IO3": [
+     [
+      "to RP2040",
+      6
+     ]
+    ]
+   }
+  },
+  "W25Q32JVSS": {
+   "designs": 2,
+   "lib": "Memory_Flash:W25Q32JVSS",
+   "footprints": [
+    "Package_SO:SOIC-8_5.23x5.23mm_P1.27mm",
+    "Package_DFN_QFN:DFN-8-1EP_3x2mm_P0.5mm_EP1.3x1.5mm"
+   ],
+   "pins": {
+    "IO2": [
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "tied to +3.3V",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ],
+     [
+      "to RP2040",
+      1
+     ]
+    ],
+    "~{CS}": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "R 10k -> +3.3V",
+      1
+     ],
+     [
+      "R 1k -> signal",
+      1
+     ],
+     [
+      "to RP2040",
+      1
+     ],
+     [
+      "R 5.1k -> +3V3",
+      1
+     ],
+     [
+      "R 10k -> +3V3",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "DO(IO1)": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to AT25XXX",
+      1
+     ],
+     [
+      "to 74HC589",
+      1
+     ],
+     [
+      "to RP2040",
+      1
+     ]
+    ],
+    "DI(IO0)": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "to AT25XXX",
+      1
+     ],
+     [
+      "to RP2040",
+      1
+     ]
+    ],
+    "CLK": [
+     [
+      "to connector",
+      2
+     ],
+     [
+      "R 5.1k -> GND",
+      1
+     ],
+     [
+      "to AT25XXX",
+      1
+     ],
+     [
+      "to 74HC589",
+      1
+     ],
+     [
+      "to RP2040",
+      1
+     ]
+    ],
+    "VCC": [
+     [
+      "tied to +3V3",
+      2
+     ],
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ],
+     [
+      "tied to +3.3V",
+      1
+     ],
+     [
+      "R 0 -> UH_3V3",
+      1
+     ],
+     [
+      "R 0 -> VCC",
+      1
+     ]
+    ],
+    "IO3": [
+     [
+      "not connected",
+      1
+     ],
+     [
+      "to RP2040",
+      1
+     ]
+    ]
+   }
+  },
+  "XC6206PXXXMR": {
+   "designs": 3,
+   "lib": "Regulator_Linear:XC6206PxxxMR",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-23-3",
+    "Package_TO_SOT_SMD:SOT-23"
+   ],
+   "pins": {
+    "VO": [
+     [
+      "C 100nF -> GND",
+      3
+     ],
+     [
+      "tied to +3V3",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      3
+     ]
+    ],
+    "VI": [
+     [
+      "C 100nF -> GND",
+      2
+     ],
+     [
+      "tied to VBUS",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      2
+     ]
+    ]
+   }
+  },
+  "XC6220B331MR": {
+   "designs": 2,
+   "lib": "Regulator_Linear:XC6220B331MR",
+   "footprints": [
+    "Package_TO_SOT_SMD:SOT-23-5",
+    "footprints:SOT-23-5"
+   ],
+   "pins": {
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ],
+    "VOUT": [
+     [
+      "C 4.7uF -> GND",
+      2
+     ],
+     [
+      "tied to PPH_VCC",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "tied to +3.3V",
+      1
+     ],
+     [
+      "C 10nF -> GND",
+      1
+     ]
+    ],
+    "CE": [
+     [
+      "tied to PPH_VCC_CTRL",
+      1
+     ],
+     [
+      "R 2M -> GND",
+      1
+     ]
+    ],
+    "VIN": [
+     [
+      "C 10uF -> GND",
+      2
+     ],
+     [
+      "C 4.7uF -> GND",
+      1
+     ],
+     [
+      "tied to VDDH",
+      1
+     ],
+     [
+      "C 1uF -> GND",
+      1
+     ],
+     [
+      "C 100nF -> GND",
+      1
+     ],
+     [
+      "tied to +5V",
+      1
+     ]
+    ],
+    "NC": [
+     [
+      "not connected",
+      2
+     ]
+    ]
+   }
+  },
+  "XIAO-RP2040": {
+   "designs": 2,
+   "lib": "LKBD_MCU:XIAO-RP2040",
+   "footprints": [
+    "LKBD_MCU:MCU_XIAO-RP2040",
+    "LKBD_MCU:MCU_XIAO_RP2040"
+   ],
+   "pins": {
+    "3V3": [
+     [
+      "tied to +3.3V",
+      2
+     ],
+     [
+      "C 1uF -> GND",
+      1
+     ]
+    ],
+    "5V": [
+     [
+      "tied to +5V",
+      1
+     ],
+     [
+      "not connected",
+      1
+     ]
+    ],
+    "D3/A3": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "MISO/D9": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to PMW3360DM-T2QU",
+      1
+     ],
+     [
+      "R 10k -> +3.3V",
+      1
+     ]
+    ],
+    "MOSI/D10": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to PMW3360DM-T2QU",
+      1
+     ]
+    ],
+    "RX/D7": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to PMW3360DM-T2QU",
+      1
+     ]
+    ],
+    "SCK/D8": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to PMW3360DM-T2QU",
+      1
+     ]
+    ],
+    "D5/SCL": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "D4/SDA": [
+     [
+      "to connector",
+      1
+     ]
+    ],
+    "D6/TX": [
+     [
+      "to connector",
+      1
+     ],
+     [
+      "to PMW3360DM-T2QU",
+      1
+     ]
+    ],
+    "GND": [
+     [
+      "tied to GND",
+      2
+     ]
+    ]
+   }
+  }
+ },
+ "aliases": {
+  "REGULATOR_LINEAR:AMS1117-3.3": "AMS1117-3.3",
+  "AMS1117-3.3": "AMS1117-3.3",
+  "REGULATOR_LINEAR:NCP1117-3.3_SOT223": "NCP1117-3.3_SOT223",
+  "NCP1117-3.3_SOT223": "NCP1117-3.3_SOT223",
+  "MCU_ST_STM32F0:STM32F030F4PX": "STM32F030F4PX",
+  "STM32F030F4PX": "STM32F030F4PX",
+  "LKBD_MCU:XIAO-RP2040": "XIAO-RP2040",
+  "XIAO-RP2040": "XIAO-RP2040",
+  "POWER_PROTECTION:USBLC6-2SC6": "USBLC6-2SC6",
+  "USBLC6-2SC6": "USBLC6-2SC6",
+  "INTERFACE_USB:FT231XQ": "FT231XQ",
+  "FT231XQ": "FT231XQ",
+  "INTERFACE_USB:CH340C": "CH340C",
+  "CH340C": "CH340C",
+  "RF_MODULE:ESP32-WROOM-32": "ESP32-WROOM-32",
+  "ESP32-WROOM-32": "ESP32-WROOM-32",
+  "74XX:74HC595": "74HC595",
+  "74HC595": "74HC595",
+  "MEMORY_FLASH:SST39SF040": "SST39SF040",
+  "SST39SF040": "SST39SF040",
+  "PMW3360_PCB:PMW3360DM-T2QU": "PMW3360DM-T2QU",
+  "PMW3360DM-T2QU": "PMW3360DM-T2QU",
+  "PMW3360_PCB:TLV74318PDBVR": "TLV74318PDBVR",
+  "TLV74318PDBVR": "TLV74318PDBVR",
+  "KICAD-RP-PICO:PICO": "PICO",
+  "PICO": "PICO",
+  "REGULATOR_LINEAR:XC6206PXXXMR": "XC6206PXXXMR",
+  "XC6206PXXXMR": "XC6206PXXXMR",
+  "MCU_ST_STM32G4:STM32G431CBUX": "STM32G431CBUX",
+  "STM32G431CBUX": "STM32G431CBUX",
+  "MEMORY_FLASH:W25Q128JVS": "W25Q128JVS",
+  "W25Q128JVS": "W25Q128JVS",
+  "COMMON LIBRARY:PROMICRO": "PROMICRO",
+  "PROMICRO": "PROMICRO",
+  "MCU_RASPBERRYPI:RP2040": "RP2040",
+  "RP2040": "RP2040",
+  "REGULATOR_LINEAR:AP2112K-3.3": "AP2112K-3.3",
+  "AP2112K-3.3": "AP2112K-3.3",
+  "SL21A:SL2.1A": "SL2.1A",
+  "SL2.1A": "SL2.1A",
+  "ERGOSNM_KEYBAORD_LIBRARY:TP4057": "TP4057",
+  "TP4057": "TP4057",
+  "BATTERY_MANAGEMENT:BQ24075RGT": "BQ24075RGT",
+  "BQ24075RGT": "BQ24075RGT",
+  "REGULATOR_LINEAR:XC6220B331MR": "XC6220B331MR",
+  "XC6220B331MR": "XC6220B331MR",
+  "POWER_PROTECTION:SRV05-4": "SRV05-4",
+  "SRV05-4": "SRV05-4",
+  "00-KIML-RF-MODULE:ESP32-S3-WROOM-1-N16R8": "ESP32-S3-WROOM-1-N16R8",
+  "ESP32-S3-WROOM-1-N16R8": "ESP32-S3-WROOM-1-N16R8",
+  "00-KIML-OPTICAL:APDS-9306-065": "APDS-9306-065",
+  "APDS-9306-065": "APDS-9306-065",
+  "CUSTOM_SYMBOLS:SSI2130": "SSI2130",
+  "SSI2130": "SSI2130",
+  "REFERENCE_VOLTAGE:LM4040DBZ-2.5": "LM4040DBZ-2.5",
+  "LM4040DBZ-2.5": "LM4040DBZ-2.5",
+  "AMPLIFIER_OPERATIONAL:TL072": "TL072",
+  "TL072": "TL072",
+  "CUSTOM_SYMBOLS:SSI2162": "SSI2162",
+  "SSI2162": "SSI2162",
+  "CUSTOM_SYMBOLS:LT3467A": "LT3467A",
+  "LT3467A": "LT3467A",
+  "REGULATOR_LINEAR:L78L05_SOT89": "L78L05_SOT89",
+  "L78L05_SOT89": "L78L05_SOT89",
+  "REGULATOR_LINEAR:TPS7A0508PDBV": "TPS7A0508PDBV",
+  "TPS7A0508PDBV": "TPS7A0508PDBV",
+  "BATTERY_MANAGEMENT:LTC4054ES5-4.2": "LTC4054ES5-4.2",
+  "LTC4054ES5-4.2": "LTC4054ES5-4.2",
+  "INTERFACE_USB:FT230XQ": "FT230XQ",
+  "FT230XQ": "FT230XQ",
+  "AMPLIFIER_OPERATIONAL:TL074": "TL074",
+  "TL074": "TL074",
+  "MCU_MODULE:ARDUINO_UNO_R3": "ARDUINO_UNO_R3",
+  "ARDUINO_UNO_R3": "ARDUINO_UNO_R3",
+  "REGULATOR_LINEAR:TLV76701DRVX": "TLV76701DRVX",
+  "TLV76701DRVX": "TLV76701DRVX",
+  "INTERFACE_EXPANSION:PCF8574": "PCF8574",
+  "PCF8574": "PCF8574",
+  "RP-MICRO:RT9013-33GB": "RT9013-33GB",
+  "RT9013-33GB": "RT9013-33GB",
+  "REGULATOR_LINEAR:L7805": "L7805",
+  "L7805": "L7805",
+  "REGULATOR_SWITCHING:TPS61040DBV": "TPS61040DBV",
+  "TPS61040DBV": "TPS61040DBV",
+  "ISOLATOR:LTV-817S": "LTV-817S",
+  "LTV-817S": "LTV-817S",
+  "REGULATOR_LINEAR:AP2204R-3.3": "AP2204R-3.3",
+  "AP2204R-3.3": "AP2204R-3.3",
+  "DUMTA:NICE_NANO": "NICE_NANO",
+  "NICE_NANO": "NICE_NANO",
+  "AMPLIFIER_OPERATIONAL:RC4558": "RC4558",
+  "RC4558": "RC4558",
+  "REFERENCE_VOLTAGE:LM4040DBZ-5": "LM4040DBZ-5",
+  "LM4040DBZ-5": "LM4040DBZ-5",
+  "INTERFACE_EXPANSION:MCP23017_SO": "MCP23017_SO",
+  "MCP23017_SO": "MCP23017_SO",
+  "74XX:74LS244": "74LS244",
+  "74LS244": "74LS244",
+  "REGULATOR_LINEAR:L78L33_SOT89": "L78L33_SOT89",
+  "L78L33_SOT89": "L78L33_SOT89",
+  "ERGOSNM_KEYBOARD_LIBRARY:E73-2G4M08S1C": "E73-2G4M08S1C",
+  "E73-2G4M08S1C": "E73-2G4M08S1C",
+  "MCU_ESPRESSIF:ESP32-S3": "ESP32-S3",
+  "ESP32-S3": "ESP32-S3",
+  "REGULATOR_SWITCHING:AP63203WU": "AP63203WU",
+  "AP63203WU": "AP63203WU",
+  "74XX:74HC04": "74HC04",
+  "74HC04": "74HC04",
+  "OTTER:OTTER_USBLC6-4": "OTTER_USBLC6-4",
+  "OTTER_USBLC6-4": "OTTER_USBLC6-4",
+  "MEMORY_FLASH:W25Q32JVSS": "W25Q32JVSS",
+  "W25Q32JVSS": "W25Q32JVSS",
+  "MTG_LIFE_COUNTER:TPIC6B595": "TPIC6B595",
+  "TPIC6B595": "TPIC6B595",
+  "74XX:74HC165": "74HC165",
+  "74HC165": "74HC165",
+  "74XGXX:74LVC1G08": "74LVC1G08",
+  "74LVC1G08": "74LVC1G08",
+  "74XGXX:74LVC1G17": "74LVC1G17",
+  "74LVC1G17": "74LVC1G17",
+  "74XX:74LS125": "74LS125",
+  "74LS125": "74LS125",
+  "BITAXE:RT9080-33GJ5": "RT9080-33GJ5",
+  "RT9080-33GJ5": "RT9080-33GJ5",
+  "BITAXE:ESP32-S3-WROOM-1": "ESP32-S3-WROOM-1",
+  "ESP32-S3-WROOM-1": "ESP32-S3-WROOM-1",
+  "BITAXE:OSCILLATOR": "OSCILLATOR",
+  "OSCILLATOR": "OSCILLATOR",
+  "BITAXE:MCP1824": "MCP1824",
+  "MCP1824": "MCP1824",
+  "BITAXE:EMC2101": "EMC2101",
+  "EMC2101": "EMC2101",
+  "74XX:74LS32": "74LS32",
+  "74LS32": "74LS32",
+  "74XX:74HC14": "74HC14",
+  "74HC14": "74HC14",
+  "TIMER_RTC:DS3231MZ": "DS3231MZ",
+  "DS3231MZ": "DS3231MZ",
+  "74XX:74LS245": "74LS245",
+  "74LS245": "74LS245",
+  "PMW3610_PCB:PMW3610DM-SUDU": "PMW3610DM-SUDU",
+  "PMW3610DM-SUDU": "PMW3610DM-SUDU",
+  "AMPLIFIER_AUDIO:SSM2017P": "SSM2017P",
+  "SSM2017P": "SSM2017P",
+  "AMPLIFIER_OPERATIONAL:TL071": "TL071",
+  "TL071": "TL071",
+  "ANALOG_ADC:ADS1115IDGS": "ADS1115IDGS",
+  "ADS1115IDGS": "ADS1115IDGS",
+  "POWER_SUPERVISOR:TPS3839DBZ": "TPS3839DBZ",
+  "TPS3839DBZ": "TPS3839DBZ",
+  "AMPLIFIER_AUDIO:LM386": "LM386",
+  "LM386": "LM386",
+  "000_SYMBOLS:PROGRAMINGPADS": "PROGRAMINGPADS",
+  "PROGRAMINGPADS": "PROGRAMINGPADS",
+  "000_SYMBOLS:LCMXO2-256HC-4MG132C": "LCMXO2-256HC-4MG132C",
+  "LCMXO2-256HC-4MG132C": "LCMXO2-256HC-4MG132C",
+  "000_SYMBOLS:74LVC245ABQ,115": "74LVC245ABQ,115",
+  "74LVC245ABQ,115": "74LVC245ABQ,115",
+  "000_SYMBOLS:TXU0101DRYR": "TXU0101DRYR",
+  "TXU0101DRYR": "TXU0101DRYR",
+  "000_SYMBOLS:TLV75733PDBVR": "TLV75733PDBVR",
+  "TLV75733PDBVR": "TLV75733PDBVR"
+ },
+ "layout": {
+  "boards": 334,
+  "layers": {
+   "2": 264,
+   "4": 67,
+   "8": 1,
+   "6": 2
+  },
+  "area_per_pad_mm2": {
+   "2": {
+    "n": 264,
+    "p10": 6.016,
+    "p25": 12.707,
+    "p50": 23.003,
+    "p75": 37.207,
+    "p90": 51.629
+   },
+   "4": {
+    "n": 67,
+    "p10": 2.808,
+    "p25": 6.044,
+    "p50": 10.016,
+    "p75": 16.334,
+    "p90": 30.571
+   },
+   "8": {
+    "n": 1,
+    "p10": 1.103,
+    "p25": 1.103,
+    "p50": 1.103,
+    "p75": 1.103,
+    "p90": 1.103
+   },
+   "6": {
+    "n": 2,
+    "p10": 5.697,
+    "p25": 6.784,
+    "p50": 8.595,
+    "p75": 10.406,
+    "p90": 11.493
+   }
+  },
+  "track_width_median_mm": {
+   "n": 334,
+   "p10": 0.17,
+   "p25": 0.2,
+   "p50": 0.25,
+   "p75": 0.3,
+   "p90": 0.5
+  },
+  "via_drill_mm": {
+   "n": 305,
+   "p10": 0.3,
+   "p25": 0.3,
+   "p50": 0.4,
+   "p75": 0.4,
+   "p90": 0.4
+  },
+  "via_diameter_mm": {
+   "n": 305,
+   "p10": 0.5,
+   "p25": 0.6,
+   "p50": 0.762,
+   "p75": 0.8,
+   "p90": 0.8
+  },
+  "decoupling_gap_mm": {
+   "n": 1387,
+   "p10": 0.5,
+   "p25": 0.9,
+   "p50": 2.0,
+   "p75": 4.9,
+   "p90": 15.24
+  },
+  "noise_check_levels": {
+   "decoupling": {
+    "FAIL": 582,
+    "WARN": 214,
+    "PASS": 830
+   },
+   "switcher loop": {
+    "PASS": 50,
+    "WARN": 28
+   },
+   "ground plane": {
+    "WARN": 786,
+    "FAIL": 196,
+    "PASS": 281
+   },
+   "stitching": {
+    "PASS": 174,
+    "WARN": 122
+   },
+   "noisy nets": {
+    "PASS": 532,
+    "WARN": 148
+   },
+   "crosstalk": {
+    "PASS": 941,
+    "WARN": 23
+   },
+   "crystal": {
+    "WARN": 92,
+    "PASS": 35
+   },
+   "diff pair": {
+    "WARN": 109,
+    "PASS": 208
+   }
+  }
+ },
+ "attribution": [
+  {
+   "repo": "0rax/esphome-xiao-base",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "78860abf7bdc75d063a814d034c8a73450b5faa4"
+  },
+  {
+   "repo": "0xjmux/ESP-PROG-Adapter",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "4a74ef898489da83ddcd2ad42852188cf0471b6c"
+  },
+  {
+   "repo": "74th/74th-kicad-parts",
+   "license": "CC0-1.0",
+   "commit": "509618d5c0e7c77a2016312f854d255dd7bf4ca4"
+  },
+  {
+   "repo": "Allegra42/ZEReader-KiCad",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "08c0682c11b4d0c3c5c2b0c4e7cad1d863d2261f"
+  },
+  {
+   "repo": "AzonInc/Doorman",
+   "license": "GPL-3.0",
+   "commit": "fdec5c030e77bb8e0219d745cc0282139c96836c"
+  },
+  {
+   "repo": "BeeEvolved/Bittyaxe",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "6f48853be84c665efdcd045b34f4ff892810c711"
+  },
+  {
+   "repo": "BoBoBaSs84/KiCad.Projects",
+   "license": "MIT",
+   "commit": "8fa99c15672d2e3a93dd09c801a56ef9be23d542"
+  },
+  {
+   "repo": "CNES/argos-demo-board",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "1eccb3f20cb9004c046dba82b72bf85c500efcaa"
+  },
+  {
+   "repo": "CRImier/MyKiCad",
+   "license": "GPL-3.0",
+   "commit": "4f01eaa6b3b0a269570c711e58ba4bf0f8446d11"
+  },
+  {
+   "repo": "ChrisChrisLoLo/banime40",
+   "license": "CC-BY-SA-4.0",
+   "commit": "f447898e94577a8444246a8539a5e17d64ea6388"
+  },
+  {
+   "repo": "Cuprum77/BananaBoard",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "40db3e0767e91dda96a6989e0d0159bfa1702bfa"
+  },
+  {
+   "repo": "DoImant/TP4056-Power-Path-PCB",
+   "license": "CC-BY-SA-4.0",
+   "commit": "70636f5a07e788547c378111c31cbf150b7c1de7"
+  },
+  {
+   "repo": "DuBento/puffer",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "e288155c1c43fd52f8dade53253e152bc546906e"
+  },
+  {
+   "repo": "Gekkio/gb-hardware",
+   "license": "CC-BY-4.0",
+   "commit": "b5ade559bd988fd6c4f5941615d4d6d79dec9098"
+  },
+  {
+   "repo": "GuitarML/FunBox",
+   "license": "MIT",
+   "commit": "c0409dde8e381027688f3cc212951c605247a18f"
+  },
+  {
+   "repo": "Huaqiu-Electronics/ecad-viewer",
+   "license": "MIT",
+   "commit": "a2679a117f7074df761e8de45c393f63cdb9884a"
+  },
+  {
+   "repo": "IamPhytan/christmas-tree-pcb",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "bef5fe97dee9178959fcbbfc8ee0a9003edac2f6"
+  },
+  {
+   "repo": "ItsNotDaan/LiberBoard",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "ef3e50aff7d2a93b3dae91b956837d7f22fb6ab4"
+  },
+  {
+   "repo": "Jana-Marie/EF-S-Adapter",
+   "license": "MIT",
+   "commit": "fea1dd99eeb21a772cd7713c1606622355f8a774"
+  },
+  {
+   "repo": "Jana-Marie/LAEMP-Spoet",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "af8c898c041957183e5fa3a8e6d2b044e8709db1"
+  },
+  {
+   "repo": "Jana-Marie/USB-I2C-BRIDGE",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "a772e442bc656c8fbef76fd51cd5546343f9e1ef"
+  },
+  {
+   "repo": "Jana-Marie/analog-toolkit",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "c97bcc3512fb96a0b8f981e363db583b22aa6423"
+  },
+  {
+   "repo": "Jana-Marie/ligra",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "8a98f3938c20fe3ed07bfb34e7d43f243e21f519"
+  },
+  {
+   "repo": "Jana-Marie/mini-motor-controller",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "d8c1c296229caca3bbeba733bde94d9f0f1e931e"
+  },
+  {
+   "repo": "Jana-Marie/type-c-recessed",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "1a46db05b3a650edfdb58e724d16d166f2e59afe"
+  },
+  {
+   "repo": "JordanAceto/Phasor_II",
+   "license": "CC-BY-4.0",
+   "commit": "51ed00bad927753fb62a6edf8709872557419258"
+  },
+  {
+   "repo": "JordanAceto/micro-pico",
+   "license": "CC-BY-4.0",
+   "commit": "db0dd1ef577c030f92178ce4661d8089da9d8e99"
+  },
+  {
+   "repo": "JordanAceto/micro_ox",
+   "license": "CC-BY-4.0",
+   "commit": "8c989e44a92d1bf01970913a6cc7df114396f295"
+  },
+  {
+   "repo": "KabukiFlux/Duplicanator-Scart-Duplicator",
+   "license": "MIT",
+   "commit": "6ba5ec0b55c7774b167d11d3738b21775ac1bc7e"
+  },
+  {
+   "repo": "KabukiFlux/JAMMA_2player_xbox360",
+   "license": "MIT",
+   "commit": "22980aeb0d350f395b76f14ed5f3d8593bbeff41"
+  },
+  {
+   "repo": "KabukiFlux/MIDI4MiSTer",
+   "license": "MIT",
+   "commit": "ec68313e4b5a2be382f41cdfd56340fd08b3e9e6"
+  },
+  {
+   "repo": "KabukiFlux/NES-IO-Board-nessionator",
+   "license": "BSD-3-Clause",
+   "commit": "3617dd8a1d23131035c734626b504feaac115d52"
+  },
+  {
+   "repo": "KabukiFlux/Scart-Megadrive-2-12v-cable",
+   "license": "MIT",
+   "commit": "aac8729000a8ba76105e10e2019ae9eaa3c6e0b4"
+  },
+  {
+   "repo": "KabukiFlux/bad_raspi_jamma",
+   "license": "MIT",
+   "commit": "b50b7bd3a43b0cb01e1992c6f05eb5492f13e13e"
+  },
+  {
+   "repo": "KabukiFlux/jammanator-pi",
+   "license": "MIT",
+   "commit": "eb255ef7f721f010dc8bf5f18f9b4d2f332142de"
+  },
+  {
+   "repo": "KabukiFlux/pi-rgb-cable-sync-mixer",
+   "license": "MIT",
+   "commit": "0b4273dd13ee4344e625a34e6b0de684731fa4cf"
+  },
+  {
+   "repo": "Ladniy/TK44",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "b4f470cccce0f2e080851dd49cce4b4010973f2a"
+  },
+  {
+   "repo": "Ladniy/jiran-ble-lite",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "c2a5ef422c265f0d4e3d38f81c557ca802eab125"
+  },
+  {
+   "repo": "Miceuz/rs485-moist-sensor",
+   "license": "Apache-2.0",
+   "commit": "8cba0cd29e35b25de832e92b6521192ec9c6ec69"
+  },
+  {
+   "repo": "Open-Muscle/OpenMuscle-FlexGrid",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "912e6e615c1f123141933a465c620f1a636692f0"
+  },
+  {
+   "repo": "Open-Muscle/OpenMuscle-LASK5",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "800c8d047c471cd956bb43689839d65589d15988"
+  },
+  {
+   "repo": "OpenLightingProject/rp2040-dmxsun",
+   "license": "Apache-2.0",
+   "commit": "f3b1749c982da85770dc9a11eada035404edc25d"
+  },
+  {
+   "repo": "OpenShock/Hardware",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "0e7815e4dcb0687b4de13515196ebddb225ed61b"
+  },
+  {
+   "repo": "Ottercast/OtterCastAudioV2",
+   "license": "MIT",
+   "commit": "199395d7249aaf12432e42bff828dd665546d6a4"
+  },
+  {
+   "repo": "Pakequis/ProtoConn",
+   "license": "CC-BY-SA-4.0",
+   "commit": "ffd7c437a89f6b5c9abed5efc0b30509473ba5fd"
+  },
+  {
+   "repo": "PatrickBaus/SCAN2000",
+   "license": "CERN-OHL-W-2.0",
+   "commit": "686625b0b137426b7b50d15ed181bda0940ff883"
+  },
+  {
+   "repo": "RainbowLabsDE/USB2Speakon",
+   "license": "CERN-OHL-W-2.0",
+   "commit": "69c398a24398514b7fbed54ed7135db6eff4d0b0"
+  },
+  {
+   "repo": "RandomDelta6/ATX12VO-5VSB-to-12VSB-Adapter",
+   "license": "CC-BY-SA-4.0",
+   "commit": "9f015184801110ff122520c622f585df7f1f8488"
+  },
+  {
+   "repo": "Sarbf1/Gas-sens_Rs-485",
+   "license": "Apache-2.0",
+   "commit": "afe06be26d6752c3e1de0a03119c75afb0dfb786"
+  },
+  {
+   "repo": "Spaceboards/SpaceboardsHardware",
+   "license": "CERN-OHL-W-2.0",
+   "commit": "dd4fe15e030dee4aa9de2783cbc442bf9e349df2"
+  },
+  {
+   "repo": "TweetyDaBird/Little-Big-Scroll",
+   "license": "CC-BY-SA-4.0",
+   "commit": "97dc5f4876bb283ea938eaba5a553b861abf4b4e"
+  },
+  {
+   "repo": "XavierBerger/RotaryEncoderDebounced",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "7c262d6ab9485d6d3c98bd584a0eb71310526d42"
+  },
+  {
+   "repo": "ZSWatch/Watch-DevKit-HW",
+   "license": "GPL-3.0",
+   "commit": "e3102a3bb5b75f46a0e20edbc5e3a159150383d2"
+  },
+  {
+   "repo": "adamws/kicad-kbplacer",
+   "license": "GPL-3.0",
+   "commit": "24746a25b84041eda7ee5d03f75d672db57820ed"
+  },
+  {
+   "repo": "aeonSolutions/AeonLabs-pcb-template-esp32-s3",
+   "license": "CC0-1.0",
+   "commit": "a90ba5912d822bc57bfed4e6d266ced7b5353767"
+  },
+  {
+   "repo": "agkaminski/emuprom",
+   "license": "CC0-1.0",
+   "commit": "53ea02f1e18be6ccb5c2f1f45e68d49c8deada24"
+  },
+  {
+   "repo": "angelnu/esphome",
+   "license": "Apache-2.0",
+   "commit": "ad19ea14031634deeee4e6820c2e613fb215778e"
+  },
+  {
+   "repo": "anway0404/Arduino_OpenTherm_shield",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "c9935a9d718b1e57c8d879bc56dd3b46b108a8f3"
+  },
+  {
+   "repo": "atonizzo/seatalk_wifi",
+   "license": "Apache-2.0",
+   "commit": "9c18c1f3d418caf6bba024d145b0292354519ec6"
+  },
+  {
+   "repo": "atoomnetmarc/AVR-demo-board",
+   "license": "Apache-2.0",
+   "commit": "3d29b07fdac744ca5b5c10e11e1998db811247e6"
+  },
+  {
+   "repo": "atoomnetmarc/IoT12",
+   "license": "Apache-2.0",
+   "commit": "1154267f27544549b1881297fec97138cbeeebdf"
+  },
+  {
+   "repo": "axpaul/Avionic-Mastodonte",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "4c7ab92f1a6986d5faa0cc4e507f237a4fe222c3"
+  },
+  {
+   "repo": "badjeff/paw3395-pcb",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "b71e346fc04ef18c26e0e8638ce0333395d41a14"
+  },
+  {
+   "repo": "badjeff/pmw3610-pcb",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "b6f9f8fc26e2dd74b436263ade3f558f8940fec9"
+  },
+  {
+   "repo": "beekeeb/piantor",
+   "license": "GPL-3.0",
+   "commit": "cd847afb4f9a86e8c1c8e36f243140644013afb2"
+  },
+  {
+   "repo": "bubbajfett/kicad-guitar-pedals",
+   "license": "CC0-1.0",
+   "commit": "b4913eb3f23b7861d4b94688e0b2f9a7088d926e"
+  },
+  {
+   "repo": "camrbuss/pinci",
+   "license": "MIT",
+   "commit": "4956f50cf3902504b41de4bbb62cca7649930eb4"
+  },
+  {
+   "repo": "circuit-synth/circuit-synth",
+   "license": "MIT",
+   "commit": "3aaff18c056de7cbe8f5b0a3e1e6e7e7895f544e"
+  },
+  {
+   "repo": "codemyriad/protogon",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "75d6fd6fb51ff31b364f20e16f5fc61d46c70ece"
+  },
+  {
+   "repo": "copperheadhq/copperhead",
+   "license": "Apache-2.0",
+   "commit": "e26be947ed31a35fbbb52623174bb25017d6cd44"
+  },
+  {
+   "repo": "crmaykish/mackerel-68k",
+   "license": "MIT",
+   "commit": "50786ed64897e037c57989c3322f02ea375584b7"
+  },
+  {
+   "repo": "ctes091x/lm386_amp",
+   "license": "MIT",
+   "commit": "b477313d6ceeb951005483b1a00816698c66fb3a"
+  },
+  {
+   "repo": "devbisme/skidl",
+   "license": "MIT",
+   "commit": "4372de59bdc5d37c83c0870a0a25d8152ef75359"
+  },
+  {
+   "repo": "devfabiosilva/TeslaSMPS",
+   "license": "Unlicense",
+   "commit": "97b4435bbd0809b6a87a61b70bfb3bc9134743c7"
+  },
+  {
+   "repo": "diminDDL/PiUPS",
+   "license": "CERN-OHL-W-2.0",
+   "commit": "423f9aa1606c04cad0df986af8045d4db65deac5"
+  },
+  {
+   "repo": "duckyb/eternal-keypad",
+   "license": "MIT",
+   "commit": "bf11c1d50ead127c25401d262d73834e8438f3ca"
+  },
+  {
+   "repo": "duckyb/urchin",
+   "license": "MIT",
+   "commit": "aef241da7870dbae322416a00fbb269f1a24d8b1"
+  },
+  {
+   "repo": "electron271/tuxkeychain",
+   "license": "CC-BY-SA-4.0",
+   "commit": "b04b8d2f5e35be7d8466fca8ecbf0ac3087b2bdf"
+  },
+  {
+   "repo": "eliassjogreen/inductive-analog-switch",
+   "license": "CC-BY-SA-4.0",
+   "commit": "7ffed71822d8e825fb88cd7de3f8fda1cb1d0841"
+  },
+  {
+   "repo": "facens-omegabotz/stm32-board",
+   "license": "Apache-2.0",
+   "commit": "d2fdd157e2bf8e49b25bc0ddf0de377c8382a7de"
+  },
+  {
+   "repo": "frozen-signal/Apple_IIe_IOU_3V3",
+   "license": "CC-BY-4.0",
+   "commit": "ba2705ca9f4fc2414bee3761a11ed9872e8b09d0"
+  },
+  {
+   "repo": "frozen-signal/Apple_IIe_MMU_3V3",
+   "license": "CC-BY-4.0",
+   "commit": "4a32c553c75b0ac9166ea41c98f23740115d1b94"
+  },
+  {
+   "repo": "funkeleinhorn/sc14cvmdect-devboard",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "1e5ffbd8f1b2c45f256a95375aff201b5552f03a"
+  },
+  {
+   "repo": "galopago/din-rail-circuits",
+   "license": "CC-BY-4.0",
+   "commit": "5128d0185d0d034358768d7a4182d31165aa4d72"
+  },
+  {
+   "repo": "gcormier/megadesk",
+   "license": "GPL-3.0",
+   "commit": "2d1bf8d30337841dc9f5c1ef0724701185f99c39"
+  },
+  {
+   "repo": "git4dcc/RTB_C02",
+   "license": "Apache-2.0",
+   "commit": "30404b1bcdf14e326acd38b51065fefeeebde7d2"
+  },
+  {
+   "repo": "goscickiw/Analog-Video-Comb-Filter",
+   "license": "CC-BY-SA-4.0",
+   "commit": "811dc691496e2f255707fe41ceeecd4c4122e15e"
+  },
+  {
+   "repo": "gsteiert/nfcwchsao",
+   "license": "CC0-1.0",
+   "commit": "03a7cc22bbf82d5c51bc7b909aa31df027c4b5f0"
+  },
+  {
+   "repo": "h7ga40/rp2040_trackball_mouse_pcb",
+   "license": "CC0-1.0",
+   "commit": "434e5679232e30da1ac35df7cd60d7097d9f3235"
+  },
+  {
+   "repo": "iandchasse/silkscreen-pcb",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "5809233d22cff6b6f62aa9f6d391834d78deeae0"
+  },
+  {
+   "repo": "jangtrinh/design-os-3d-blender",
+   "license": "MIT",
+   "commit": "79c6af92ee36837e88edc699dafd6d004cee57a2"
+  },
+  {
+   "repo": "jeffqchen/Saturn8DINMod",
+   "license": "CC-BY-SA-4.0",
+   "commit": "454e52fb6719a514f154a3c5246c0c5bedd16639"
+  },
+  {
+   "repo": "jkramarz/TheTick",
+   "license": "GPL-3.0",
+   "commit": "74d8d6b81eab4fd260727502a72f293ef94791cf"
+  },
+  {
+   "repo": "justbuchanan/oasis",
+   "license": "Apache-2.0",
+   "commit": "3462f162f80e11c78705218441af37639d87bfdc"
+  },
+  {
+   "repo": "justsem/RP2040-868",
+   "license": "CC-BY-SA-4.0",
+   "commit": "f991cf9d8a81f4dbb168c7d7c67addba6eb69387"
+  },
+  {
+   "repo": "k0swe/mountaineer",
+   "license": "CC-BY-4.0",
+   "commit": "0555552a2d3ea741fc4acc02a837dffa03b8e9bb"
+  },
+  {
+   "repo": "kiisu-io/kiisu-smol",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "ebf85860ac27de579650b21489db3a8d26d05192"
+  },
+  {
+   "repo": "lambdakb/trackball-lt6c",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "2328841de21d646e5fa739f153b63118d66e7699"
+  },
+  {
+   "repo": "leomanangka/esp32-4-channel-relays",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "3c7d3b1eb80e781737f5ec5bed8cc10faca1ca0c"
+  },
+  {
+   "repo": "logitiles/HEXBERRY-V-20Q100-0.91",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "663c4fa975efc0d23afa5d16f4a29928e2a6eace"
+  },
+  {
+   "repo": "m1geo/Pi5_PCIe",
+   "license": "MIT",
+   "commit": "3047c9f160eec119d914ec9dab18eb099b6ed4f7"
+  },
+  {
+   "repo": "mackieks/nandFlex",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "53d2396f6992252094cb378896f4186e770ff32a"
+  },
+  {
+   "repo": "maelh/radio-frequency-prototype-boards",
+   "license": "BSD-3-Clause",
+   "commit": "9814f4fe23854bb84d5c0a55540f08d1cc16084b"
+  },
+  {
+   "repo": "maxlab-io/tokay-lite-pcb",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "fd04d94a332d745ad4c09e4e2da0fbb61fde3218"
+  },
+  {
+   "repo": "mdiph/MDCtrl",
+   "license": "CC-BY-SA-4.0",
+   "commit": "6f35a876b2005e19d02a7571229b5b31566cc570"
+  },
+  {
+   "repo": "mecparts/RetroWiFiModem",
+   "license": "GPL-3.0",
+   "commit": "93ae395d948b36fcf846eda8158dcae77d6c4593"
+  },
+  {
+   "repo": "mengstr/PCIeTestPCB",
+   "license": "CC0-1.0",
+   "commit": "2c932e05b18514d3b7f00bbfdd29275014425c8b"
+  },
+  {
+   "repo": "michpro/Arduino_LMeter_shield",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "7bd355ae176606982b7dbc7aefc47f557415bb33"
+  },
+  {
+   "repo": "michpro/mikroBUS",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "ccd97fc32353ec25b23bdbcbc8353c138866b35b"
+  },
+  {
+   "repo": "micro-henry/tallytime-hardware",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "31e8794abc12e8fc7b8152a420ed52449ce1a3de"
+  },
+  {
+   "repo": "mlab-modules/GPS02",
+   "license": "GPL-3.0",
+   "commit": "c722e733dae1ba0ff0504ca5000ce0c85c051ef0"
+  },
+  {
+   "repo": "mlab-modules/ISM01",
+   "license": "GPL-3.0",
+   "commit": "422199e3359900cc62c1d4ae34621d46d3e8885d"
+  },
+  {
+   "repo": "mlab-modules/PCRD04",
+   "license": "GPL-3.0",
+   "commit": "ff369099ed16dc5c730ff91c15e94f912855f9e0"
+  },
+  {
+   "repo": "mlab-modules/USB232R02",
+   "license": "GPL-3.0",
+   "commit": "c48490f55fd43c902511aa52a9bac82c7fb303c6"
+  },
+  {
+   "repo": "mlab-modules/USBI2C01",
+   "license": "GPL-3.0",
+   "commit": "8fc108913f407128495c47fdca671d2adf68268c"
+  },
+  {
+   "repo": "mprosk/mtg_life_counter",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "cacf154bdebce5b228b69c656290dcfb7af31fa9"
+  },
+  {
+   "repo": "mwrnd/OpenCAPI-to-PCIe_for_MNV303212A_RevA2",
+   "license": "GPL-2.0",
+   "commit": "1a51f86941f6814e130f3c66056ce256b376497f"
+  },
+  {
+   "repo": "mwrnd/QSFP_Breakout",
+   "license": "BSD-2-Clause",
+   "commit": "1e529a1f6b7564105fa285aeccaed259339ec7aa"
+  },
+  {
+   "repo": "mzuelch/CATs-Eurosynth",
+   "license": "MIT",
+   "commit": "ee70506817f1fb5fa16a87c3e2a54a6ded8ee441"
+  },
+  {
+   "repo": "netube99/CH573_KIT",
+   "license": "Apache-2.0",
+   "commit": "e26d0c82f7eea38da1900d21dd273276dd3a5999"
+  },
+  {
+   "repo": "obsilab/Quanta75",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "fe45630787dce4ec154e6826bf268d4de40ce11b"
+  },
+  {
+   "repo": "ojg/thatmicpre",
+   "license": "CC-BY-SA-4.0",
+   "commit": "c9735275db939b22bd7b8fc5899793add46f3683"
+  },
+  {
+   "repo": "pinguz97/Zynq-SoM",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "ad96951a225fbf9f263b555ef070a536b09ff710"
+  },
+  {
+   "repo": "protolux-electronics/soleil_hardware",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "8c7c922c1e5248b8808cf1ac2964644eca952a06"
+  },
+  {
+   "repo": "protolux-electronics/trellis_core",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "db4fe71623c14bcea47d7457d0db4c99d3899124"
+  },
+  {
+   "repo": "raeedcho/temper",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "08b23b021fcec6c2ae355cade7e0e473530afb85"
+  },
+  {
+   "repo": "rhaamo/kicad-amiga2000",
+   "license": "CC0-1.0",
+   "commit": "6942ca4427a91b5769a3da3eabb28740eff7665f"
+  },
+  {
+   "repo": "rmingon/rs485-spy-injector",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "6825846c45c09ddbdd03d043de9759f304b46edb"
+  },
+  {
+   "repo": "rniwase/tsuraraGB",
+   "license": "BSD-3-Clause",
+   "commit": "04d25e09f39777cabaa92c77b82b80f0ed53e2da"
+  },
+  {
+   "repo": "rrainey/DSKY-digital-indicator-replica",
+   "license": "CC-BY-SA-4.0",
+   "commit": "fcefdd36f856d2a1baab33a2a3bffe424893aa1d"
+  },
+  {
+   "repo": "rschenk/re-gret",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "7bc7908e7579d462b8eebd255a90dd71fe2e64b8"
+  },
+  {
+   "repo": "siderakb/calcite",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "7f050f32910d2c6fc9c757f1fdb8f7da6e80d6e1"
+  },
+  {
+   "repo": "siderakb/ergo-snm-keyboard",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "20e9e51e9f52749140369968b2bf5e741bf063b0"
+  },
+  {
+   "repo": "siderakb/facade",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "ed4f6c20780338fe45a2233944ebf411d2d3161b"
+  },
+  {
+   "repo": "siderakb/pmw3360-pcb",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "cd8874d863a454403262b8525a7f16351b66f0b8"
+  },
+  {
+   "repo": "siderakb/pmw3610-pcb",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "02658835a74cb683d0237ab21a1538de79452a9e"
+  },
+  {
+   "repo": "siderakb/rp-micro",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "a7baf36025b974ed55b4676ad1e9f7e79f16bba1"
+  },
+  {
+   "repo": "skot/bitaxe",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "942bbd97aab09b12d826c6e82c64f3fb91246c4c"
+  },
+  {
+   "repo": "sporniket/kicad-conversions--atari-ste-motherboard--c300780-001",
+   "license": "CC0-1.0",
+   "commit": "d6bcd1cb83d2c4d386f6471235729e3fe0872f05"
+  },
+  {
+   "repo": "techy-robot/Mighty-Micro-Motors",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "8bfaabd3ca5a2f096687f65f07bc4e7a446bae65"
+  },
+  {
+   "repo": "triglav-modular/218r_Retrigger_Mod",
+   "license": "Unlicense",
+   "commit": "8854869fe8a3a0ca51c2d1b22069451fbd53f003"
+  },
+  {
+   "repo": "triglav-modular/THAT1512_Mic_Pre",
+   "license": "Unlicense",
+   "commit": "f3132c9ce30faa897e65aba28109010d42541a77"
+  },
+  {
+   "repo": "tzarc/keyboards",
+   "license": "CERN-OHL-S-2.0",
+   "commit": "21dd586153f70b0247c3c38f8a8070891e49041d"
+  },
+  {
+   "repo": "yaqwsx/KiKit",
+   "license": "MIT",
+   "commit": "ff94e842a9cbcf334085cfa4107e0ddc1111257b"
+  },
+  {
+   "repo": "yu2924/XPS",
+   "license": "CC0-1.0",
+   "commit": "b2f379d94959743a58c5fd70401c3b86029f651b"
+  },
+  {
+   "repo": "zhiayang/mikoto",
+   "license": "Apache-2.0",
+   "commit": "86318f6c69495b8308354b6393d85229177b26ae"
+  },
+  {
+   "repo": "ziteh/moco",
+   "license": "CERN-OHL-P-2.0",
+   "commit": "e0caae5762ac5f7731c79ccb5e8fe11ee3f4468e"
+  }
+ ]
+}

@@ -39,6 +39,8 @@ examples: [`examples/`](../examples).
 - **Every pin must be on a net or listed in `no_connect`**, so unused pins are
   a deliberate decision rather than an accident.
 - Electrical sanity: single-pin nets, multiple drivers, undriven power inputs.
+- **Logic levels**: chips on different supply voltages (say 3.3 V and 5 V) that drive the same signal are flagged.
+- **Power budget**: with `current_ma` on the main loads, each rail's current is added up, and every linear regulator's heat, (Vin − Vout) × I, is compared with what its package can dissipate.
 
 ## Schematic generation
 
@@ -56,6 +58,10 @@ without changing connectivity.
    claim the spot beside their pin.
 3. Everything else in connectivity order, each part placed where its pads are
    closest to connected pads, followed by refinement passes.
+
+Auto-sized boards start from an estimate (part area, plus what has routed
+before), then shrink step by step while every part still fits at full
+spacing, never below the room needed for routing or a size that failed before.
 
 Placement uses each footprint's real courtyard shape (a module's wide antenna
 section doesn't block the pins beside it), spacing presets with extra
@@ -91,14 +97,17 @@ pad density (a contextual bandit with an exploration bonus). The first run on
 a new kind of board uses the hand-tuned defaults; later runs start with what
 worked. Auto-sized boards use the tightest area per pad that has reliably
 routed, and footprints that caused unrouted connections get extra clearance.
-`kipcb learn reset` clears it, and `KIPCB_LEARN=0` turns it off.
+Runs that followed a broken placement (a part left off the board) are
+ignored, so one bad run can't teach the wrong lesson. `kipcb learn reset`
+clears everything, and `KIPCB_LEARN=0` turns logging off.
 
 **From open-source designs** (`kipcb ref <part>`): the companion
 [pcb-knowledge](https://github.com/virajrungta/pcb-knowledge) project mines
 openly licensed KiCad projects on GitHub into statistics: how real designs
 wire each chip's pins, plus layout distributions from hundreds of routed
-boards. Only aggregate statistics are kept, with attribution. Claude
-consults it during part selection and review; the datasheet always wins.
+boards. Only aggregate statistics are kept, with attribution. A copy ships
+with the plugin, so `kipcb ref` works out of the box. Claude consults it during
+part selection and review; the datasheet always wins.
 
 Nothing is uploaded anywhere. Learning stays on your machine.
 

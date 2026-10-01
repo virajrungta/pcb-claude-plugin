@@ -7,12 +7,34 @@ release and publishes it on GitHub.
 
 ## Unreleased
 
+_Nothing yet._
+
+## V1.1 - 2026-09-30
+
 - **Faster failures**: `kipcb route` refuses in about a second when a part sits
   outside the board, instead of spending minutes on routing attempts that can
   never succeed.
 - **Parts no longer get stranded**: if a part doesn't fit at the chosen spacing
   (e.g. `"roomy"` on a small board), placement retries with tighter spacing
   before giving up, and says so in the build output.
+- **Learning ignores broken runs**: routing attempts that followed a placement
+  with a part off the board no longer count against good strategies or mark
+  innocent footprints as "hard". Existing experience logs are repaired
+  automatically. A failure at a size that has also routed fine no longer
+  inflates future boards.
+- **Knowledge base ships with the plugin**: `kipcb ref <part>` works out of the
+  box (82 parts from 391 open-source projects). A locally built base still
+  takes priority.
+- **Logic-level check**: `kipcb check` flags signals shared by chips on
+  different supply voltages (e.g. a 3.3 V MCU driving a 5 V shift register).
+- **Power budget**: add `current_ma` to the main loads, and `kipcb check` adds
+  up each rail and warns when a linear regulator would run too hot for its
+  package. Rail voltages come from net names, or from a new `rails` field.
+- **Auto-shrink**: auto-sized boards shrink until the parts no longer fit at
+  full spacing (the ESP32-C3 example went from 76 x 55 to 57 x 42 mm), never
+  below routing room or a size that failed before. `"auto_shrink": false` opts out.
+- **Cleaner routing**: a small safety margin for the autorouter removes
+  occasional micron-level clearance errors.
 
 ## V1.0 - 2026-09-30
 

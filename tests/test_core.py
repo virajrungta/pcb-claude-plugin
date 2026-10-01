@@ -8,7 +8,7 @@ import os
 import tempfile
 import unittest
 
-from kipcb import fplib, learn, place, sexp
+from kipcb import fplib, learn, place, sexp, spec
 from kipcb.sexp import Sym
 
 
@@ -128,6 +128,28 @@ class LearningTests(unittest.TestCase):
         self.assertAlmostEqual(learn.extra_margin("Connector_USB:X"), 0.4)
         self.assertEqual(learn.extra_margin("Other:Y"), 0)
 
+    def test_runs_after_a_stranded_part_are_ignored(self):
+        f = {"layers": 2, "pads": 44, "area_mm2": 600, "pad_density": 7.3}
+        learn.record("build", features=dict(f, pads=42), placement_failed=1)
+        learn.record("route_attempt", features=f, arm=[False, 3.0], missing=15, bottom_mm=0, seconds=94)
+        learn.record("route_final", features=f, arm=[False, 3.0], unconnected=15,
+                     hard_footprints=["Package_SO:SOIC-8"], auto_size=False)
+        learn.record("build", features=dict(f, pads=42), placement_failed=0)
+        learn.record("route_attempt", features=f, arm=[False, 3.0], missing=0, bottom_mm=5, seconds=4)
+        self.assertEqual(len(learn.history("route_attempt")), 1)
+        self.assertEqual(len(learn.history("route_attempt", include_tainted=True)), 2)
+        self.assertEqual(learn.extra_margin("Package_SO:SOIC-8"), 0)
+
+    def test_failure_at_a_size_that_also_routed_does_not_inflate_boards(self):
+        f = {"layers": 2, "pads": 100, "area_mm2": 3000}
+        learn.record("route_final", features=f, unconnected=1, auto_size=True, hard_footprints=[])
+        learn.record("route_final", features=f, unconnected=0, auto_size=True, hard_footprints=[])
+        self.assertAlmostEqual(learn.area_per_pad(2, 100), 30.0)
+        self.assertIsNone(learn.min_area_per_pad(2, 100))
+        tight = dict(f, area_mm2=2000)
+        learn.record("route_final", features=tight, unconnected=4, auto_size=True, hard_footprints=[])
+        self.assertAlmostEqual(learn.min_area_per_pad(2, 100), 22.0)
+
     def test_learning_can_be_disabled(self):
         os.environ["KIPCB_LEARN"] = "0"
         try:
@@ -135,6 +157,19 @@ class LearningTests(unittest.TestCase):
             self.assertEqual(learn.history(), [])
         finally:
             os.environ.pop("KIPCB_LEARN")
+
+
+class ElectricalTests(unittest.TestCase):
+    def test_rail_voltages_from_net_names(self):
+        cases = {"+3V3": 3.3, "+5V": 5.0, "3V3": 3.3, "+1V8": 1.8, "12V": 12.0, "VBUS": 5.0,
+                 "+3.3V": 3.3, "/VCC_3V3": 3.3, "GND": None, "SDA": None}
+        for name, volts in cases.items():
+            self.assertEqual(spec.rail_voltage(name), volts, name)
+        self.assertEqual(spec.rail_voltage("VCC", {"VCC": 3.3}), 3.3)
+
+    def test_package_power_limits(self):
+        self.assertEqual(spec.package_watts("Package_TO_SOT_SMD:SOT-223-3_TabPin2"), ("SOT-223", 1.0))
+        self.assertEqual(spec.package_watts("Package_TO_SOT_SMD:SOT-23-5"), ("SOT-23", 0.35))
 
 
 class ExampleSpecTests(unittest.TestCase):

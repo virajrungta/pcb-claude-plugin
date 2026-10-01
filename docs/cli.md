@@ -19,13 +19,13 @@ these commands for you, but they also work on their own.
 | `kipcb sym-info Lib:Name` | Lists every pin (number, name, electrical type, unit) |
 | `kipcb fp-search <words>` | Searches footprint libraries |
 | `kipcb fp-info Lib:Name` | Shows a footprint's pads and courtyard size |
-| `kipcb ref <part>` | Shows how open-source designs wire a part (needs the knowledge base) |
+| `kipcb ref <part>` | Shows how open-source designs wire a part (uses the knowledge base shipped with the plugin) |
 
 ## Design
 
 | Command | What it does |
 |---|---|
-| `kipcb check spec.json` | Validates the spec: symbols, footprints, pins, nets, unused pins |
+| `kipcb check spec.json` | Validates the spec: symbols, footprints, pins, nets, unused pins, logic levels, and the power budget / regulator heat |
 | `kipcb build spec.json [-o DIR] [--no-render]` | Generates the schematic and placed board, runs ERC, the placement DRC and placement noise checks, and renders previews |
 | `kipcb route <project> [--attempts N] [--timeout S] [--no-pour]` | Autoroutes, pours ground, adds stitching vias, then runs DRC and noise checks |
 | `kipcb fab <project> [--fab jlcpcb\|generic] [--force]` | Exports Gerbers and drill zip, BOM and CPL. Refuses while DRC has errors |
@@ -46,7 +46,7 @@ these commands for you, but they also work on their own.
 
 | Command | What it does |
 |---|---|
-| `kipcb learn` | What has been learned: strategy success rates, hard footprints, sizing |
+| `kipcb learn` | What has been learned: strategy success rates, hard footprints, sizing, and how many runs were ignored |
 | `kipcb learn reset` | Forget all local experience |
 
 ## Output layout
@@ -66,7 +66,7 @@ my_board/
 | `KIPCB_PYTHON` | Python with `pcbnew` (if KiCad isn't in the default location) |
 | `KIPCB_KICAD_CLI` | Path to `kicad-cli` |
 | `KIPCB_FREEROUTING_JAR` | Use a specific Freerouting jar |
-| `KIPCB_KNOWLEDGE` | Path to a `knowledge.json` (default `~/.local/share/kipcb/knowledge.json`) |
+| `KIPCB_KNOWLEDGE` | Path to a `knowledge.json` (default: `~/.local/share/kipcb/knowledge.json` if you built one, else the copy in the plugin's `data/`) |
 | `KIPCB_EXPERIENCE` | Path to the experience log |
 | `KIPCB_LEARN=0` | Disable learning |
 | `KIPCB_CACHE` | Library index and Freerouting cache (default `~/.cache/kipcb`) |

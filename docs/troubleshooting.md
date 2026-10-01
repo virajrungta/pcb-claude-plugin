@@ -43,10 +43,21 @@ edits. Iterate through the spec first, then polish in KiCad at the end.
 See "Custom parts" in [spec-format.md](../skills/design/references/spec-format.md)
 (stock equivalents, `easyeda2kicad`, or a hand-made footprint).
 
-**`kipcb ref` says no knowledge base is installed**
-It's optional. Build one with the
-[pcb-knowledge](https://github.com/virajrungta/pcb-knowledge) project
-(`pkb fetch`, `pkb extract`, `pkb build`, `pkb install`).
+**`Not routing: U1 is outside the board outline`**
+A part didn't fit and was parked beside the board. Make the board larger,
+use `"spacing": "normal"` (or `"compact"`) on small boards, or free up fixed
+positions, then rebuild. Routing refuses to start in this state, because it
+could never succeed.
+
+**`regulator heat` warning**
+A linear regulator turns (Vin − Vout) × current into heat. Use a bigger
+package (SOT-223 instead of SOT-23), lower the input voltage, or switch to a
+buck converter.
+
+**`kipcb ref` shows an older knowledge base than you built**
+A locally built base (`~/.local/share/kipcb/knowledge.json`, from
+[pcb-knowledge](https://github.com/virajrungta/pcb-knowledge)'s `pkb install`)
+takes priority over the copy shipped with the plugin.
 
 **Something else**
 Run `kipcb doctor` and include its output when you

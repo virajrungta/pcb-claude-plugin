@@ -64,6 +64,7 @@ One JSON file describes the whole board. `kipcb check` validates it, and
 | `requirements` | recommended | Free-form record of what the user asked for (size, power, current, build, noise). Tools ignore it; the reviewer agent checks the design against it |
 | `board` | no | See below. Omit width/height to auto-size from the parts |
 | `net_roles` | no | Override the noise checker's guess: `{"SENSE_IN": "sensitive", "MOTOR_PWM": "noisy", "LED_DIN": "quiet"}` |
+| `rails` | no | Voltages of supply nets whose names don't say it, e.g. `{"VCC": 3.3, "VMOT": 12}`. `+3V3`, `+5V`, `3V3`, `+1V8`, `12V`, `VBUS` and `VBAT` are recognised automatically |
 | `rules` | no | Design rules in mm; defaults shown above (JLCPCB-safe) |
 | `power_nets` | recommended | Supply/ground nets. They get the wider `power_track` (ground is routed thin and poured instead), power symbols in the schematic, and PWR_FLAGs when nothing on the board drives them (e.g. a connector input) |
 | `net_classes` | no | Extra classes: `name`, `track`, `clearance`, `via_diameter`, `via_drill`, `nets` |
@@ -74,7 +75,11 @@ One JSON file describes the whole board. `kipcb check` validates it, and
 
 ## `board`
 
-- `width`, `height` (mm). Omit both to auto-size from part area (`density_factor`, default 2.0).
+- `width`, `height` (mm). Omit both to auto-size: kipcb picks a starting size from
+  the parts and what has routed before, then shrinks the board while every
+  part still fits at full spacing.
+- `auto_shrink`: `false` keeps the auto-sized board at its starting size. Use this for
+  noise-sensitive boards, where the extra room keeps routes on the top layer.
 - `layers`: 2 or 4. With 4, inner layers are available to the router. Pour planes are still added on the outer layers only.
 - `corner_radius` (mm, default 1).
 - `mounting_holes`: `"M3"`, or `{"size": "M2|M2.5|M3|M4", "inset": 3.5}`
@@ -97,6 +102,7 @@ Coordinates are mm from the board's **top-left** corner, with X right and Y down
 | `lcsc`, `mpn`, `manufacturer` | Sourcing fields, carried into the BOM (`LCSC Part #` for JLCPCB) |
 | `fields` | Extra symbol fields `{"Tolerance": "1%"}` |
 | `dnp` | `true` = do not populate |
+| `current_ma` | Typical/peak current this part draws from its supply (mA). Set it on the main loads (MCU or radio module, LEDs, motors, sensors with heaters). `kipcb check` then adds up each rail and checks linear regulator heat against its package |
 | `group` | Schematic grouping (parts sharing a group sit together): `power`, `mcu`, `usb`… |
 | `place` | Placement hints (below) |
 

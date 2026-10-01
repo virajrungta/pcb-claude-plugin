@@ -122,6 +122,8 @@ def cmd_check(a):
         return 1
     d.validate()
     print(d.summary())
+    for n in getattr(d, "notes", []):
+        print("NOTE: " + n)
     for w in d.warnings:
         print("WARNING: " + w)
     for e in d.errors:

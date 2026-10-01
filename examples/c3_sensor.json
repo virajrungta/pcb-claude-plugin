@@ -67,7 +67,8 @@
       "symbol": "Regulator_Linear:AMS1117-3.3",
       "value": "AMS1117-3.3",
       "group": "power",
-      "lcsc": "C6186"
+      "lcsc": "C6186",
+      "current_ma": 5
     },
     {
       "ref": "C1",
@@ -97,7 +98,8 @@
       "lcsc": "C2934560",
       "place": {
         "edge": "top"
-      }
+      },
+      "current_ma": 350
     },
     {
       "ref": "C3",
@@ -167,7 +169,8 @@
       "ref": "D1",
       "symbol": "LED:WS2812B-2020",
       "value": "WS2812B-2020",
-      "group": "io"
+      "group": "io",
+      "current_ma": 12
     },
     {
       "ref": "C6",
@@ -184,7 +187,8 @@
       "symbol": "Amplifier_Operational:LM358",
       "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
       "value": "LM358",
-      "group": "analog"
+      "group": "analog",
+      "current_ma": 1
     },
     {
       "ref": "C7",

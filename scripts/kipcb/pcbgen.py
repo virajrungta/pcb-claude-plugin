@@ -42,16 +42,26 @@ def unconnected_net_name(comp, number):
     return "unconnected-(%s-%s-Pad%s)" % (comp.ref, name, number)
 
 
-def board_size(design):
-    b = design.board
-    if b.get("width") and b.get("height"):
-        return float(b["width"]), float(b["height"])
+def _courtyard_area(design):
+    """Sum of part courtyards including their spacing margins (mm²)."""
     area = 0.0
     for c in design.components:
         x0, y0, x1, y1 = c.fp.courtyard
         m = 2 * part_margin(design, c)
         area += (x1 - x0 + m) * (y1 - y0 + m)
-    courtyard_area = area
+    return area
+
+
+def auto_sized(design):
+    b = design.board
+    return not (b.get("width") and b.get("height"))
+
+
+def board_size(design):
+    b = design.board
+    if b.get("width") and b.get("height"):
+        return float(b["width"]), float(b["height"])
+    courtyard_area = area = _courtyard_area(design)
     area *= float(b.get("density_factor", 1.8))
     # learned sizing: the tightest area per pad that has routed on similar boards,
     # seeded by open-source boards from the knowledge base
@@ -111,7 +121,7 @@ def part_margin(design, comp):
     return base + (ic_extra if is_ic else 0.0) + learn.extra_margin(comp.footprint_id)
 
 
-def compute_placement(design, sch_builder, W, H, holes):
+def compute_placement(design, sch_builder, W, H, holes, quiet=False, step=None, refine=2):
     parts = []
     net_sizes = {n: len(p) for n, p in design.nets.items()}
     for c in design.components:
@@ -123,10 +133,12 @@ def compute_placement(design, sch_builder, W, H, holes):
     for (x, y), r in holes:
         obstacles.append((x - r, y - r, x + r, y + r))
     pl = place.Placer(W, H, parts, net_sizes, design.rules["edge_clearance"], obstacles)
-    failed = pl.run(step=0.5 if max(W, H) < 120 else 1.0)
-    for line in pl.log:
-        print("note: " + line)
-    return {p.ref: (p.x, p.y, p.rot) for p in parts if p.x is not None}, failed
+    failed = pl.run(step=step or (0.5 if max(W, H) < 120 else 1.0), refine_passes=refine)
+    if not quiet:
+        for line in pl.log:
+            print("note: " + line)
+    result = {p.ref: (p.x, p.y, p.rot) for p in parts if p.x is not None}
+    return (result, failed, pl.log) if quiet else (result, failed)
 
 
 def _set_rules(board, design):
@@ -202,6 +214,51 @@ def _outline(board, W, H, radius):
         arc(r, r, 0, r, 90)
 
 
+def _holes(design, W, H):
+    hole_size, hole_pos = hole_positions(design, W, H)
+    holes = []
+    if hole_pos:
+        fpname, dia = HOLES.get(hole_size, HOLES["M3"])
+        r = dia / 2 + 2.0   # keep parts clear of the screw head
+        holes = [((x, y), r) for x, y in hole_pos]
+    return hole_size, hole_pos, holes
+
+
+def shrink_to_fit(design, sch_builder, W, H, step=0.92, max_steps=6):
+    """Shrink an auto-sized board while every part still fits at full spacing.
+
+    Stops above two floors: enough free area left for routing (1.45x the
+    parts' footprint including spacing), and the area per pad at which
+    similar boards failed to route before (learned)."""
+    from . import learn
+    layers = int(design.board.get("layers", 2))
+    pads = sum(len(c.fp.pads) for c in design.components)
+    floor = 1.45 * _courtyard_area(design)
+    if design.board.get("mounting_holes"):
+        floor += 4 * 7.0 * 7.0
+    learned_floor = learn.min_area_per_pad(layers, pads)
+    if learned_floor:
+        floor = max(floor, learned_floor * pads)
+    best = None
+    for _ in range(max_steps):
+        W2, H2 = float(math.floor(W * step)), float(math.floor(H * step))
+        if W2 * H2 < floor:
+            break
+        _, _, holes = _holes(design, W2, H2)
+        # coarse grid for the trials (fast); the final size gets a fine placement below
+        placement, failed, log = compute_placement(design, sch_builder, W2, H2, holes, quiet=True,
+                                                   step=1.0, refine=0)
+        if failed or log:        # anything stranded or squeezed means it's too tight
+            break
+        W, H, best = W2, H2, placement
+    if best is not None:
+        _, _, holes = _holes(design, W, H)
+        fine, failed, log = compute_placement(design, sch_builder, W, H, holes, quiet=True)
+        if not failed and not log:
+            best = fine
+    return W, H, best
+
+
 def build(design, sch_builder, pcb_path, placement=None):
     pn = pcbnew()
     board = pn.NewBoard(pcb_path)
@@ -232,15 +289,18 @@ def build(design, sch_builder, pcb_path, placement=None):
                 ns.SetNetclassPatternAssignment(names[net], extra["name"])
 
     W, H = board_size(design)
-    hole_size, hole_pos = hole_positions(design, W, H)
-    holes = []
-    if hole_pos:
-        fpname, dia = HOLES.get(hole_size, HOLES["M3"])
-        r = dia / 2 + 2.0   # keep parts clear of the screw head
-        holes = [((x, y), r) for x, y in hole_pos]
+    hole_size, hole_pos, holes = _holes(design, W, H)
 
     if placement is None:
-        placement, failed = compute_placement(design, sch_builder, W, H, holes)
+        shrunk = None
+        if auto_sized(design) and design.board.get("auto_shrink", True):
+            W2, H2, shrunk = shrink_to_fit(design, sch_builder, W, H)
+            if shrunk:
+                print("note: auto-size shrank the board from %.0f x %.0f to %.0f x %.0f mm" % (W, H, W2, H2))
+                W, H, placement, failed = W2, H2, shrunk, []
+                hole_size, hole_pos, holes = _holes(design, W, H)
+        if not shrunk:
+            placement, failed = compute_placement(design, sch_builder, W, H, holes)
     else:
         failed = []
 

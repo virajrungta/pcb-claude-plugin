@@ -27,6 +27,35 @@ class SpecError(Exception):
     pass
 
 
+# Continuous dissipation (W) a package handles on a typical 2-layer board without a heatsink.
+PACKAGE_WATTS = [("SOT-23", 0.35), ("SC-70", 0.25), ("SOT-353", 0.25), ("SOT-363", 0.25), ("SOT-89", 0.6),
+                 ("SOT-223", 1.0), ("TO-252", 1.5), ("DPAK", 1.5), ("TO-263", 2.0), ("D2PAK", 2.0),
+                 ("TO-220", 2.0), ("DFN", 1.0), ("QFN", 1.0), ("SOIC", 0.6), ("MSOP", 0.5), ("TSOT", 0.35)]
+
+
+def rail_voltage(name, overrides=None):
+    """Nominal voltage of a supply net from its name (+3V3, 5V, VBUS, +1V8...), or None."""
+    n = name.lstrip("/")
+    if overrides and n in overrides:
+        return float(overrides[n])
+    u = n.upper().lstrip("+")
+    m = re.match(r"^(\d+)V(\d*)$", u) or re.match(r"^(\d+)\.(\d+)V$", u)
+    if m:
+        return float("%s.%s" % (m.group(1), m.group(2) or "0"))
+    m = re.match(r"^V(\d+)V(\d*)$", u) or re.match(r"^VCC_?(\d+)V(\d*)$", u)
+    if m:
+        return float("%s.%s" % (m.group(1), m.group(2) or "0"))
+    return {"VBUS": 5.0, "VUSB": 5.0, "USB_5V": 5.0, "VBAT": 3.7}.get(u)
+
+
+def package_watts(footprint_id):
+    name = footprint_id.split(":", 1)[-1].upper()
+    for key, watts in PACKAGE_WATTS:
+        if key in name:
+            return key, watts
+    return None, 0.5
+
+
 def strip_markup(name):
     return re.sub(r"~\{([^}]*)\}", r"\1", name).replace("~", "")
 
@@ -140,6 +169,7 @@ class Design(object):
         for n in self.power_nets:
             if n not in self.nets:
                 self.warnings.append("power net %s has no pins" % n)
+        self.notes = []
 
     def _resolve(self, ref_pin, ctx):
         if "." not in ref_pin:
@@ -203,7 +233,95 @@ class Design(object):
                 self.warnings.append("net %s has multiple outputs driving it: %s" % (net, _fmt(outs)))
             if "power_in" in types and not any(t == "power_out" for t in types) and net not in self.power_nets:
                 self.warnings.append("net %s feeds power_in pins but is not in power_nets and has no power_out" % net)
+        if not self.errors:
+            self.electrical_checks()
         return not self.errors
+
+    # ------------------------------------------------------------ electrical
+    def supply_of(self, comp, rails):
+        """The single supply voltage an IC runs from, or None (unknown or several)."""
+        vs = set()
+        for p in comp.sym.pins:
+            if p["type"] != "power_in":
+                continue
+            net = self.pin_net.get((comp.ref, p["number"]))
+            if net and net in rails:
+                vs.add(rails[net])
+        return vs.pop() if len(vs) == 1 else None
+
+    def electrical_checks(self):
+        """Logic-level compatibility and power budget / regulator heat. Fills warnings and notes."""
+        overrides = self.raw.get("rails") or {}
+        rails = {}
+        for net in self.nets:
+            v = rail_voltage(net, overrides)
+            if v is not None and v > 0:
+                rails[net] = v
+
+        # logic levels: chips on different supplies driving one signal net
+        chip = lambda c: c.ref.rstrip("0123456789") in ("U", "IC", "M", "A")
+        for net, pins in sorted(self.nets.items()):
+            if net in self.power_nets or net in rails:
+                continue
+            sides = {}
+            for ref, num in pins:
+                c = self.by_ref[ref]
+                if not chip(c) or self.pin_type((ref, num)) in ("passive", "power_in", "power_out", "no_connect"):
+                    continue
+                v = self.supply_of(c, rails)
+                if v is not None:
+                    sides.setdefault(v, set()).add(ref)
+            if len(sides) > 1 and max(sides) - min(sides) > 0.6:
+                desc = " and ".join("%s (%gV)" % (", ".join(sorted(refs)), v) for v, refs in sorted(sides.items()))
+                self.warnings.append("logic levels: net %s connects %s; check the lower-voltage part is "
+                                     "tolerant of %gV, or add a level shifter" % (net, desc, max(sides)))
+
+        # power budget per rail, from component current_ma
+        loads = {}
+        any_current = False
+        for c in self.components:
+            ma = c.d.get("current_ma")
+            if ma is None:
+                continue
+            any_current = True
+            supplies = {self.pin_net.get((c.ref, p["number"])) for p in c.sym.pins if p["type"] == "power_in"}
+            supplies = [n for n in supplies if n in rails]
+            for n in supplies[:1]:
+                loads[n] = loads.get(n, 0.0) + float(ma)
+        if not any_current:
+            self.notes.append("power budget: add \"current_ma\" to the main loads (MCU, radio, LEDs, "
+                              "motors) to check regulator heat and rail current")
+            return
+        for c in self.components:
+            outs = [self.pin_net.get((c.ref, p["number"])) for p in c.sym.pins if p["type"] == "power_out"]
+            ins = [self.pin_net.get((c.ref, p["number"])) for p in c.sym.pins if p["type"] == "power_in"]
+            outs = [n for n in outs if n in rails]
+            ins = [n for n in ins if n in rails and n not in outs]
+            if not outs or not ins:
+                continue
+            vout, vin = rails[outs[0]], max(rails[n] for n in ins)
+            if vin <= vout:
+                continue
+            amps = loads.get(outs[0], 0.0) / 1000.0   # its own quiescent current is already on the input
+            loads[ins[0]] = loads.get(ins[0], 0.0) + amps * 1000.0   # regulator draws its load from the input
+            switching = "Switching" in c.symbol_id or "switch" in c.sym.props.get("Description", "").lower()
+            if switching:
+                self.notes.append("power: %s (%s) supplies %s with %.0f mA (switching regulator)" % (
+                    c.ref, c.value, outs[0], amps * 1000))
+                continue
+            watts = (vin - vout) * amps
+            pkg, limit = package_watts(c.footprint_id)
+            line = "%s (%s) %gV->%gV at %.0f mA dissipates %.2f W; %s handles about %.1f W" % (
+                c.ref, c.value, vin, vout, amps * 1000, watts, pkg or "this package", limit)
+            if watts > limit:
+                self.warnings.append("regulator heat: %s. Use a bigger package, a lower input voltage or a "
+                                     "switching regulator" % line)
+            elif watts > 0.75 * limit:
+                self.warnings.append("regulator heat: %s (close to the limit; add copper around it)" % line)
+            else:
+                self.notes.append("power: " + line)
+        for net, ma in sorted(loads.items()):
+            self.notes.append("rail %s carries about %.0f mA" % (net, ma))
 
     def pin_type(self, key):
         c = self.by_ref[key[0]]
