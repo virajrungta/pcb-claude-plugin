@@ -88,6 +88,11 @@ class Design(object):
                 self.raw = json.load(f)
             except ValueError as e:
                 raise SpecError("spec is not valid JSON: %s" % e)
+        from . import blocks
+        try:
+            self.raw, self.block_summary = blocks.expand(self.raw)
+        except blocks.BlockError as e:
+            raise SpecError(str(e))
         r = self.raw
         self.name = r.get("name") or os.path.splitext(os.path.basename(path))[0]
         if not re.match(r"^[A-Za-z0-9_\-]+$", self.name):

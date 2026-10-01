@@ -9,6 +9,29 @@ release and publishes it on GitHub.
 
 _Nothing yet._
 
+## V1.4 - 2026-09-30
+
+- **Prebuilt circuit blocks**: 15 verified sub-circuits that drop into a design
+  with one line and need no part research: `usb_c_power`, `usb_c_data` (with
+  ESD), `ldo_ams1117_3v3`, `ldo_ap2112_3v3`, `lipo_charger_mcp73831`,
+  `esp32_c3_wroom02`, `esp32_s3_wroom1`, `atmega328p_16mhz`, `ws2812b_led`,
+  `led_indicator`, `button`, `i2c_pullups`, `qwiic_connector`,
+  `lowside_switch`, `voltage_divider`. Ports join your nets by name or through
+  `connect`; spare MCU pins become no-connects automatically; part numbers are
+  assigned to fit. `kipcb blocks` lists them.
+- **Prebuilt part names**: `{"part": "R0603", "value": "10k"}` fills in symbol,
+  footprint and, for common values, the JLCPCB part number. Covers passives,
+  LEDs, buttons, crystals, headers of any size, USB-C connectors, regulators,
+  the charger, ESD, MCUs and modules, the WS2812, LM358 and AO3400A.
+  `kipcb parts` lists them.
+- **Remembers your parts**: chips and connectors from every board that reaches
+  "ready to order" are saved locally and usable by name next time.
+- **New example** `c3_blocks.json`: the ESP32-C3 sensor board in 1,253
+  characters instead of 4,309, with no library searches, and 7 parts without
+  JLCPCB numbers instead of 17.
+- Every block and part is tested against KiCad's libraries
+  (`tests/test_blocks_kicad.py`).
+
 ## V1.3 - 2026-09-30
 
 - **One command for the whole pipeline**: `kipcb run <spec>` checks, builds,

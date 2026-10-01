@@ -159,6 +159,8 @@ def cmd_check(a):
         return 1
     d.validate()
     print(d.summary())
+    for line in getattr(d, "block_summary", []):
+        print("block " + line)
     for n in getattr(d, "notes", []):
         print("NOTE: " + n)
     for w in d.warnings:
@@ -280,6 +282,65 @@ def cmd_settings(a):
     return 0
 
 
+def cmd_parts(a):
+    from . import blocks
+    q = " ".join(a.query).lower()
+    rows = []
+    for name, p in sorted(blocks.builtin_parts().items()):
+        text = "%s %s %s %s" % (name, p.get("symbol", ""), p.get("footprint", ""), p.get("kind", ""))
+        if q and q not in text.lower():
+            continue
+        lc = p.get("lcsc")
+        lcs = (" lcsc " + lc) if isinstance(lc, str) else (" lcsc for " + ",".join(lc)) if lc else ""
+        fp = p.get("footprint", "(symbol default)").split(":")[-1]
+        rows.append("%s: %s | %s%s%s" % (name, p["symbol"], fp, lcs, (" | " + p["pins"]) if p.get("pins") else ""))
+    mem = sorted(blocks.remembered().values(), key=lambda e: -e.get("uses", 0))
+    mine = [e for e in mem if not q or q in json_dumps(e).lower()][:15]
+    for line in rows:
+        print(line)
+    if mine:
+        print("## remembered from your boards (use \"part\": \"<value>\")")
+        for e in mine:
+            print("%s: %s | %s%s | used %dx" % (e["value"], e["symbol"], e["footprint"].split(":")[-1],
+                                               (" lcsc " + e["lcsc"]) if e.get("lcsc") else "", e.get("uses", 1)))
+    print('(use: {"ref": "R1", "part": "R0603", "value": "10k"}; LCSC numbers: confirm in JLCPCB\'s BOM preview)')
+    return 0
+
+
+def json_dumps(o):
+    import json
+    return json.dumps(o)
+
+
+def cmd_blocks(a):
+    from . import blocks
+    cat = blocks.builtin_blocks()
+    if a.name:
+        b = cat.get(a.name)
+        if b is None:
+            print("no block %r; `kipcb blocks` lists them" % a.name)
+            return 1
+        ports = [n[1:] for n in b["nets"] if n.startswith("@")]
+        opt = set(b.get("optional", []))
+        req = [p for p in ports if p not in opt]
+        print("%s: %s" % (a.name, b["title"]))
+        print("  " + b["description"])
+        defaults = b.get("defaults", {})
+        print("  ports: " + " ".join("%s%s" % (p, ("=" + defaults[p]) if p in defaults else "") for p in req))
+        if opt:
+            print("  optional ports (no-connect if unused): " + " ".join(p for p in ports if p in opt))
+        if b.get("params"):
+            print("  params: " + " ".join("%s=%s" % kv for kv in b["params"].items()))
+        print("  parts: " + ", ".join("%s %s %s" % (c["ref"], c.get("part", ""), c.get("value", "")) for c in b["components"]))
+        print('  use: {"use": "%s", "connect": {%s}}' % (a.name, ", ".join('"%s": "..."' % p for p in req[:3])))
+        return 0
+    for name, b in cat.items():
+        ports = [n[1:] for n in b["nets"] if n.startswith("@") and n[1:] not in set(b.get("optional", []))]
+        print("%s: %s | ports %s%s" % (name, b["title"], " ".join(ports), " +IOs" if b.get("optional") else ""))
+    print("(`kipcb blocks <name>` for ports, params and parts)")
+    return 0
+
+
 def cmd_guide(a):
     from . import guide
     return guide.show(" ".join(a.topic))
@@ -368,6 +429,10 @@ def main(argv=None):
     p.add_argument("target"); p.set_defaults(fn=cmd_netlist)
     p = sp.add_parser("ref", help="how open-source designs wire a part (needs the knowledge base)")
     p.add_argument("part", nargs="+"); p.set_defaults(fn=cmd_ref)
+    p = sp.add_parser("parts", help="prebuilt parts usable as {\"part\": \"R0603\"} (plus parts remembered from your boards)")
+    p.add_argument("query", nargs="*"); p.set_defaults(fn=cmd_parts)
+    p = sp.add_parser("blocks", help="prebuilt circuit blocks (USB-C, regulators, MCUs, LEDs...); give a name for details")
+    p.add_argument("name", nargs="?"); p.set_defaults(fn=cmd_blocks)
     p = sp.add_parser("guide", help="print the reference section on a topic (no topic: list sections)")
     p.add_argument("topic", nargs="*"); p.set_defaults(fn=cmd_guide)
     p = sp.add_parser("fmt", help="rewrite specs in the compact one-line-per-part layout")

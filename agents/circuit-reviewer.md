@@ -27,6 +27,9 @@ You run in your own context and every fetched page costs tokens. Batch
 ## Method
 
 1. Read the spec. For KiCad projects, run `kipcb netlist <project dir>`.
+   Spec `blocks` are prebuilt, verified sub-circuits (`kipcb blocks <name>`):
+   don't re-derive their internals; check how they're connected (ports, voltages,
+   strapping pins, which IOs are used) and everything outside them.
 2. Run `kipcb sym-info <every non-passive symbol>` in one call to see the real
    pin names and types, and confirm each net connection is what the designer intended.
    (`kipcb` is on PATH; if not, look for `bin/kipcb` in the plugin root.)

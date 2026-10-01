@@ -14,7 +14,14 @@ of truth: change the spec and rerun, never hand-edit generated `.kicad_*` files.
 
 ## Work efficiently (tokens and time)
 
-- **Batch lookups**: one `kipcb sym-search "esp32 c3 | ams1117 | usb c 16p"`
+- **Prebuilt first**: `kipcb blocks` lists verified sub-circuits (USB-C
+  power/data, 3.3 V regulators, LiPo charger, ESP32-C3/S3, ATmega328P,
+  WS2812 LED, indicator LED, button, I²C pull-ups, Qwiic, MOSFET load switch,
+  voltage divider); `kipcb parts` lists part names (`R0603`, `C0603`,
+  `AMS1117-3.3`, `HEADER_1x04`…, plus parts from the user's past boards).
+  A block or `part` name needs no search, pin lookup or datasheet: it is
+  already checked against KiCad's libraries and the reference circuit.
+- **Batch lookups** for anything not prebuilt: one `kipcb sym-search "esp32 c3 | ams1117 | usb c 16p"`
   and one `kipcb sym-info A B C …` for all parts, not one call per part.
 - **Read reference sections, not files**: `kipcb guide <topic>` prints one
   section (`usb-c`, `esp32`, `ldo`, `decoupling`, `crystal`, `i2c`, `led`,
@@ -54,10 +61,12 @@ Confirm the key features too if the idea is vague. Record the answers in
 
 ## 2. Parts
 
-Give a short block diagram and power tree in chat. Pick parts from KiCad's stock
-libraries (batch `sym-search`, then batch `sym-info` for exact pins). Follow each
-IC's reference circuit: `kipcb ref <part>`, `kipcb guide <block>`, and the
-datasheet only if still unsure. Not in the libraries: `kipcb guide custom parts`.
+Give a short block diagram and power tree in chat. Build it from **blocks**
+wherever one fits (`kipcb blocks <name>` shows its ports and parameters), and
+use `part` names for individual parts. Only for what's left: batch
+`sym-search` / `sym-info` in KiCad's libraries, follow the IC's reference
+circuit (`kipcb ref <part>`, `kipcb guide <block>`, the datasheet only if still
+unsure). Not in the libraries: `kipcb guide custom parts`.
 
 ## 3. Spec
 
@@ -67,22 +76,30 @@ cover every field:
 
 ```json
 {
-  "name": "blinky", "title": "USB-C blinker",
-  "requirements": {"size": "30x20 mm", "power": "USB-C 5 V", "noise": "not critical"},
-  "board": {"width": 30, "height": 20, "layers": 2},
-  "power_nets": "GND VBUS",
-  "components": [
-    {"ref": "J1", "symbol": "Connector:USB_C_Receptacle_PowerOnly_6P", "footprint": "Connector_USB:USB_C_Receptacle_GCT_USB4125-xx-x_6P_TopMnt_Horizontal", "value": "USB-C", "place": {"edge": "left"}},
-    {"ref": "C1", "symbol": "Device:C", "footprint": "Capacitor_SMD:C_0603_1608Metric", "value": "100nF", "place": {"near": "U1.VCC"}}
+  "name": "plant_sensor", "title": "USB-C ESP32-C3 plant sensor",
+  "requirements": {"size": "small", "power": "USB-C 5 V", "noise": "one analog input"},
+  "board": {"layers": 2, "mounting_holes": {"size": "M2"}},
+  "power_nets": "GND VBUS +3V3",
+  "blocks": [
+    {"use": "usb_c_data", "params": {"edge": "bottom"}},
+    {"use": "ldo_ams1117_3v3"},
+    {"use": "esp32_c3_wroom02", "connect": {"USB_DP": "USB_DP", "USB_DN": "USB_DN", "IO3": "MOIST", "IO8": "LED_DIN"}},
+    {"use": "ws2812b_led", "connect": {"DIN": "LED_DIN"}}
   ],
-  "nets": {"VBUS": "J1.VBUS C1.1 U1.VCC", "GND": "J1.GND C1.2 U1.GND"},
-  "no_connect": "U1.PB3 U1.PB4"
+  "components": [
+    {"ref": "J5", "part": "HEADER_1x03", "value": "PROBE", "place": {"edge": "right"}},
+    {"ref": "C20", "part": "C0603", "value": "100nF", "place": {"near": "J5.2"}}
+  ],
+  "nets": {"+3V3": "J5.1", "MOIST": "J5.2 C20.1", "GND": "J5.3 C20.2"}
 }
 ```
 
-Every pin must be on a net or in `no_connect`. Put `current_ma` on the main
-loads so the power budget and regulator heat get checked. Decoupling caps get
-`near` on their exact supply pin; connectors get `edge`.
+Block ports join the spec net of the same name unless `connect` says
+otherwise; unused optional ports (spare IOs) become no-connects automatically.
+`kipcb check` prints the part numbers each block got (e.g. `esp32_c3_wroom02:
+U3 C4 …`), so later edits can refer to them. For your own parts: every pin must
+be on a net or in `no_connect`, put `current_ma` on loads, give decoupling caps
+`near` on their supply pin, and give connectors `edge`.
 
 ## 4. Run, look, fix
 

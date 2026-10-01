@@ -27,6 +27,41 @@ Write specs in this compact layout (one line per component, nets and
 `power_nets`/`no_connect` as space-separated strings; JSON lists also work).
 `kipcb fmt <spec>` rewrites any spec into it.
 
+## Blocks
+
+Prebuilt, verified sub-circuits. `kipcb blocks` lists them; `kipcb blocks <name>`
+shows ports, optional ports, defaults and parameters.
+
+```json
+"blocks": [
+  {"use": "usb_c_power", "params": {"edge": "bottom"}},
+  {"use": "ldo_ap2112_3v3", "connect": {"VIN": "VBAT"}},
+  {"use": "esp32_c3_wroom02", "connect": {"IO4": "SDA", "IO5": "SCL"}},
+  {"use": "led_indicator", "name": "pwr_led", "connect": {"IN": "+3V3"}, "params": {"color": "Red"}}
+]
+```
+
+- **Ports** join the spec net named in `connect`; otherwise the block's default
+  (e.g. a regulator's `VIN` defaults to `VBUS`); otherwise the net with the
+  port's own name (`GND`, `+3V3`, `USB_DP`…). Power ports are added to `power_nets`.
+- **Optional ports** (spare MCU IOs, a WS2812's `DOUT`) that aren't connected
+  become no-connects, so you don't list them.
+- **Refs** are renumbered to avoid clashes with your own parts and each other;
+  `kipcb check` prints the mapping. Nets inside a block are named `<block>_<net>`.
+- Use the same block twice with different `name`s (e.g. two `led_indicator`s).
+
+## Prebuilt parts
+
+`"part": "<name>"` fills `symbol`, `footprint`, a default `value` and
+`current_ma`, and an LCSC number for common values (e.g. `R0603` + `10k` →
+C25804). `kipcb parts` lists them: `R0402/R0603/R0805`, `C0402/C0603/C0805/C1206`,
+`LED0603/LED0805`, `SCHOTTKY_SOD123`, `BUTTON`, `CRYSTAL_3225`,
+`HEADER_1x04`-style headers (any count), `JST_SH_4`, `USB-C-6P/16P`,
+`AMS1117-3.3`, `AP2112K-3.3`, `MCP73831`, `USBLC6-2SC6`, ESP32-C3/S3 modules,
+`ATMEGA328P-AU`, `ATTINY85-SOIC`, `WS2812B-2020`, `LM358-SOIC`, `AO3400A`. Parts from
+your own ready-to-order boards are remembered and usable by their value.
+Fields you set yourself (e.g. `footprint`) win over the catalog.
+
 ## Top level
 
 | key | required | meaning |

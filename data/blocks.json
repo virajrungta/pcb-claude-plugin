@@ -1,0 +1,312 @@
+{
+  "_about": "Prebuilt, verified sub-circuits. In a spec: \"blocks\": [{\"use\": \"usb_c_power\", \"connect\": {\"VBUS\": \"VBUS\"}}]. Nets starting with @ are ports: they join the spec net named in `connect` (default: `defaults`, else the port's own name). Optional ports left unconnected become no-connects. Other nets stay inside the block (named <block>_<net>). Refs are renumbered to fit the spec.",
+
+  "usb_c_power": {
+    "title": "USB-C 5 V power input (no data)",
+    "description": "Power-only USB-C receptacle with the two 5.1k CC pull-downs a host needs before it supplies 5 V, plus 10 uF bulk.",
+    "params": {"edge": "left"},
+    "power": ["VBUS", "GND"],
+    "components": [
+      {"ref": "J1", "part": "USB-C-6P", "place": {"edge": "{edge}"}},
+      {"ref": "R1", "part": "R0603", "value": "5.1k", "place": {"near": "J1.CC1"}},
+      {"ref": "R2", "part": "R0603", "value": "5.1k", "place": {"near": "J1.CC2"}},
+      {"ref": "C1", "part": "C0603", "value": "10uF", "place": {"near": "J1.VBUS"}}
+    ],
+    "nets": {
+      "@VBUS": "J1.VBUS C1.1",
+      "@GND": "J1.GND J1.SHIELD R1.2 R2.2 C1.2",
+      "CC1": "J1.CC1 R1.1",
+      "CC2": "J1.CC2 R2.1"
+    }
+  },
+
+  "usb_c_data": {
+    "title": "USB-C with USB 2.0 data and ESD protection",
+    "description": "16-pin USB-C (HRO TYPE-C-31-M-12) with 5.1k CC pull-downs, both D+/D- rows joined, a USBLC6-2SC6 ESD array right at the connector, and 10 uF bulk on VBUS.",
+    "params": {"edge": "left"},
+    "power": ["VBUS", "GND"],
+    "components": [
+      {"ref": "J1", "part": "USB-C-16P", "place": {"edge": "{edge}"}},
+      {"ref": "R1", "part": "R0603", "value": "5.1k", "place": {"near": "J1.CC1"}},
+      {"ref": "R2", "part": "R0603", "value": "5.1k", "place": {"near": "J1.CC2"}},
+      {"ref": "U1", "part": "USBLC6-2SC6", "place": {"near": "J1"}},
+      {"ref": "C1", "part": "C0603", "value": "10uF", "place": {"near": "J1.VBUS"}}
+    ],
+    "nets": {
+      "@VBUS": "J1.VBUS U1.5 C1.1",
+      "@GND": "J1.GND J1.SHIELD R1.2 R2.2 U1.2 C1.2",
+      "@USB_DP": "J1.D+ U1.1 U1.6",
+      "@USB_DN": "J1.D- U1.3 U1.4",
+      "CC1": "J1.CC1 R1.1",
+      "CC2": "J1.CC2 R2.1"
+    },
+    "no_connect": "J1.SBU1 J1.SBU2"
+  },
+
+  "ldo_ams1117_3v3": {
+    "title": "3.3 V linear regulator, 1 A (AMS1117-3.3)",
+    "description": "AMS1117-3.3 in SOT-223 with 10 uF input and 22 uF output capacitors. Needs at least ~4.5 V in (not for 1S LiPo); dissipates (Vin - 3.3 V) x current.",
+    "defaults": {"VIN": "VBUS"},
+    "power": ["VIN", "+3V3", "GND"],
+    "components": [
+      {"ref": "U1", "part": "AMS1117-3.3"},
+      {"ref": "C1", "part": "C0603", "value": "10uF", "place": {"near": "U1.VI"}},
+      {"ref": "C2", "part": "C0805", "value": "22uF", "place": {"near": "U1.VO"}}
+    ],
+    "nets": {
+      "@VIN": "U1.VI C1.1",
+      "@+3V3": "U1.VO C2.1",
+      "@GND": "U1.GND C1.2 C2.2"
+    }
+  },
+
+  "ldo_ap2112_3v3": {
+    "title": "3.3 V low-dropout regulator, 600 mA (AP2112K-3.3)",
+    "description": "AP2112K-3.3 (SOT-23-5) with 1 uF in and out, enable tied on. Low dropout, so it also works from a 1S LiPo down to ~3.5 V.",
+    "defaults": {"VIN": "VBUS"},
+    "power": ["VIN", "+3V3", "GND"],
+    "components": [
+      {"ref": "U1", "part": "AP2112K-3.3"},
+      {"ref": "C1", "part": "C0603", "value": "1uF", "place": {"near": "U1.VIN"}},
+      {"ref": "C2", "part": "C0603", "value": "1uF", "place": {"near": "U1.VOUT"}}
+    ],
+    "nets": {
+      "@VIN": "U1.VIN U1.EN C1.1",
+      "@+3V3": "U1.VOUT C2.1",
+      "@GND": "U1.GND C1.2 C2.2"
+    }
+  },
+
+  "lipo_charger_mcp73831": {
+    "title": "Single-cell LiPo charger (MCP73831), with charge LED",
+    "description": "MCP73831-2 (4.2 V) with 4.7 uF in/out, PROG resistor setting the charge current (2k = 500 mA; current = 1000 V / R), and a red LED that lights while charging.",
+    "params": {"prog": "2k"},
+    "defaults": {"VIN": "VBUS"},
+    "power": ["VIN", "VBAT", "GND"],
+    "components": [
+      {"ref": "U1", "part": "MCP73831"},
+      {"ref": "C1", "part": "C0603", "value": "4.7uF", "place": {"near": "U1.4"}},
+      {"ref": "C2", "part": "C0603", "value": "4.7uF", "place": {"near": "U1.3"}},
+      {"ref": "R1", "part": "R0603", "value": "{prog}", "place": {"near": "U1.5"}},
+      {"ref": "R2", "part": "R0603", "value": "1k"},
+      {"ref": "D1", "part": "LED0603", "value": "Red"}
+    ],
+    "nets": {
+      "@VIN": "U1.4 C1.1 R2.1",
+      "@VBAT": "U1.3 C2.1",
+      "@GND": "U1.2 C1.2 C2.2 R1.2",
+      "PROG": "U1.5 R1.1",
+      "LED_A": "R2.2 D1.A",
+      "STAT": "U1.1 D1.K"
+    }
+  },
+
+  "esp32_c3_wroom02": {
+    "title": "ESP32-C3 module (WROOM-02) with reset, boot and native USB",
+    "description": "ESP32-C3-WROOM-02 with 10 uF + 100 nF at 3V3, EN pull-up and 1 uF delay with a RESET button, IO9 pull-up with a BOOT button, and native USB on IO18/IO19. IO2 and IO8 are strapping pins: don't pull them low at boot. Keep the antenna end at a board edge.",
+    "params": {"edge": "top"},
+    "power": ["+3V3", "GND"],
+    "optional": ["USB_DP", "USB_DN", "IO0", "IO1", "IO2", "IO3", "IO4", "IO5", "IO6", "IO7", "IO8", "IO10", "RXD", "TXD"],
+    "components": [
+      {"ref": "U1", "part": "ESP32-C3-WROOM-02", "place": {"edge": "{edge}"}},
+      {"ref": "C1", "part": "C0603", "value": "100nF", "place": {"near": "U1.3V3"}},
+      {"ref": "C2", "part": "C0603", "value": "10uF", "place": {"near": "C1"}},
+      {"ref": "R1", "part": "R0603", "value": "10k", "place": {"near": "U1.EN"}},
+      {"ref": "C3", "part": "C0603", "value": "1uF", "place": {"near": "U1.EN"}},
+      {"ref": "SW1", "part": "BUTTON", "value": "RESET"},
+      {"ref": "R2", "part": "R0603", "value": "10k", "place": {"near": "U1.IO9"}},
+      {"ref": "SW2", "part": "BUTTON", "value": "BOOT"}
+    ],
+    "nets": {
+      "@+3V3": "U1.3V3 C1.1 C2.1 R1.1 R2.1",
+      "@GND": "U1.GND C1.2 C2.2 C3.2 SW1.2 SW2.2",
+      "EN": "U1.EN R1.2 C3.1 SW1.1",
+      "BOOT": "U1.IO9 R2.2 SW2.1",
+      "@USB_DP": "U1.IO19", "@USB_DN": "U1.IO18",
+      "@IO0": "U1.IO0", "@IO1": "U1.IO1", "@IO2": "U1.IO2", "@IO3": "U1.IO3", "@IO4": "U1.IO4",
+      "@IO5": "U1.IO5", "@IO6": "U1.IO6", "@IO7": "U1.IO7", "@IO8": "U1.IO8", "@IO10": "U1.IO10",
+      "@RXD": "U1.11", "@TXD": "U1.12"
+    }
+  },
+
+  "esp32_s3_wroom1": {
+    "title": "ESP32-S3 module (WROOM-1) with reset, boot and native USB",
+    "description": "ESP32-S3-WROOM-1 with 10 uF + 100 nF at 3V3, EN pull-up and 1 uF delay with a RESET button, IO0 pull-up with a BOOT button, and native USB on IO19/IO20 (USB_D-/USB_D+). IO3, IO45 and IO46 are strapping pins. Keep the antenna end at a board edge.",
+    "params": {"edge": "top"},
+    "power": ["+3V3", "GND"],
+    "optional": ["USB_DP", "USB_DN", "IO1", "IO2", "IO3", "IO4", "IO5", "IO6", "IO7", "IO8", "IO9", "IO10", "IO11", "IO12",
+                 "IO13", "IO14", "IO15", "IO16", "IO17", "IO18", "IO21", "IO35", "IO36", "IO37", "IO38", "IO39", "IO40",
+                 "IO41", "IO42", "IO45", "IO46", "IO47", "IO48", "RXD0", "TXD0"],
+    "components": [
+      {"ref": "U1", "part": "ESP32-S3-WROOM-1", "place": {"edge": "{edge}"}},
+      {"ref": "C1", "part": "C0603", "value": "100nF", "place": {"near": "U1.3V3"}},
+      {"ref": "C2", "part": "C0603", "value": "10uF", "place": {"near": "C1"}},
+      {"ref": "R1", "part": "R0603", "value": "10k", "place": {"near": "U1.EN"}},
+      {"ref": "C3", "part": "C0603", "value": "1uF", "place": {"near": "U1.EN"}},
+      {"ref": "SW1", "part": "BUTTON", "value": "RESET"},
+      {"ref": "R2", "part": "R0603", "value": "10k", "place": {"near": "U1.IO0"}},
+      {"ref": "SW2", "part": "BUTTON", "value": "BOOT"}
+    ],
+    "nets": {
+      "@+3V3": "U1.3V3 C1.1 C2.1 R1.1 R2.1",
+      "@GND": "U1.GND C1.2 C2.2 C3.2 SW1.2 SW2.2",
+      "EN": "U1.EN R1.2 C3.1 SW1.1",
+      "BOOT": "U1.IO0 R2.2 SW2.1",
+      "@USB_DP": "U1.14", "@USB_DN": "U1.13",
+      "@IO1": "U1.IO1", "@IO2": "U1.IO2", "@IO3": "U1.IO3", "@IO4": "U1.IO4", "@IO5": "U1.IO5", "@IO6": "U1.IO6",
+      "@IO7": "U1.IO7", "@IO8": "U1.IO8", "@IO9": "U1.IO9", "@IO10": "U1.IO10", "@IO11": "U1.IO11", "@IO12": "U1.IO12",
+      "@IO13": "U1.IO13", "@IO14": "U1.IO14", "@IO15": "U1.IO15", "@IO16": "U1.IO16", "@IO17": "U1.IO17",
+      "@IO18": "U1.IO18", "@IO21": "U1.IO21", "@IO35": "U1.IO35", "@IO36": "U1.IO36", "@IO37": "U1.IO37",
+      "@IO38": "U1.IO38", "@IO39": "U1.IO39", "@IO40": "U1.IO40", "@IO41": "U1.IO41", "@IO42": "U1.IO42",
+      "@IO45": "U1.IO45", "@IO46": "U1.IO46", "@IO47": "U1.IO47", "@IO48": "U1.IO48",
+      "@RXD0": "U1.RXD0", "@TXD0": "U1.TXD0"
+    }
+  },
+
+  "atmega328p_16mhz": {
+    "title": "ATmega328P (TQFP-32) at 16 MHz, Arduino-compatible core",
+    "description": "ATmega328P-AU with a 16 MHz crystal and 22 pF load caps, 100 nF on VCC, AVCC and AREF, and a 10k RESET pull-up. Program it over ISP (RESET, SCK=PB5, MISO=PB4, MOSI=PB3) or a UART bootloader (PD0/PD1).",
+    "power": ["+5V", "GND"],
+    "defaults": {"+5V": "+5V"},
+    "optional": ["RESET", "PB0", "PB1", "PB2", "PB3", "PB4", "PB5", "PC0", "PC1", "PC2", "PC3", "PC4", "PC5",
+                 "PD0", "PD1", "PD2", "PD3", "PD4", "PD5", "PD6", "PD7", "ADC6", "ADC7"],
+    "components": [
+      {"ref": "U1", "part": "ATMEGA328P-AU"},
+      {"ref": "Y1", "part": "CRYSTAL_3225", "value": "16MHz", "place": {"near": "U1.7"}},
+      {"ref": "C1", "part": "C0603", "value": "22pF", "place": {"near": "Y1"}},
+      {"ref": "C2", "part": "C0603", "value": "22pF", "place": {"near": "Y1"}},
+      {"ref": "C3", "part": "C0603", "value": "100nF", "place": {"near": "U1.4"}},
+      {"ref": "C4", "part": "C0603", "value": "100nF", "place": {"near": "U1.18"}},
+      {"ref": "C5", "part": "C0603", "value": "100nF", "place": {"near": "U1.20"}},
+      {"ref": "R1", "part": "R0603", "value": "10k", "place": {"near": "U1.29"}}
+    ],
+    "nets": {
+      "@+5V": "U1.VCC U1.AVCC C3.1 C4.1 R1.1",
+      "@GND": "U1.GND Y1.2 Y1.4 C1.2 C2.2 C3.2 C4.2 C5.2",
+      "XTAL1": "U1.7 Y1.1 C1.1",
+      "XTAL2": "U1.8 Y1.3 C2.1",
+      "AREF": "U1.AREF C5.1",
+      "@RESET": "U1.29 R1.2",
+      "@PB0": "U1.PB0", "@PB1": "U1.PB1", "@PB2": "U1.PB2", "@PB3": "U1.PB3", "@PB4": "U1.PB4", "@PB5": "U1.PB5",
+      "@PC0": "U1.PC0", "@PC1": "U1.PC1", "@PC2": "U1.PC2", "@PC3": "U1.PC3", "@PC4": "U1.PC4", "@PC5": "U1.PC5",
+      "@PD0": "U1.PD0", "@PD1": "U1.PD1", "@PD2": "U1.PD2", "@PD3": "U1.PD3", "@PD4": "U1.PD4", "@PD5": "U1.PD5",
+      "@PD6": "U1.PD6", "@PD7": "U1.PD7", "@ADC6": "U1.ADC6", "@ADC7": "U1.ADC7"
+    }
+  },
+
+  "ws2812b_led": {
+    "title": "Addressable RGB LED (WS2812B-2020) with decoupling",
+    "description": "WS2812B-2020 with 100 nF at VDD. Chain several by connecting DOUT to the next block's DIN. At 5 V, a 3.3 V MCU may need a level shifter on DIN.",
+    "power": ["VDD", "GND"],
+    "defaults": {"VDD": "+3V3"},
+    "optional": ["DOUT"],
+    "components": [
+      {"ref": "D1", "part": "WS2812B-2020"},
+      {"ref": "C1", "part": "C0603", "value": "100nF", "place": {"near": "D1.VDD"}}
+    ],
+    "nets": {
+      "@VDD": "D1.VDD C1.1",
+      "@GND": "D1.VSS C1.2",
+      "@DIN": "D1.DIN",
+      "@DOUT": "D1.DOUT"
+    }
+  },
+
+  "led_indicator": {
+    "title": "Indicator LED with series resistor",
+    "description": "LED and resistor from a signal or supply (IN) to ground. 1k at 3.3 V gives ~1.3 mA for a red/green LED; use R = (V - Vf) / I.",
+    "params": {"resistor": "1k", "color": "Green"},
+    "components": [
+      {"ref": "R1", "part": "R0603", "value": "{resistor}"},
+      {"ref": "D1", "part": "LED0603", "value": "{color}", "place": {"near": "R1"}}
+    ],
+    "nets": {
+      "@IN": "R1.1",
+      "@GND": "D1.K",
+      "LED": "R1.2 D1.A"
+    }
+  },
+
+  "button": {
+    "title": "Push button to ground",
+    "description": "Tactile button pulling SIG to ground; use the MCU's internal pull-up, or add one.",
+    "params": {"label": "Button"},
+    "components": [
+      {"ref": "SW1", "part": "BUTTON", "value": "{label}"}
+    ],
+    "nets": {
+      "@SIG": "SW1.1",
+      "@GND": "SW1.2"
+    }
+  },
+
+  "i2c_pullups": {
+    "title": "I2C bus pull-ups",
+    "description": "One pair of pull-ups per bus: 4.7k for 100 kHz (2.2k for 400 kHz or long buses).",
+    "params": {"value": "4.7k"},
+    "defaults": {"VCC": "+3V3"},
+    "power": ["VCC"],
+    "components": [
+      {"ref": "R1", "part": "R0603", "value": "{value}"},
+      {"ref": "R2", "part": "R0603", "value": "{value}", "place": {"near": "R1"}}
+    ],
+    "nets": {
+      "@VCC": "R1.1 R2.1",
+      "@SDA": "R1.2",
+      "@SCL": "R2.2"
+    }
+  },
+
+  "qwiic_connector": {
+    "title": "Qwiic / STEMMA QT I2C connector (JST SH 4-pin)",
+    "description": "JST SH 1 mm connector in the Qwiic pinout: 1 GND, 2 3V3, 3 SDA, 4 SCL.",
+    "params": {"edge": "right"},
+    "defaults": {"VCC": "+3V3"},
+    "power": ["VCC", "GND"],
+    "components": [
+      {"ref": "J1", "part": "JST_SH_4", "place": {"edge": "{edge}"}}
+    ],
+    "nets": {
+      "@GND": "J1.1",
+      "@VCC": "J1.2",
+      "@SDA": "J1.3",
+      "@SCL": "J1.4"
+    }
+  },
+
+  "lowside_switch": {
+    "title": "Low-side MOSFET switch for a load (AO3400A) with flyback diode",
+    "description": "Logic-level N-MOSFET (30 V, 5.7 A) switching the load's low side: 100R gate resistor, 100k gate pull-down, Schottky flyback diode across the load for motors, relays and solenoids.",
+    "defaults": {"VLOAD": "VBUS"},
+    "power": ["VLOAD", "GND"],
+    "components": [
+      {"ref": "Q1", "part": "AO3400A"},
+      {"ref": "R1", "part": "R0603", "value": "100", "place": {"near": "Q1.1"}},
+      {"ref": "R2", "part": "R0603", "value": "100k", "place": {"near": "Q1.1"}},
+      {"ref": "D1", "part": "SCHOTTKY_SOD123", "place": {"near": "Q1.3"}}
+    ],
+    "nets": {
+      "@CTRL": "R1.1",
+      "GATE": "Q1.1 R1.2 R2.1",
+      "@LOAD": "Q1.3 D1.A",
+      "@VLOAD": "D1.K",
+      "@GND": "Q1.2 R2.2"
+    }
+  },
+
+  "voltage_divider": {
+    "title": "Voltage divider with filter cap (e.g. battery sense)",
+    "description": "OUT = IN x bottom / (top + bottom), with 100 nF on OUT for a quiet ADC reading. Defaults halve the input (100k/100k).",
+    "params": {"top": "100k", "bottom": "100k"},
+    "components": [
+      {"ref": "R1", "part": "R0603", "value": "{top}"},
+      {"ref": "R2", "part": "R0603", "value": "{bottom}", "place": {"near": "R1"}},
+      {"ref": "C1", "part": "C0603", "value": "100nF", "place": {"near": "R2"}}
+    ],
+    "nets": {
+      "@IN": "R1.1",
+      "@OUT": "R1.2 R2.1 C1.1",
+      "@GND": "R2.2 C1.2"
+    }
+  }
+}

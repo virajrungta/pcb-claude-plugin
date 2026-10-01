@@ -1,0 +1,26 @@
+{
+  "name": "c3_blocks",
+  "title": "ESP32-C3 sensor node (built from blocks)",
+  "requirements": {"size": "as small as practical, 4x M2 holes", "power": "USB-C 5 V, ~350 mA peak (WiFi TX)", "io": "USB-C bottom edge, 4-pin sensor header right edge", "build": "JLCPCB assembly", "noise": "two buffered analog inputs"},
+  "board": {"layers": 2, "corner_radius": 2, "mounting_holes": {"size": "M2"}, "ground_pour": "GND"},
+  "power_nets": "GND VBUS +3V3",
+  "blocks": [
+    {"use": "usb_c_data", "params": {"edge": "bottom"}},
+    {"use": "ldo_ams1117_3v3"},
+    {"use": "esp32_c3_wroom02", "connect": {"USB_DP": "USB_DP", "USB_DN": "USB_DN", "IO8": "LED_DIN", "IO3": "SENSE_OUT", "IO4": "SENSE2_OUT"}},
+    {"use": "ws2812b_led", "connect": {"DIN": "LED_DIN"}}
+  ],
+  "components": [
+    {"ref": "U5", "part": "LM358-SOIC", "group": "analog"},
+    {"ref": "C20", "part": "C0603", "value": "100nF", "group": "analog", "place": {"near": "U5.8"}},
+    {"ref": "J5", "part": "HEADER_1x04", "value": "SENSOR", "group": "analog", "place": {"edge": "right"}}
+  ],
+  "nets": {
+    "+3V3": "U5.8 C20.1 J5.3",
+    "GND": "U5.4 C20.2 J5.4",
+    "SENSE_IN": "J5.1 U5.3",
+    "SENSE_OUT": "U5.1 U5.2",
+    "SENSE2_IN": "J5.2 U5.5",
+    "SENSE2_OUT": "U5.7 U5.6"
+  }
+}

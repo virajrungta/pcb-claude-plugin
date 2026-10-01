@@ -32,6 +32,21 @@ board size and rules, and optional placement hints. Full reference:
 [spec-format.md](../skills/design/references/spec-format.md). Worked
 examples: [`examples/`](../examples).
 
+## Prebuilt blocks and parts
+
+Most boards share the same building blocks: a USB-C input, a 3.3 V
+regulator, an MCU with its reset and boot circuitry, LEDs, buttons, I²C. These
+ship with the plugin as **blocks** (`kipcb blocks`): verified sub-circuits with
+named ports. A design says `{"use": "esp32_c3_wroom02", "connect": {"IO4": "SDA"}}`
+and gets the module, its decoupling, the EN and boot circuits and the buttons,
+already wired to the reference design, with spare IOs marked unused. Individual
+parts have short **part names** (`R0603`, `AMS1117-3.3`, `HEADER_1x04`) that fill
+in symbol, footprint and, for common values, an LCSC number. Every block and part
+is tested against KiCad's libraries before each release.
+
+Parts from boards that reach "ready to order" are remembered locally, so they
+become part names too.
+
 ## Validation (`kipcb check`)
 
 - Every symbol and footprint is resolved against your installed KiCad libraries.

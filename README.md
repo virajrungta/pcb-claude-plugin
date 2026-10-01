@@ -83,6 +83,7 @@ Every design is a normal **KiCad 9 project** (`.kicad_pro`, `.kicad_sch`, `.kica
 ## Highlights
 
 - **Asks before it designs**: board size, power budget, connector edges, build method and noise sensitivity are pinned down first, not guessed.
+- **Prebuilt, verified building blocks**: USB-C power or data, 3.3 V regulators, a LiPo charger, ESP32-C3/S3 and ATmega328P cores, LEDs, buttons, I²C, Qwiic, a MOSFET load switch and more, each one line in a design. No part research, pin lookups or datasheet reading for standard circuitry, and the parts you use are remembered for next time.
 - **Real parts, verified pins**: every symbol and footprint comes from KiCad's libraries; every pin is checked, and unused pins must be marked deliberately.
 - **Placement that follows the rules of thumb**: connectors flush to edges facing out, decoupling caps first and right at their pins, room for ICs to fan out, noisy parts kept away from sensitive ones.
 - **Routing that finishes**: Freerouting with several strategies, a completion pass, ground pours on both layers and stitching vias.
@@ -176,7 +177,8 @@ After an update, the next session tells you which version you're on and links to
   <tr>
     <td align="center" width="50%">
       <img src="docs/images/usb_blinker_angle.png" alt="USB-C ATtiny85 LED blinker" width="100%"><br>
-      <sub><a href="examples/usb_blinker.json"><code>usb_blinker.json</code></a>: 30 × 22 mm, ATtiny85, USB-C power, ISP header</sub>
+      <sub><a href="examples/usb_blinker.json"><code>usb_blinker.json</code></a>: 30 × 22 mm, ATtiny85, USB-C power, ISP header.
+      <a href="examples/c3_blocks.json"><code>c3_blocks.json</code></a> builds a 21-part ESP32-C3 board from four blocks in about 30 lines.</sub>
     </td>
     <td align="center" width="50%">
       <img src="docs/images/usb_blinker_top.png" alt="USB-C LED blinker, top view" width="100%"><br>

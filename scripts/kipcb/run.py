@@ -58,6 +58,8 @@ def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600):
         ui.always(report.text(report.write(pdir, d.name, last.get("timings"))))
         return 0
     ui.always("check  ok: %d parts, %d nets, %d warning(s)" % (len(d.components), len(d.nets), len(d.warnings)))
+    for line in getattr(d, "block_summary", []):
+        ui.always("       block " + line)
 
     # 2. build
     from . import build as buildmod
@@ -103,6 +105,10 @@ def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600):
 
     r = report.write(pdir, d.name, timings)
     ready = not r["blockers"]
+    if ready:
+        from . import blocks, learn
+        if learn.enabled():
+            blocks.remember(d)          # its parts become instant `part` names next time
     with open(_cache_file(pdir), "w") as f:
         json.dump({"hash": digest, "ready": ready, "timings": timings}, f)
     ui.always("\n" + report.text(r))

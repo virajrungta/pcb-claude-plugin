@@ -23,6 +23,8 @@ these commands for you, but they also work on their own.
 | `kipcb sym-info A B C` | Compact pins of several symbols in one call (`-v` adds the datasheet URL) |
 | `kipcb guide [topic]` | Prints one section of the design references (USB-C, LDO, decoupling, placement hints…); no topic lists them |
 | `kipcb fmt spec.json` | Rewrites a spec in the compact one-line-per-part layout |
+| `kipcb blocks [name]` | Prebuilt circuit blocks; with a name, its ports, optional ports, parameters and parts |
+| `kipcb parts [query]` | Prebuilt part names for `"part": "…"` (symbol, footprint, LCSC for common values), plus parts remembered from your boards |
 | `kipcb ref <part>` | Shows how open-source designs wire a part (uses the knowledge base shipped with the plugin) |
 
 ## Design

@@ -233,3 +233,43 @@ class V13Tests(unittest.TestCase):
             self.assertTrue(out.startswith("READY TO ORDER"))
             self.assertIn(os.path.join(pdir, "t.kicad_pro"), out)
             self.assertTrue(os.path.exists(os.path.join(rep, "REPORT.md")))
+
+
+class BlockExpansionTests(unittest.TestCase):
+    def test_part_shorthand_fills_symbol_footprint_and_lcsc(self):
+        from kipcb import blocks
+        c = blocks.expand_part({"ref": "R1", "part": "r0603", "value": "10K"})
+        self.assertEqual(c["symbol"], "Device:R")
+        self.assertEqual(c["footprint"], "Resistor_SMD:R_0603_1608Metric")
+        self.assertEqual(c["lcsc"], "C25804")
+        self.assertNotIn("lcsc", blocks.expand_part({"ref": "R2", "part": "R0603", "value": "33k"}))
+        h = blocks.expand_part({"ref": "J1", "part": "HEADER_1x06"})
+        self.assertEqual(h["symbol"], "Connector_Generic:Conn_01x06")
+        self.assertIn("PinHeader_1x06", h["footprint"])
+        with self.assertRaises(blocks.BlockError):
+            blocks.expand_part({"ref": "X1", "part": "NOPE"})
+
+    def test_blocks_renumber_connect_and_handle_optional_ports(self):
+        from kipcb import blocks
+        raw = {"name": "t", "power_nets": "GND",
+               "components": [{"ref": "R1", "part": "R0603", "value": "1k"}],
+               "nets": {"GND": "R1.2"},
+               "blocks": [{"use": "led_indicator", "connect": {"IN": "STATUS"}, "params": {"color": "Red"}},
+                          {"use": "atmega328p_16mhz", "connect": {"+5V": "VBUS", "PD2": "BTN"}}]}
+        spec, summary = blocks.expand(raw)
+        refs = [c["ref"] for c in spec["components"]]
+        self.assertEqual(len(refs), len(set(refs)))              # no clashes with the explicit R1
+        led = [c for c in spec["components"] if c.get("group") == "led_indicator"]
+        self.assertEqual({c["ref"] for c in led}, {"R2", "D1"})
+        self.assertIn("Red", [c.get("value") for c in led])        # params substituted
+        self.assertIn("R2.1", spec["nets"]["STATUS"])
+        self.assertIn("D1.K", spec["nets"]["GND"])                  # default: port name -> same net
+        self.assertIn("R1.2", spec["nets"]["GND"])                  # merged with the spec's own net
+        self.assertIn("VBUS", spec["power_nets"])                   # power port registered
+        u = [c["ref"] for c in spec["components"] if c.get("value") == "ATmega328P-AU"][0]
+        self.assertIn("%s.PD2" % u, spec["nets"]["BTN"])
+        self.assertIn("%s.PB0" % u, spec["no_connect"])             # unused optional single pin
+        self.assertIn("atmega328p_16mhz_RESET", spec["nets"])       # unused optional, but joins 2 parts
+        self.assertNotIn("blocks", spec)
+        with self.assertRaises(blocks.BlockError):
+            blocks.expand({"blocks": [{"use": "led_indicator", "connect": {"NOPE": "X"}}]})
