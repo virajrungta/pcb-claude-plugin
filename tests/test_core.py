@@ -326,11 +326,13 @@ class ProgressTests(unittest.TestCase):
                 self.assertEqual(items["Placement"]["took"], "4s")
                 self.assertEqual(items["Preflight checks"]["status"], "failed")
                 line = progress.render_line(progress.load())
-                self.assertIn("✔ Schematic", line)
-                self.assertIn("✘ Preflight (2 problem(s) to fix)", line)
+                self.assertIn("■■■■✘□□□□ 4/9", line)
+                self.assertIn("✘ Preflight: 2 problem(s) to fix", line)
                 self.assertNotIn("\n", line)
-                hook = progress.hook(json.dumps({"tool_input": {"command": "cd x && kipcb run t.json --resume"}}))
-                self.assertIn("PCB progress", json.loads(hook)["systemMessage"])
+                cmd = json.dumps({"tool_input": {"command": "cd x && kipcb run t.json --resume"}})
+                self.assertIn("PCB · t", json.loads(progress.hook(cmd))["systemMessage"])
+                self.assertIsNone(progress.hook(cmd))          # unchanged: not shown again
+                self.assertEqual(progress.statusline(), line)
                 self.assertIsNone(progress.hook(json.dumps({"tool_input": {"command": "ls"}})))
             finally:
                 if old is None:

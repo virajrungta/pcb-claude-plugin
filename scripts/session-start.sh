@@ -24,6 +24,11 @@ printf '{"fab_house": "%s", "build_method": "%s", "layers": %s, "learning": %s}\
   "$([[ "$LEARN" == "false" || "$LEARN" == "0" ]] && echo false || echo true)" \
   > "$SETTINGS_DIR/settings.json" 2>/dev/null
 
+# stable launcher for Claude Code's status line (the plugin's own folder changes per version):
+# "statusLine": {"type": "command", "command": "~/.local/share/kipcb/statusline.sh"}
+printf '#!/usr/bin/env bash\nexec "%s/scripts/statusline.sh"\n' "$CLAUDE_PLUGIN_ROOT" \
+  > "$SETTINGS_DIR/statusline.sh" 2>/dev/null && chmod +x "$SETTINGS_DIR/statusline.sh" 2>/dev/null
+
 # 2. toolchain check (files only)
 missing=()
 if [[ -x /Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli || -x "$HOME/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli" ]] \

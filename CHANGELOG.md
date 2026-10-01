@@ -9,6 +9,17 @@ release and publishes it on GitHub.
 
 _Nothing yet._
 
+## V1.9 - 2026-10-01
+
+- **Cleaner progress display**: the progress line is now a short bar,
+  `PCB · board  ■■■■■□□□□ 5/9  ▶ Routing ~1 min` (or `✘ Preflight: 2 problems
+  to fix`), shown only when progress changes instead of after every command.
+- **Status bar option**: the same bar can live in Claude Code's status line
+  and update in place. Add
+  `"statusLine": {"type": "command", "command": "~/.local/share/kipcb/statusline.sh"}`
+  to `~/.claude/settings.json`. It's empty when no design is in progress.
+  `kipcb progress --statusline` prints it.
+
 ## V1.8 - 2026-10-01
 
 - **Progress checklist from the start**: it now appears as soon as you've

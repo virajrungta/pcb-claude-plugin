@@ -263,6 +263,9 @@ def cmd_progress(a):
         progress.start(pdir, name, {})
         print("progress checklist started for %s (the user sees it after each kipcb step)" % name)
         return 0
+    if a.statusline:
+        print(progress.statusline())
+        return 0
     if a.hook:
         out = progress.hook(sys.stdin.read())
         if out:
@@ -528,6 +531,8 @@ def main(argv=None):
     p.add_argument("part", nargs="+"); p.set_defaults(fn=cmd_ref)
     p = sp.add_parser("progress", help="show the current design's progress checklist")
     p.add_argument("--hook", action="store_true", help=argparse.SUPPRESS)
+    p.add_argument("--statusline", action="store_true",
+                   help="one line for Claude Code's status bar (empty when no design is in progress)")
     p.add_argument("--start", metavar="NAME", help="start a checklist for a new board right after the requirements")
     p.add_argument("--dir", default="hardware", help="folder the spec will go in (default: hardware)")
     p.set_defaults(fn=cmd_progress)

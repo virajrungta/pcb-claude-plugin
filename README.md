@@ -163,6 +163,24 @@ marketplace `virajrungta/pcb-claude-plugin`, select **PCB Design**, and choose a
 
 The [getting started guide](docs/getting-started.md) walks through a first board end to end.
 
+### 7. Progress in your status bar (optional)
+
+While a board is being designed, Claude Code shows a short progress line after
+each step:
+
+```text
+PCB · esp32_lcd  ■■■■■□□□□ 5/9  ▶ Routing ~1 min
+```
+
+To keep it in Claude Code's status bar at the bottom of the screen instead (one
+line, updating live), add this to `~/.claude/settings.json`:
+
+```json
+"statusLine": {"type": "command", "command": "~/.local/share/kipcb/statusline.sh"}
+```
+
+It's empty when no design is in progress, so it doesn't get in the way.
+
 ## Updating
 
 A new version ships every week (see the [changelog](CHANGELOG.md) and [releases](https://github.com/virajrungta/pcb-claude-plugin/releases)). Third-party plugins don't update on their own unless you turn auto-update on, so update when a new version is out:

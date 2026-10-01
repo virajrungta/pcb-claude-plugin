@@ -141,19 +141,22 @@ SHORT = {"Requirements": "Requirements", "Components & circuit": "Components", "
 
 
 def render_line(state):
-    """One line (Claude Code prefixes every line of a hook message, so keep it to one)."""
-    marks = {"done": "✔", "active": "▶", "todo": "☐", "failed": "✘"}
-    parts = []
-    for it in state["items"]:
-        label = "%s %s" % (marks[it["status"]], SHORT.get(it["name"], it["name"]))
-        if it["status"] == "done" and it.get("took"):
-            label += " " + it["took"]
-        elif it["status"] in ("active", "todo") and it.get("est"):
-            label += " " + it["est"]
-        if it["status"] == "failed" and it.get("note"):
-            label += " (%s)" % it["note"]
-        parts.append(label)
-    return "PCB progress · %s   %s" % (state.get("name", ""), "  ".join(parts))
+    """Compact progress bar: 'PCB · board  ■■■■■□□□□ 5/9  ▶ Routing ~1 min'."""
+    items = state["items"]
+    cells = {"done": "■", "failed": "✘", "active": "□", "todo": "□"}
+    bar = "".join(cells[it["status"]] for it in items)
+    done = sum(1 for it in items if it["status"] == "done")
+    failed = [it for it in items if it["status"] == "failed"]
+    active = [it for it in items if it["status"] == "active"]
+    if failed:
+        it = failed[0]
+        tail = "✘ %s%s" % (SHORT.get(it["name"], it["name"]), (": " + it["note"]) if it.get("note") else "")
+    elif active:
+        it = active[0]
+        tail = "▶ %s%s" % (SHORT.get(it["name"], it["name"]), (" " + it["est"]) if it.get("est") else "")
+    else:
+        tail = "✔ done"
+    return "PCB · %s  %s %d/%d  %s" % (state.get("name", ""), bar, done, len(items), tail)
 
 
 def hook(stdin_text):
@@ -168,4 +171,29 @@ def hook(stdin_text):
     state = load()
     if not state or time.time() - state.get("updated", 0) > 3600:
         return None
-    return json.dumps({"systemMessage": render_line(state)})
+    line = render_line(state)
+    if state.get("shown") == line:
+        return None                    # nothing changed since the last line the user saw
+    _remember_shown(line)
+    return json.dumps({"systemMessage": line})
+
+
+def _remember_shown(line):
+    try:
+        with open(_pointer()) as f:
+            pdir = json.load(f)["project"]
+        with open(_path(pdir)) as f:
+            state = json.load(f)
+        state["shown"] = line
+        with open(_path(pdir), "w") as f:
+            json.dump(state, f)
+    except (OSError, ValueError, KeyError):
+        pass
+
+
+def statusline():
+    """For Claude Code's status line: the progress bar while a design is active, else ''."""
+    state = load()
+    if not state or time.time() - state.get("updated", 0) > 3 * 3600:
+        return ""
+    return render_line(state)
