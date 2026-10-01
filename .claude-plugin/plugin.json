@@ -1,7 +1,7 @@
 {
   "name": "pcb",
   "displayName": "PCB Design",
-  "version": "1.10",
+  "version": "1.11",
   "description": "Go from a circuit idea to a manufacturable KiCad PCB: requirements, part selection, schematic, placement, autorouting, ERC/DRC and fab outputs (Gerbers, BOM, pick-and-place).",
   "author": {
     "name": "Viraj Rungta"
@@ -56,6 +56,12 @@
       "type": "boolean",
       "title": "Learn from my boards",
       "description": "Remember which layouts and routing strategies worked so future boards go faster. Stored only on this computer.",
+      "default": true
+    },
+    "progress_statusline": {
+      "type": "boolean",
+      "title": "Show design progress in the status bar",
+      "description": "While a board is being designed, Claude Code's status bar shows a live progress bar (\u25a0\u25a0\u25a0\u25a0\u25a0\u25a1\u25a1\u25a1\u25a1 5/9 \u25b6 Routing ~1 min). Never replaces a status line you already have.",
       "default": true
     }
   }

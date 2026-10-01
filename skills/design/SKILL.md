@@ -103,12 +103,10 @@ The user follows the design on a progress bar:
    your message is how they see the progress. Don't put it in a code block.
 3. As soon as the spec exists, run `kipcb estimate hardware/<name>.json`; it
    adds the times; tell the user the total and why any step is long.
-4. Once per user: if `kipcb settings` shows `statusline: not set`, ask (in the
-   requirements round, as a last option-style question) whether they'd like
-   live progress in Claude Code's status bar. On yes, run
-   `kipcb progress --install-statusline` (it changes ~/.claude/settings.json,
-   only if they have no status line yet) and tell them it shows from the next
-   session. On no, don't ask again (`kipcb settings --set statusline_offer=no`).
+
+Claude Code's status bar also shows the bar live when the user kept the
+plugin's "Show design progress in the status bar" option on (the default);
+nothing to set up.
 
 ## 2. Parts
 

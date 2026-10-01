@@ -9,6 +9,14 @@ release and publishes it on GitHub.
 
 _Nothing yet._
 
+## V1.11 - 2026-10-01
+
+- **Status bar progress is built in**: a new install option, *Show design
+  progress in the status bar* (on by default), makes the plugin set up Claude
+  Code's status bar by itself at session start. There's nothing to run. It never
+  replaces a status line you already have, and turning the option off removes
+  it again. The "ask once" step in the design flow is gone.
+
 ## V1.10 - 2026-10-01
 
 - **Readable progress**: Claude now reports progress in its own messages after

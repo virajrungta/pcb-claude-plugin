@@ -198,6 +198,22 @@ def install_statusline():
     return "done: the status bar now shows PCB progress while a design is running (backup: %s.bak-kipcb)" % path
 
 
+def uninstall_statusline():
+    """Remove kipcb's status line again (only if it's the one in place)."""
+    path = os.path.expanduser("~/.claude/settings.json")
+    try:
+        with open(path) as f:
+            cfg = json.load(f)
+    except (OSError, ValueError):
+        return "nothing to remove"
+    if "kipcb" not in (cfg.get("statusLine") or {}).get("command", ""):
+        return "nothing to remove"
+    cfg.pop("statusLine", None)
+    with open(path, "w") as f:
+        json.dump(cfg, f, indent=2)
+    return "removed the PCB progress status line"
+
+
 def statusline_installed():
     try:
         with open(os.path.expanduser("~/.claude/settings.json")) as f:

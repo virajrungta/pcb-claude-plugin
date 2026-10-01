@@ -26,8 +26,17 @@ printf '{"fab_house": "%s", "build_method": "%s", "layers": %s, "learning": %s}\
 
 # stable launcher for Claude Code's status line (the plugin's own folder changes per version):
 # "statusLine": {"type": "command", "command": "~/.local/share/kipcb/statusline.sh"}
-printf '#!/usr/bin/env bash\nexec "%s/scripts/statusline.sh"\n' "$CLAUDE_PLUGIN_ROOT" \
+printf '#!/usr/bin/env bash\nT="%s/scripts/statusline.sh"\n[ -x "$T" ] && exec "$T"\n' "$CLAUDE_PLUGIN_ROOT" \
   > "$SETTINGS_DIR/statusline.sh" 2>/dev/null && chmod +x "$SETTINGS_DIR/statusline.sh" 2>/dev/null
+# install option "Show design progress in the status bar": set it up (never replacing a status
+# line the user already has), or take ours away again when the option is turned off
+if command -v python3 >/dev/null 2>&1; then
+  if [[ "${CLAUDE_PLUGIN_OPTION_PROGRESS_STATUSLINE:-true}" == "false" || "${CLAUDE_PLUGIN_OPTION_PROGRESS_STATUSLINE:-}" == "0" ]]; then
+    PYTHONPATH="$CLAUDE_PLUGIN_ROOT/scripts" python3 -c 'from kipcb import progress; progress.uninstall_statusline()' >/dev/null 2>&1
+  else
+    PYTHONPATH="$CLAUDE_PLUGIN_ROOT/scripts" python3 -c 'from kipcb import progress; progress.install_statusline()' >/dev/null 2>&1
+  fi
+fi
 
 # 2. toolchain check (files only)
 missing=()

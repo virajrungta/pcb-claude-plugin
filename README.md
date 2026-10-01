@@ -134,6 +134,7 @@ claude plugin install pcb@pcb-claude-plugin --config fab_house=JLCPCB --config l
 | How boards get built | Assembled by the manufacturer · Hand soldering | Part sizes (0402/0603 vs 0805+) and stocked-part preference |
 | Default layer count | 2 · 4 | Starting layer count for new boards |
 | Learn from my boards | on · off | Whether kipcb remembers what worked (stored only on your computer) |
+| Show design progress in the status bar | on · off | Live progress bar at the bottom of Claude Code while a board is designed |
 
 ### 5. Check the setup
 
@@ -171,15 +172,10 @@ While a board is being designed, Claude reports progress after each step:
 PCB progress ■■■■■□□□□ 5/9 · ▶ Routing (~1 min)
 ```
 
-The first time you design a board, Claude offers to also pin it in Claude Code's
-status bar, where it updates live. To set that up yourself:
-
-```bash
-kipcb progress --install-statusline
-```
-
-It only changes `~/.claude/settings.json` if you don't have a status line yet,
-and the bar is empty when no design is in progress.
+It's also pinned in Claude Code's status bar, where it updates live. That's
+automatic, through the install option *Show design progress in the status
+bar* (on by default). It never replaces a status line you already have, it's
+empty when no design is in progress, and turning the option off removes it.
 
 ## Updating
 
