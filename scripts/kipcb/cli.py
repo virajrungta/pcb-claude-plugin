@@ -245,6 +245,25 @@ def cmd_estimate(a):
     d = Design(a.spec)
     for line in estimate.lines(d, fab=not a.no_fab):
         print(line)
+    from . import progress
+    est, _, f = estimate.estimate(d)
+    why = ("%s: fine-pitch pins" % " and ".join(f["fine_parts"])) if est["route"][1] > 120 and f["fine_parts"] else ""
+    progress.start(os.path.join(d.dir, d.name), d.name,
+                   {k: "~" + estimate.fmt((v[0] + v[1]) / 2) for k, v in est.items()}, why)
+    print("progress checklist started (shown to the user after each kipcb run stage)")
+    return 0
+
+
+def cmd_progress(a):
+    """Show the design progress checklist; --hook renders it for Claude Code (PostToolUse)."""
+    from . import progress
+    if a.hook:
+        out = progress.hook(sys.stdin.read())
+        if out:
+            print(out)
+        return 0
+    state = progress.load()
+    print(progress.render(state) if state else "no design in progress")
     return 0
 
 
@@ -501,6 +520,8 @@ def main(argv=None):
     p.add_argument("target"); p.set_defaults(fn=cmd_netlist)
     p = sp.add_parser("ref", help="how open-source designs wire a part (needs the knowledge base)")
     p.add_argument("part", nargs="+"); p.set_defaults(fn=cmd_ref)
+    p = sp.add_parser("progress", help="show the current design's progress checklist")
+    p.add_argument("--hook", action="store_true", help=argparse.SUPPRESS); p.set_defaults(fn=cmd_progress)
     p = sp.add_parser("estimate", help="approximate time for each step of `kipcb run` on this spec, "
                       "with the reason when a step is long")
     p.add_argument("spec"); p.add_argument("--no-fab", action="store_true"); p.set_defaults(fn=cmd_estimate)

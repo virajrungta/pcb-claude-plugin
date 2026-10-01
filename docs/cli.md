@@ -35,6 +35,7 @@ these commands for you, but they also work on their own.
 |---|---|
 | `kipcb run spec.json [--no-fab] [--force]` | **The whole pipeline**: check → build → preflight → route → manufacturing files → report, with one progress line per step. An unchanged spec returns the last report instantly |
 | `kipcb run spec.json --until build\|preflight\|route` / `--resume` | The same pipeline in stages: stop after a stage, then continue where it left off. Each stage ends with a `checkpoint:` line; Claude ticks its progress checklist between stages |
+| `kipcb progress` | The current design's progress checklist (the same one shown in Claude Code after each step) |
 | `kipcb estimate spec.json [--no-fab]` | Approximate time for each step of `kipcb run` on this design, with the reason when a step is long (e.g. fine-pitch chips); learns from your own run times |
 | `kipcb preflight spec.json` | Checks in under a second whether a built board can route cleanly: pad reach at each pin pitch, one netclass per net, manufacturer limits, copper near the edge, overlaps, decoupling and crystal placement, escape room around fine-pitch chips, routing density. `run` stops before routing if any of these fail |
 | `kipcb check spec.json` | Validates the spec: symbols, footprints, pins, nets, unused pins, logic levels, and the power budget / regulator heat |

@@ -120,6 +120,19 @@ def lines(design, fab=True):
     return out
 
 
+def checklist(design):
+    """The progress checklist Claude shows the user (task list), with times."""
+    est, reasons, f = estimate(design)
+    mid = lambda s: "~" + fmt((est[s][0] + est[s][1]) / 2)
+    why = ""
+    if est["route"][1] > 120 and f["fine_parts"]:
+        why = ", %s has fine-pitch pins" % " and ".join(f["fine_parts"])
+    return ["Requirements", "Components & circuit", "Schematic",
+            "Placement (%s)" % mid("build"), "Preflight checks (%s)" % mid("preflight"),
+            "Routing (%s%s)" % (mid("route"), why), "DRC & noise checks",
+            "Manufacturing files (%s)" % mid("fab"), "Review & hand-off"]
+
+
 def record(design, timings):
     f = features(design)
     f.pop("fine_parts", None)

@@ -9,6 +9,20 @@ release and publishes it on GitHub.
 
 _Nothing yet._
 
+## V1.7 - 2026-10-01
+
+- **Progress checklist that actually shows up**: V1.6 asked Claude to use
+  Claude Code's task-list tool, which many Claude Code versions don't have, so
+  no checklist appeared. Now the plugin shows it itself after every
+  `kipcb estimate` / `kipcb run` step, and it ticks forward as the design
+  progresses:
+  `PCB progress · board  ✔ Requirements  ✔ Components  ✔ Schematic  ✔ Placement 3s  ▶ Preflight ~1s  ☐ Routing ~6s  ☐ DRC  ☐ Files  ☐ Hand-off`.
+  A failed step shows ✘ with the reason. It's drawn by a plugin hook from the
+  pipeline's own progress file, so it can't be skipped and costs no tokens.
+  `kipcb progress` prints the full checklist.
+- The design skill starts the checklist right after the requirements
+  questions, before any design work.
+
 ## V1.6 - 2026-10-01
 
 - **Progress checklist**: after the requirements questions, Claude shows a

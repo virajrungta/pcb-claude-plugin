@@ -34,10 +34,15 @@ def _erc_errors(pdir):
     return sum(1 for sh in erc.get("sheets", []) for v in sh.get("violations", []) if v.get("severity") == "error")
 
 
+TICKS = {"schematic + placement": "Components & circuit, Schematic, Placement",
+         "preflight": "Preflight checks", "routing + DRC + noise checks": "Routing, DRC & noise checks",
+         "manufacturing files": "Manufacturing files"}
+
+
 def _checkpoint(done, summary, d, nxt):
-    """One line Claude can relay (and tick in its checklist): what finished, what's next."""
+    """One line Claude can relay and tick in its checklist: what finished, what's next."""
     from . import estimate
-    line = "checkpoint: %s done -- %s" % (done, summary)
+    line = "checkpoint: %s done -- %s [tick: %s]" % (done, summary, TICKS.get(done, done))
     if nxt:
         est, _, _ = estimate.estimate(d)
         lo, hi = est.get(nxt, (0, 0))
@@ -106,7 +111,16 @@ def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600, 
         ui.always("unchanged since the last successful run; nothing to redo (use --force to rebuild)\n")
         ui.always(report.text(report.write(pdir, d.name, last.get("timings"))))
         return 0
-    from . import estimate
+    from . import estimate, progress
+    est, _, _f = estimate.estimate(d)
+    est_txt = {k: "~" + estimate.fmt((v[0] + v[1]) / 2) for k, v in est.items()}
+
+    def mark(stage_name, ok, note=""):
+        try:
+            progress.stage(pdir, d.name, stage_name, ok, timings.get(stage_name), note, est_txt)
+        except Exception:
+            pass                      # the checklist is a nicety; never fail a run over it
+
     if not resume:
         ui.always("check  ok: %d parts, %d nets, %d warning(s)" % (len(d.components), len(d.nets), len(d.warnings)))
         for line in getattr(d, "block_summary", []):
@@ -124,6 +138,7 @@ def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600, 
         timings["build"] = round(time.time() - t)
         b = report._load(pdir, "build.json") or {}
         if b.get("placement_failed") or rc == 2:
+            mark("build", False, "parts didn't fit")
             ui.always("build  stopped: %s did not fit on the board" % ", ".join(b.get("placement_failed", [])))
             ui.always("\n" + report.text(report.write(pdir, d.name, timings)))
             return 1
@@ -132,6 +147,7 @@ def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600, 
         _checkpoint("schematic + placement", "%d parts on a %.0f x %.0f mm board, ERC %s" % (
             len(d.components), b.get("width", 0), b.get("height", 0),
             "ok" if not _erc_errors(pdir) else "%d error(s)" % _erc_errors(pdir)), d, "preflight")
+        mark("build", True)
         if staged("build"):
             return 0
 
@@ -142,11 +158,13 @@ def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600, 
         fails = preflight.run(pdir, d.name, d)
         timings["preflight"] = round(time.time() - t)
         if fails:
+            mark("preflight", False, "%d problem(s) to fix" % fails)
             ui.always("preflight  %d problem(s); not routing until they're fixed (fixes above)" % fails)
             ui.always("\n" + report.text(report.write(pdir, d.name, timings)))
             return 1
         ui.always("preflight  ok (%ds)" % timings["preflight"])
         _checkpoint("preflight", "the board can route cleanly", d, "route")
+        mark("preflight", True)
         if staged("preflight"):
             return 0
 
@@ -170,6 +188,9 @@ def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600, 
         _checkpoint("routing + DRC + noise checks", "%s, DRC %s" % (
             "all connections routed" if not rj.get("unconnected") else "%d connection(s) left" % rj["unconnected"],
             "clean" if not errs else "%d error(s)" % errs), d, "fab" if do_fab else None)
+        left = rj.get("unconnected") or errs
+        mark("route", not left, ("%d unrouted" % rj["unconnected"]) if rj.get("unconnected") else
+             ("%d DRC error(s)" % errs if errs else ""))
         if staged("route"):
             return 0
 
@@ -184,6 +205,7 @@ def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600, 
                                       timings["fab"]))
         if frc == 0:
             _checkpoint("manufacturing files", "Gerbers, BOM and pick-and-place in fab/", d, None)
+        mark("fab", frc == 0, "" if frc == 0 else "blocked by DRC")
     staged("fab")
 
     # printable extras for people (bottom view, board PDF); Claude doesn't need to read them

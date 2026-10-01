@@ -308,6 +308,37 @@ class V16PlacementTests(unittest.TestCase):
             learn.history = orig
 
 
+class ProgressTests(unittest.TestCase):
+    def test_checklist_ticks_through_stages(self):
+        import tempfile
+        from kipcb import progress
+        with tempfile.TemporaryDirectory() as home, tempfile.TemporaryDirectory() as pdir:
+            old = os.environ.get("XDG_DATA_HOME")
+            os.environ["XDG_DATA_HOME"] = home
+            try:
+                progress.start(pdir, "t", {"build": "~5s", "route": "~6 min"}, "U1 (RP2040): fine-pitch pins")
+                st = {i["name"]: i["status"] for i in progress.load()["items"]}
+                self.assertEqual((st["Requirements"], st["Components & circuit"], st["Routing"]), ("done", "active", "todo"))
+                progress.stage(pdir, "t", "build", True, 4)
+                progress.stage(pdir, "t", "preflight", False, 0, "2 problem(s) to fix")
+                items = {i["name"]: i for i in progress.load()["items"]}
+                self.assertEqual(items["Placement"]["status"], "done")
+                self.assertEqual(items["Placement"]["took"], "4s")
+                self.assertEqual(items["Preflight checks"]["status"], "failed")
+                line = progress.render_line(progress.load())
+                self.assertIn("✔ Schematic", line)
+                self.assertIn("✘ Preflight (2 problem(s) to fix)", line)
+                self.assertNotIn("\n", line)
+                hook = progress.hook(json.dumps({"tool_input": {"command": "cd x && kipcb run t.json --resume"}}))
+                self.assertIn("PCB progress", json.loads(hook)["systemMessage"])
+                self.assertIsNone(progress.hook(json.dumps({"tool_input": {"command": "ls"}})))
+            finally:
+                if old is None:
+                    os.environ.pop("XDG_DATA_HOME", None)
+                else:
+                    os.environ["XDG_DATA_HOME"] = old
+
+
 if __name__ == "__main__":
     unittest.main()
 

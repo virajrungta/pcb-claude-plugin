@@ -88,6 +88,22 @@ design work, together with the expected time:
 `kipcb check` repeats this as `SUPPORT:` lines; if one appears that you
 didn't mention, tell the user before routing.
 
+## 1c. Start the progress checklist (required, every design)
+
+The user sees a progress line that ticks off as the design moves along:
+`✔ Requirements ▶ Components ☐ Schematic ☐ Placement ~15s ☐ Preflight ☐ Routing ~6 min …`.
+The plugin shows it automatically after every `kipcb estimate` / `kipcb run`
+command; you only have to drive the stages:
+
+1. As soon as the spec file exists, run `kipcb estimate hardware/<name>.json`.
+   This starts the checklist (Requirements ticked) and prints the times; tell
+   the user the total and why any step is long.
+2. Then run the pipeline in the stages of step 4. Each stage updates the
+   checklist and ends with a `checkpoint:` line you can relay in a few words.
+
+If your Claude Code also has a task/todo list tool (TodoWrite or TaskCreate),
+you may mirror the same items there, but the plugin's line is what users rely on.
+
 ## 2. Parts
 
 Give a short block diagram and power tree in chat. Build it from **blocks**
@@ -134,26 +150,9 @@ be on a net or in `no_connect`, put `current_ma` on loads, give decoupling caps
 
 ## 4. Run, look, fix
 
-**Progress checklist.** As soon as the requirements are answered (end of step
-1b), create a checklist with Claude Code's task/todo list tool (TodoWrite, or
-TaskCreate/TaskUpdate where that's what's available) so the user sees the
-work as a box of steps that tick off. Use these items, with rough times, and
-refresh the times from `kipcb estimate <spec>` once the spec exists:
-
-1. Requirements
-2. Components & circuit
-3. Schematic
-4. Placement (~N s/min)
-5. Preflight checks
-6. Routing (~N min; say why if long, e.g. "0.4 mm-pitch RP2040")
-7. DRC & noise checks
-8. Manufacturing files
-9. Review & hand-off
-
-Mark exactly one item in progress at a time and complete each the moment its
-stage finishes. Don't batch the ticks at the end. Run the pipeline in stages
-so there's something to tick between them; each stage ends with a
-`checkpoint:` line (what finished, what's next and how long):
+Run the pipeline in stages so the checklist (step 1c) ticks off as you go.
+Each stage updates it and ends with a `checkpoint:` line saying what finished,
+what's next and how long:
 
 | Stage | Command | Ticks |
 |---|---|---|
