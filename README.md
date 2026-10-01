@@ -165,21 +165,21 @@ The [getting started guide](docs/getting-started.md) walks through a first board
 
 ### 7. Progress in your status bar (optional)
 
-While a board is being designed, Claude Code shows a short progress line after
-each step:
+While a board is being designed, Claude reports progress after each step:
 
 ```text
-PCB · esp32_lcd  ■■■■■□□□□ 5/9  ▶ Routing ~1 min
+PCB progress ■■■■■□□□□ 5/9 · ▶ Routing (~1 min)
 ```
 
-To keep it in Claude Code's status bar at the bottom of the screen instead (one
-line, updating live), add this to `~/.claude/settings.json`:
+The first time you design a board, Claude offers to also pin it in Claude Code's
+status bar, where it updates live. To set that up yourself:
 
-```json
-"statusLine": {"type": "command", "command": "~/.local/share/kipcb/statusline.sh"}
+```bash
+kipcb progress --install-statusline
 ```
 
-It's empty when no design is in progress, so it doesn't get in the way.
+It only changes `~/.claude/settings.json` if you don't have a status line yet,
+and the bar is empty when no design is in progress.
 
 ## Updating
 

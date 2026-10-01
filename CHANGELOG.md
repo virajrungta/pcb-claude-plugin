@@ -9,6 +9,18 @@ release and publishes it on GitHub.
 
 _Nothing yet._
 
+## V1.10 - 2026-10-01
+
+- **Readable progress**: Claude now reports progress in its own messages after
+  each step (**PCB progress** ■■■■■□□□□ 5/9 · ▶ Routing (~1 min)). This
+  replaces the dim "PostToolUse:Bash says" notice, which is how Claude Code
+  shows any plugin hook message and couldn't be styled. The design commands
+  print a ready-made `progress:` line for Claude to relay.
+- **Status bar, one click**: the first time you design a board, Claude offers to
+  pin live progress in Claude Code's status bar. `kipcb progress
+  --install-statusline` sets it up and only touches `~/.claude/settings.json`
+  if no status line is configured. It keeps a backup.
+
 ## V1.9 - 2026-10-01
 
 - **Cleaner progress display**: the progress line is now a short bar,

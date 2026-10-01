@@ -329,11 +329,8 @@ class ProgressTests(unittest.TestCase):
                 self.assertIn("■■■■✘□□□□ 4/9", line)
                 self.assertIn("✘ Preflight: 2 problem(s) to fix", line)
                 self.assertNotIn("\n", line)
-                cmd = json.dumps({"tool_input": {"command": "cd x && kipcb run t.json --resume"}})
-                self.assertIn("PCB · t", json.loads(progress.hook(cmd))["systemMessage"])
-                self.assertIsNone(progress.hook(cmd))          # unchanged: not shown again
+                self.assertTrue(line.startswith("PCB · t"))
                 self.assertEqual(progress.statusline(), line)
-                self.assertIsNone(progress.hook(json.dumps({"tool_input": {"command": "ls"}})))
             finally:
                 if old is None:
                     os.environ.pop("XDG_DATA_HOME", None)

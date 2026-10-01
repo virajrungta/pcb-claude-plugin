@@ -34,15 +34,10 @@ def _erc_errors(pdir):
     return sum(1 for sh in erc.get("sheets", []) for v in sh.get("violations", []) if v.get("severity") == "error")
 
 
-TICKS = {"schematic + placement": "Components & circuit, Schematic, Placement",
-         "preflight": "Preflight checks", "routing + DRC + noise checks": "Routing, DRC & noise checks",
-         "manufacturing files": "Manufacturing files"}
-
-
 def _checkpoint(done, summary, d, nxt):
     """One line Claude can relay and tick in its checklist: what finished, what's next."""
     from . import estimate
-    line = "checkpoint: %s done -- %s [tick: %s]" % (done, summary, TICKS.get(done, done))
+    line = "checkpoint: %s done -- %s" % (done, summary)
     if nxt:
         est, _, _ = estimate.estimate(d)
         lo, hi = est.get(nxt, (0, 0))
@@ -118,6 +113,7 @@ def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600, 
     def mark(stage_name, ok, note=""):
         try:
             progress.stage(pdir, d.name, stage_name, ok, timings.get(stage_name), note, est_txt)
+            ui.always("progress: " + progress.render_line(progress.load(pdir)))
         except Exception:
             pass                      # the checklist is a nicety; never fail a run over it
 

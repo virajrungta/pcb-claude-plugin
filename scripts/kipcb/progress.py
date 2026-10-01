@@ -1,10 +1,10 @@
 """The progress checklist the user sees in Claude Code while a board is designed.
 
-`kipcb estimate` starts it and each `kipcb run` stage updates it (written to
-.kipcb/progress.json in the project, plus a pointer to the current one). A
-plugin hook (hooks/hooks.json, PostToolUse on Bash) renders it as a box after
-every kipcb command, so the user sees the steps tick off without relying on any
-particular Claude Code tool.
+`kipcb progress --start` begins it right after the requirements, and each
+`kipcb run` stage updates it (.kipcb/progress.json in the project, plus a
+pointer to the current one). The commands print it as a `progress:` line that
+Claude relays in its own message, and Claude Code's status bar can show it live
+(install_statusline / scripts/statusline.sh).
 """
 
 import json
@@ -159,41 +159,48 @@ def render_line(state):
     return "PCB · %s  %s %d/%d  %s" % (state.get("name", ""), bar, done, len(items), tail)
 
 
-def hook(stdin_text):
-    """PostToolUse hook: after a kipcb command, show the checklist box to the user."""
-    try:
-        data = json.loads(stdin_text or "{}")
-    except ValueError:
-        return None
-    cmd = str((data.get("tool_input") or {}).get("command", ""))
-    if "kipcb run" not in cmd and "kipcb estimate" not in cmd and "kipcb progress" not in cmd:
-        return None
-    state = load()
-    if not state or time.time() - state.get("updated", 0) > 3600:
-        return None
-    line = render_line(state)
-    if state.get("shown") == line:
-        return None                    # nothing changed since the last line the user saw
-    _remember_shown(line)
-    return json.dumps({"systemMessage": line})
-
-
-def _remember_shown(line):
-    try:
-        with open(_pointer()) as f:
-            pdir = json.load(f)["project"]
-        with open(_path(pdir)) as f:
-            state = json.load(f)
-        state["shown"] = line
-        with open(_path(pdir), "w") as f:
-            json.dump(state, f)
-    except (OSError, ValueError, KeyError):
-        pass
-
-
 def statusline():
     """For Claude Code's status line: the progress bar while a design is active, else ''."""
     state = load()
     if not state or time.time() - state.get("updated", 0) > 3 * 3600:
         return ""
     return render_line(state)
+
+
+def install_statusline():
+    """Point Claude Code's status line at kipcb's progress bar (only if none is set)."""
+    path = os.path.expanduser("~/.claude/settings.json")
+    try:
+        with open(path) as f:
+            cfg = json.load(f)
+    except OSError:
+        cfg = {}
+    except ValueError:
+        return "not changed: %s isn't valid JSON" % path
+    cur = (cfg.get("statusLine") or {}).get("command", "")
+    if "kipcb" in cur:
+        return "already set: the status bar shows PCB progress"
+    if cur:
+        return ("not changed: you already have a status line (%s). To show PCB progress there, "
+                "add the output of ~/.local/share/kipcb/statusline.sh to it." % cur)
+    launcher = os.path.join(os.path.dirname(_pointer()), "statusline.sh")
+    if not os.path.exists(launcher):
+        return "not changed: start a new Claude Code session first (it creates %s)" % launcher
+    cfg["statusLine"] = {"type": "command", "command": launcher}
+    if os.path.exists(path):
+        with open(path) as f:
+            backup = f.read()
+        with open(path + ".bak-kipcb", "w") as f:
+            f.write(backup)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w") as f:
+        json.dump(cfg, f, indent=2)
+    return "done: the status bar now shows PCB progress while a design is running (backup: %s.bak-kipcb)" % path
+
+
+def statusline_installed():
+    try:
+        with open(os.path.expanduser("~/.claude/settings.json")) as f:
+            return "kipcb" in (json.load(f).get("statusLine") or {}).get("command", "")
+    except (OSError, ValueError):
+        return False

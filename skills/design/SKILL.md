@@ -90,24 +90,25 @@ didn't mention, tell the user before routing.
 
 ## 1c. Start the progress checklist (required, every design)
 
-The user sees a progress line that ticks off as the design moves along:
-`✔ Requirements ▶ Components ☐ Schematic ☐ Placement ~15s ☐ Preflight ☐ Routing ~6 min …`.
-The plugin shows it automatically after every `kipcb estimate` / `kipcb run`
-command; you only have to drive the stages:
+The user follows the design on a progress bar:
+`■■■■■□□□□ 5/9  ▶ Routing ~1 min`.
 
-1. **Immediately after the user answers the requirements questions**, before
-   anything else, pick a short board name and run
-   `kipcb progress --start <name>` (it assumes the spec goes in `hardware/`;
-   pass `--dir <folder>` otherwise). The user now sees
-   `✔ Requirements ▶ Components …`.
-2. As soon as the spec file exists, run `kipcb estimate hardware/<name>.json`.
-   It adds the times to the checklist; tell the user the total and why any
-   step is long.
-3. Then run the pipeline in the stages of step 4. Each stage updates the
-   checklist and ends with a `checkpoint:` line you can relay in a few words.
-
-If your Claude Code also has a task/todo list tool (TodoWrite or TaskCreate),
-you may mirror the same items there, but the plugin's line is what users rely on.
+1. **Immediately after the user answers the requirements questions**, pick a
+   short board name and run `kipcb progress --start <name>` (it assumes the
+   spec goes in `hardware/`; pass `--dir <folder>` otherwise).
+2. Every `kipcb progress`, `kipcb estimate` and `kipcb run` stage prints a
+   `progress:` line. **Relay it in your own message**, as one short bold-led line,
+   e.g. **PCB progress** ■■■■■□□□□ 5/9 · ▶ Routing (~1 min), together
+   with a few words on what just happened. Users can't see command output, so
+   your message is how they see the progress. Don't put it in a code block.
+3. As soon as the spec exists, run `kipcb estimate hardware/<name>.json`; it
+   adds the times; tell the user the total and why any step is long.
+4. Once per user: if `kipcb settings` shows `statusline: not set`, ask (in the
+   requirements round, as a last option-style question) whether they'd like
+   live progress in Claude Code's status bar. On yes, run
+   `kipcb progress --install-statusline` (it changes ~/.claude/settings.json,
+   only if they have no status line yet) and tell them it shows from the next
+   session. On no, don't ask again (`kipcb settings --set statusline_offer=no`).
 
 ## 2. Parts
 
@@ -155,9 +156,9 @@ be on a net or in `no_connect`, put `current_ma` on loads, give decoupling caps
 
 ## 4. Run, look, fix
 
-Run the pipeline in stages so the checklist (step 1c) ticks off as you go.
-Each stage updates it and ends with a `checkpoint:` line saying what finished,
-what's next and how long:
+Run the pipeline in stages so the progress bar (step 1c) moves as you go.
+Each stage ends with a `checkpoint:` line (what finished, what's next, how
+long) and a `progress:` line; relay both briefly in your own message:
 
 | Stage | Command | Ticks |
 |---|---|---|

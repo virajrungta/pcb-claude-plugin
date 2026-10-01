@@ -250,7 +250,7 @@ def cmd_estimate(a):
     why = ("%s: fine-pitch pins" % " and ".join(f["fine_parts"])) if est["route"][1] > 120 and f["fine_parts"] else ""
     progress.start(os.path.join(d.dir, d.name), d.name,
                    {k: "~" + estimate.fmt((v[0] + v[1]) / 2) for k, v in est.items()}, why, keep=True)
-    print("progress checklist started (shown to the user after each kipcb run stage)")
+    print("progress: " + progress.render_line(progress.load(os.path.join(d.dir, d.name))))
     return 0
 
 
@@ -261,10 +261,13 @@ def cmd_progress(a):
         name = re.sub(r"[^A-Za-z0-9_\-]+", "_", a.start).strip("_") or "board"
         pdir = os.path.abspath(os.path.join(a.dir, name))
         progress.start(pdir, name, {})
-        print("progress checklist started for %s (the user sees it after each kipcb step)" % name)
+        print("progress: " + progress.render_line(progress.load(pdir)))
         return 0
     if a.statusline:
         print(progress.statusline())
+        return 0
+    if a.install_statusline:
+        print(progress.install_statusline())
         return 0
     if a.hook:
         out = progress.hook(sys.stdin.read())
@@ -327,13 +330,32 @@ def cmd_ref(a):
     return knowledge.print_part(" ".join(a.part))
 
 
+def _prefs_path():
+    base = os.environ.get("XDG_DATA_HOME", os.path.expanduser("~/.local/share"))
+    return os.path.join(base, "kipcb", "prefs.json")
+
+
 def cmd_settings(a):
-    from . import learn
+    import json
+    from . import learn, progress
+    try:
+        with open(_prefs_path()) as f:
+            prefs = json.load(f)
+    except (OSError, ValueError):
+        prefs = {}
+    if a.set:
+        key, _, val = a.set.partition("=")
+        prefs[key.strip()] = val.strip()
+        os.makedirs(os.path.dirname(_prefs_path()), exist_ok=True)
+        with open(_prefs_path(), "w") as f:
+            json.dump(prefs, f)
     s = learn.settings()
     print("manufacturer:  %s" % s.get("fab_house", "JLCPCB (default)"))
     print("build method:  %s" % s.get("build_method", "Assembled by the manufacturer (default)"))
     print("layers:        %s" % s.get("layers", "2 (default)"))
     print("learning:      %s" % ("on" if learn.enabled() else "off"))
+    print("statusline:    %s" % ("PCB progress" if progress.statusline_installed() else
+                                 "declined" if prefs.get("statusline_offer") == "no" else "not set"))
     print("change with:   /plugin configure pcb@pcb-claude-plugin")
     return 0
 
@@ -531,6 +553,9 @@ def main(argv=None):
     p.add_argument("part", nargs="+"); p.set_defaults(fn=cmd_ref)
     p = sp.add_parser("progress", help="show the current design's progress checklist")
     p.add_argument("--hook", action="store_true", help=argparse.SUPPRESS)
+    p.add_argument("--install-statusline", action="store_true",
+                   help="show design progress in Claude Code's status bar (edits ~/.claude/settings.json; "
+                        "only when no status line is set yet)")
     p.add_argument("--statusline", action="store_true",
                    help="one line for Claude Code's status bar (empty when no design is in progress)")
     p.add_argument("--start", metavar="NAME", help="start a checklist for a new board right after the requirements")
@@ -557,7 +582,8 @@ def main(argv=None):
     p.add_argument("topic", nargs="*"); p.set_defaults(fn=cmd_guide)
     p = sp.add_parser("fmt", help="rewrite specs in the compact one-line-per-part layout")
     p.add_argument("spec", nargs="+"); p.set_defaults(fn=cmd_fmt)
-    sp.add_parser("settings", help="show your defaults from the install dialog").set_defaults(fn=cmd_settings)
+    p = sp.add_parser("settings", help="show your defaults from the install dialog")
+    p.add_argument("--set", metavar="KEY=VALUE", help=argparse.SUPPRESS); p.set_defaults(fn=cmd_settings)
     p = sp.add_parser("learn", help="show or reset what kipcb has learned from past runs")
     p.add_argument("action", nargs="?", default="status", choices=["status", "reset"])
     p.set_defaults(fn=cmd_learn)
