@@ -91,35 +91,84 @@ Every design is a normal **KiCad 9 project** (`.kicad_pro`, `.kicad_sch`, `.kica
 - **Right-sized boards**: auto-sized boards shrink to fit their parts while keeping room to route.
 - **Gets smarter with use**: routing strategy, board sizing and footprint clearances improve with every board you route, and `kipcb ref` shows how open-source designs wire each chip ([how](docs/how-it-works.md#learning)). A knowledge base built from hundreds of real boards ships with the plugin. Everything stays on your machine.
 
-## Quick start
+## Installation
 
-**1. Install the requirements:** [Claude Code](https://claude.com/claude-code), [KiCad 9](https://www.kicad.org/download/), and Java 21+ for the autorouter (`brew install --cask temurin` on macOS).
+<table>
+  <tr>
+    <td valign="top" width="34%"><b>1 · Requirements</b><br><br>
+      <a href="https://claude.com/claude-code">Claude Code</a><br>
+      <a href="https://www.kicad.org/download/">KiCad 9</a><br>
+      Java 21+ for the autorouter<br><sub>macOS: <code>brew install --cask temurin</code></sub>
+    </td>
+    <td valign="top" width="33%"><b>2 · Install</b><br><br>
+      In Claude Code, run:<br><br>
+      <code>/plugin install pcb --marketplace virajrungta/pcb-claude-plugin</code><br><br>
+      <sub>Confirm the marketplace, then choose <b>Install for you</b>.</sub>
+    </td>
+    <td valign="top" width="33%"><b>3 · Turn on auto-update</b><br><br>
+      <code>/plugin</code> → <b>Marketplaces</b> → <b>pcb-claude-plugin</b> → <b>Enable auto-update</b><br><br>
+      <sub>Weekly versions then arrive on their own.</sub>
+    </td>
+  </tr>
+</table>
 
-**2. Install the plugin:**
+**Setup dialog.** Installing from `/plugin` opens a short setup form. You can change any of these later:
+
+| Setting | Options | What it changes |
+|---|---|---|
+| Default PCB manufacturer | JLCPCB · PCBWay · OSH Park · Other | BOM / pick-and-place format and the design rules Claude aims for |
+| How boards get built | Assembled by the manufacturer · Hand soldering | Part sizes (0402/0603 vs 0805+) and stocked-part preference |
+| Default layer count | 2 · 4 | Starting layer count for new boards |
+| Learn from my boards | on · off | Whether kipcb remembers what worked (stored only on your computer) |
+
+**First run.** Start a new session. The plugin welcomes you and checks that KiCad, Java and the autorouter are in place, and only speaks up again if something is missing. Then try:
+
+```text
+/pcb:design a 30 x 20 mm USB-C LED blinker with an ATtiny85 and an ISP header
+```
+
+<details>
+<summary><b>Desktop app</b></summary>
+
+In the **Code** tab, click **+** next to the prompt box → **Plugins** → **Add plugin**, add the
+marketplace `virajrungta/pcb-claude-plugin`, select **PCB Design**, and choose a scope.
+
+</details>
+
+<details>
+<summary><b>Install from a terminal instead</b></summary>
+
+The shell commands skip the setup dialog. Pass settings with `--config`, or run `/plugin configure pcb@pcb-claude-plugin` later in Claude Code.
 
 ```bash
 claude plugin marketplace add virajrungta/pcb-claude-plugin
 ```
 
 ```bash
-claude plugin install pcb@pcb-claude-plugin
+claude plugin install pcb@pcb-claude-plugin --config fab_house=JLCPCB --config layers=2
 ```
 
-**3. Check your setup** (in a new Claude Code session, or ask Claude to run it):
+</details>
+
+Check your setup any time with `kipcb doctor`, and see your defaults with `kipcb settings`.
+The [getting started guide](docs/getting-started.md) walks through a first board end to end.
+
+## Updating
+
+A new version ships every week (see the [changelog](CHANGELOG.md) and [releases](https://github.com/virajrungta/pcb-claude-plugin/releases)).
+
+- **Automatically:** turn on auto-update once (`/plugin` → **Marketplaces** → **pcb-claude-plugin** → **Enable auto-update**). New versions download in the background, and the next session uses them.
+- **In Claude Code:** `/plugin` → **Installed** → **PCB Design** → **Update now**
+- **From a terminal:**
 
 ```bash
-kipcb doctor
+claude plugin update pcb@pcb-claude-plugin
 ```
 
-**4. Design something:**
+After an update, the next session tells you which version you're on and links to what's new.
 
-```text
-/pcb:design a 30 x 20 mm USB-C LED blinker with an ATtiny85 and an ISP header
-```
-
-**5. Open the result in KiCad**, review it, and order boards with `/pcb:fab`.
-
-The [getting started guide](docs/getting-started.md) walks through each step.
+**Change your settings:** `/plugin configure pcb@pcb-claude-plugin`
+<br>**Uninstall:** `/plugin uninstall pcb@pcb-claude-plugin` (your designs and local learning data stay on disk)
 
 ## Examples
 
@@ -169,15 +218,6 @@ bin/kipcb build examples/c3_sensor.json && bin/kipcb route examples/c3_sensor &&
 Autorouted boards are functional, not optimal. Switching-regulator layout, RF, controlled-impedance and
 high-speed signals (USB 480 Mb/s, Ethernet, DDR) need human review or hand routing in KiCad. The plugin
 flags these rather than hiding them. **Always review a design before ordering boards.**
-
-## Releases
-
-The plugin is updated weekly: V1.0, V1.1, V1.2… See the [changelog](CHANGELOG.md) and
-[releases](https://github.com/virajrungta/pcb-claude-plugin/releases). Update with:
-
-```bash
-claude plugin update pcb
-```
 
 ## Contributing
 

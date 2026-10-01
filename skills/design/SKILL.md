@@ -31,6 +31,14 @@ Run `kipcb doctor`. It also reports what kipcb has learned from past runs.
   `kipcb setup-router`, which downloads a ~65 MB jar from the official GitHub
   releases into `~/.cache/kipcb`. Java 21+ is required; 25+ gets the newest router.
 
+## Your defaults
+
+The user picked a manufacturer, build method (assembled or hand-soldered)
+and layer count in the plugin's install dialog. They appear in the session
+context ("PCB plugin defaults from the user's settings: …") and from
+`kipcb settings`. Use them unless the request says otherwise, and don't ask
+about them again. They change them with `/plugin configure pcb@pcb-claude-plugin`.
+
 ## 1. Requirements: always ask first
 
 Don't design from imagination. Before choosing any part, ask one short
@@ -43,9 +51,10 @@ answered it.** Cover:
 2. **Power**: USB-C 5 V / battery (chemistry, charging?) / DC jack / external rail,
    and the rough current the board draws.
 3. **I/O and connectors**: which connectors, and which board edges they go on.
-4. **Build and noise**: JLCPCB assembly (0402/0603, LCSC parts) or hand soldering
-   (0805+), and whether anything is noise-sensitive (analog sensors, audio,
-   ADC precision, RF). Noise-sensitive boards get 4 layers or strict separation.
+4. **Noise**: is anything noise-sensitive (analog sensors, audio, ADC
+   precision, RF)? Noise-sensitive boards get 4 layers or strict separation.
+   Ask about manufacturer, build method or layer count only if the user's
+   idea conflicts with their defaults above (e.g. a dense design on 2 layers).
 
 If the idea is vague about function ("a smart plant monitor"), confirm the
 key features in the same round. Record the answers in the spec's

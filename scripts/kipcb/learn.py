@@ -38,8 +38,19 @@ def log_path():
     return os.environ.get("KIPCB_EXPERIENCE") or os.path.join(data_dir(), "experience.jsonl")
 
 
+def settings():
+    """Settings chosen in the plugin's install dialog (saved by the session-start hook)."""
+    try:
+        with open(os.path.join(data_dir(), "settings.json")) as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return {}
+
+
 def enabled():
-    return os.environ.get("KIPCB_LEARN", "1") != "0"
+    if "KIPCB_LEARN" in os.environ:
+        return os.environ["KIPCB_LEARN"] != "0"
+    return settings().get("learning", True) is not False
 
 
 def record(kind, **data):
@@ -210,7 +221,7 @@ def status():
     att = history("route_attempt")
     fin = history("route_final")
     builds = history("build")
-    print("experience: %s" % log_path())
+    print("experience: %s%s" % (log_path(), "" if enabled() else "  (learning is OFF in your settings)"))
     print("  %d builds, %d routed boards, %d routing attempts" % (len(builds), len(fin), len(att)))
     ignored = len(history("route_attempt", include_tainted=True)) - len(att)
     if ignored:

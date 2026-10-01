@@ -1,11 +1,13 @@
 {
   "name": "pcb",
   "displayName": "PCB Design",
-  "version": "1.1",
+  "version": "1.2",
   "description": "Go from a circuit idea to a manufacturable KiCad PCB: requirements, part selection, schematic, placement, autorouting, ERC/DRC and fab outputs (Gerbers, BOM, pick-and-place).",
   "author": {
     "name": "Viraj Rungta"
   },
+  "homepage": "https://github.com/virajrungta/pcb-claude-plugin",
+  "repository": "https://github.com/virajrungta/pcb-claude-plugin",
   "license": "MIT",
   "keywords": [
     "pcb",
@@ -17,6 +19,44 @@
     "jlcpcb",
     "freerouting"
   ],
-  "homepage": "https://github.com/virajrungta/pcb-claude-plugin",
-  "repository": "https://github.com/virajrungta/pcb-claude-plugin"
+  "userConfig": {
+    "fab_house": {
+      "type": "string",
+      "title": "Default PCB manufacturer",
+      "description": "Who you usually order boards from. Sets the BOM and pick-and-place format and the design rules Claude aims for.",
+      "options": [
+        "JLCPCB",
+        "PCBWay",
+        "OSH Park",
+        "Other"
+      ],
+      "default": "JLCPCB"
+    },
+    "build_method": {
+      "type": "string",
+      "title": "How boards get built",
+      "description": "Assembled by the manufacturer allows small parts (0402/0603) and prefers stocked parts; hand soldering keeps parts at 0805 or larger.",
+      "options": [
+        "Assembled by the manufacturer",
+        "Hand soldering"
+      ],
+      "default": "Assembled by the manufacturer"
+    },
+    "layers": {
+      "type": "string",
+      "title": "Default layer count",
+      "description": "2 layers is cheapest and fine for most boards; 4 layers adds a solid ground plane for dense or noise-sensitive designs.",
+      "options": [
+        "2",
+        "4"
+      ],
+      "default": "2"
+    },
+    "learning": {
+      "type": "boolean",
+      "title": "Learn from my boards",
+      "description": "Remember which layouts and routing strategies worked so future boards go faster. Stored only on this computer.",
+      "default": true
+    }
+  }
 }

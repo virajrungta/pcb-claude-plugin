@@ -13,7 +13,8 @@ argument-hint: "[project dir or .kicad_pro]"
    and explain them. Offer to fix them (via `/pcb:design` for kipcb specs, or
    directly in KiCad). `kipcb fab --force` exists, but only use it if the user
    explicitly accepts the risk.
-3. Run `kipcb fab <project>` (use `--fab generic` if they aren't using JLCPCB).
+3. Run `kipcb fab <project>`. The output format follows the user's manufacturer
+   setting (see `kipcb settings`); pass `--fab jlcpcb` or `--fab generic` to override.
 4. Read `fab/<name>-bom.csv`. Flag parts without an LCSC number when the user
    wants JLCPCB assembly, and never make one up. Suggest they match those in
    JLCPCB's BOM tool, or hand-solder / mark them DNP.

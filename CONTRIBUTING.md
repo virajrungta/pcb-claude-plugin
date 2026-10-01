@@ -57,4 +57,5 @@ Versions are `V<major>.<minor>`: V1.0, then V1.1, V1.2… each week.
    and `kipcb`, runs the tests, commits `V1.1`, tags `v1.1` and pushes. GitHub
    Actions then publishes the release page from the changelog.
 
-Users get the update with `claude plugin update pcb`.
+Users with auto-update on get it automatically; others use `/plugin` →
+**Installed** → **Update now**, or `claude plugin update pcb@pcb-claude-plugin`.

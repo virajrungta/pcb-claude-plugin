@@ -15,15 +15,21 @@ Flatpak so that `python3 -c "import pcbnew"` works.
 
 ## 2. Install the plugin
 
-```bash
-claude plugin marketplace add virajrungta/pcb-claude-plugin
+In Claude Code, run:
+
+```text
+/plugin install pcb --marketplace virajrungta/pcb-claude-plugin
 ```
 
-```bash
-claude plugin install pcb@pcb-claude-plugin
-```
+Confirm the marketplace and choose **Install for you**. A setup form asks for
+your usual manufacturer, how boards get built (assembled or hand-soldered),
+your default layer count, and whether kipcb may learn from your boards
+(locally). Change these later with `/plugin configure pcb@pcb-claude-plugin`.
 
-Start a new Claude Code session afterwards so the plugin loads.
+Turn on auto-update so weekly versions arrive automatically: `/plugin` →
+**Marketplaces** → **pcb-claude-plugin** → **Enable auto-update**.
+
+Start a new session. The plugin welcomes you and checks your toolchain.
 
 ## 3. Check the toolchain
 

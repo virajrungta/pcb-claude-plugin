@@ -9,6 +9,24 @@ release and publishes it on GitHub.
 
 _Nothing yet._
 
+## V1.2 - 2026-09-30
+
+- **Setup dialog at install**: installing from `/plugin` asks for your usual
+  manufacturer, how boards get built (assembled or hand-soldered), your
+  default layer count, and whether kipcb may learn from your boards. Claude
+  uses these as defaults instead of asking every time, `kipcb fab` picks the
+  matching output format, and `/plugin configure pcb@pcb-claude-plugin`
+  changes them later.
+- **Welcome and update notices**: the first session after installing shows a
+  welcome with an example to try; after an update it tells you the new
+  version and links to what's new. It also warns when KiCad, Java or the
+  autorouter is missing, and otherwise stays quiet.
+- **`kipcb settings`** shows your defaults.
+- **Install guide**: one-line install (`/plugin install pcb --marketplace
+  virajrungta/pcb-claude-plugin`), the setup dialog, desktop-app and terminal
+  installs, auto-update, updating, changing settings and uninstalling are all
+  documented in the README.
+
 ## V1.1 - 2026-09-30
 
 - **Faster failures**: `kipcb route` refuses in about a second when a part sits
