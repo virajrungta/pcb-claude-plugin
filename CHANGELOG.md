@@ -9,6 +9,73 @@ release and publishes it on GitHub.
 
 _Nothing yet._
 
+## V2.0 - 2026-10-02
+
+**The PCB Design plugin now runs on Windows.** Describe a board in Claude Code
+on Windows 10/11 and get the same result as on a Mac: a checked KiCad 9
+project, a routed board and manufacturing files ready to order. It's the same
+plugin and the same commands on both; only the one-time install of KiCad and
+Java differs.
+
+### Install on Windows
+
+In PowerShell:
+
+```powershell
+winget install Git.Git
+winget install KiCad.KiCad
+winget install EclipseAdoptium.Temurin.21.JDK
+```
+
+Then, as on macOS:
+
+```bash
+claude plugin marketplace add virajrungta/pcb-claude-plugin
+claude plugin install pcb@pcb-claude-plugin
+```
+
+Already using the plugin on macOS? Update as usual
+(`claude plugin marketplace update pcb-claude-plugin`, then
+`claude plugin update pcb@pcb-claude-plugin`); nothing changes for you.
+
+### What's new
+
+- **Windows 10/11 support.** kipcb finds KiCad 9 automatically (in
+  `C:\Program Files\KiCad\9.x` or a per-user install) and runs on the Python
+  that ships with KiCad, so there's no separate Python to install. Claude Code
+  on Windows runs the plugin through Git Bash, which it already requires.
+- **Previews on every platform.** Schematic previews no longer depend on
+  macOS's `sips`. On Windows they're rendered from KiCad's SVG export by
+  Microsoft Edge, which ships with Windows (headless; Chrome works too).
+- **Windows-native locations.** Settings, learning and caches live in
+  `%LOCALAPPDATA%\kipcb`, and install hints, the "open in KiCad" command
+  (`start "" board.kicad_pro`) and the docs match the platform. The README
+  has a side-by-side macOS / Windows setup and a "where files live" table.
+- **Sturdier on any machine.**
+  - Unicode output works in Windows consoles.
+  - Scripts are pinned to LF line endings, so a Windows checkout can't break
+    them.
+  - When KiCad's Python can't be found, kipcb now says what it tried and why it
+    failed.
+- **Better placement on a fresh install.**
+  - Chips with capacitors or resistors pinned to their pins now keep other
+    parts at a distance, so those helpers fit right at the pin. Before, a new
+    user (no learning history yet) could get a regulator pressed against the
+    USB connector with its input capacitor 7 mm away, and preflight then
+    stopped the run.
+  - kipcb also sets up KiCad's global library tables if KiCad was never
+    opened, and retries or times out kicad-cli calls that crash or hang.
+- **Tested on Windows on every change.** A GitHub Actions job installs KiCad 9
+  and Java on Windows, runs the test suite and designs the example boards end
+  to end, requiring each to come out ready to order.
+
+### Notes
+
+- **Requirements:** KiCad 9, Java 21+, and on Windows Git for Windows. KiCad 10
+  isn't supported yet.
+- **Fine-pitch chips:** the RP2040 and STM32 blocks stay marked *advanced* on
+  2 layers, on every platform.
+
 ## V1.11 - 2026-10-01
 
 - **Status bar progress is built in**: a new install option, *Show design

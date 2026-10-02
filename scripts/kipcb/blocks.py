@@ -42,8 +42,8 @@ def builtin_blocks():
 
 
 def memory_path():
-    base = os.environ.get("XDG_DATA_HOME", os.path.expanduser("~/.local/share"))
-    return os.path.join(base, "kipcb", "parts_memory.json")
+    from . import kienv
+    return os.path.join(kienv.data_dir(), "parts_memory.json")
 
 
 def remembered():

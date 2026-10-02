@@ -6,3 +6,7 @@ fp-info-cache
 __pycache__/
 *.pyc
 .DS_Store
+
+# boards designed while testing inside the repo
+hardware/
+.ci-last.log

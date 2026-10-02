@@ -2,8 +2,10 @@
 
 **`kipcb: could not find a Python with KiCad's pcbnew module`**
 Install KiCad 9. If it's installed somewhere unusual, point `KIPCB_PYTHON` at a
-Python that can `import pcbnew` (on macOS:
-`/Applications/KiCad/KiCad.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3`).
+Python that can `import pcbnew`: on macOS
+`/Applications/KiCad/KiCad.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3`,
+on Windows `C:\Program Files\KiCad\9.0\bin\python.exe` (or set `KIPCB_KICAD_ROOT`
+to KiCad's install folder).
 
 **`kipcb` is not found in Claude Code**
 The plugin's `bin/` folder is only on PATH while the plugin is enabled. Start a
@@ -11,7 +13,7 @@ new session after installing. Outside Claude Code, run `bin/kipcb` from the repo
 
 **Freerouting: Java too old / not found**
 Freerouting 2.1 needs Java 21+, and newer versions need Java 25. Run
-`java -version`, install a newer JRE (`brew install --cask temurin`), then
+`java -version`, install a newer JRE (macOS: `brew install --cask temurin`; Windows: `winget install EclipseAdoptium.Temurin.21.JDK`), then
 `kipcb setup-router` again.
 
 **Routing leaves connections unrouted**
@@ -55,9 +57,19 @@ package (SOT-223 instead of SOT-23), lower the input voltage, or switch to a
 buck converter.
 
 **`kipcb ref` shows an older knowledge base than you built**
-A locally built base (`~/.local/share/kipcb/knowledge.json`, from
+A locally built base (`knowledge.json` in kipcb's data folder: `~/.local/share/kipcb`
+on macOS, `%LOCALAPPDATA%\kipcb` on Windows; from
 [pcb-knowledge](https://github.com/virajrungta/pcb-knowledge)'s `pkb install`)
 takes priority over the copy shipped with the plugin.
+
+**Windows: `\r: command not found` or `bad interpreter`**
+A script was checked out with Windows (CRLF) line endings. Reinstall the plugin
+(`claude plugin uninstall pcb@pcb-claude-plugin`, then install again); the
+repository pins scripts to LF, so a fresh install fixes it.
+
+**Windows: Claude Code can't run commands**
+Claude Code on Windows needs Git for Windows (`winget install Git.Git`). Restart
+Claude Code after installing it.
 
 **Something else**
 Run `kipcb doctor` and include its output when you

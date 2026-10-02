@@ -13,10 +13,20 @@ def _out_dir(pdir):
     return paths.reports(pdir)
 
 
+def _report(args, rpt):
+    """Run kicad-cli for a JSON report; if it wrote none, fail with kicad-cli's own message."""
+    if os.path.exists(rpt):
+        os.remove(rpt)                      # never read a stale report from an earlier run
+    p = kienv.run_cli(args, check=False)
+    if not os.path.exists(rpt):
+        raise RuntimeError("kicad-cli %s produced no report (exit %s):\n%s" % (
+            " ".join(args[:2]), p.returncode, (p.stdout or "").strip()[-1500:]))
+
+
 def run_erc(pdir, name):
     rpt = os.path.join(_out_dir(pdir), "erc.json")
-    kienv.run_cli(["sch", "erc", "--format", "json", "--severity-all", "-o", rpt,
-                   os.path.join(pdir, name + ".kicad_sch")], check=False)
+    _report(["sch", "erc", "--format", "json", "--severity-all", "-o", rpt,
+             os.path.join(pdir, name + ".kicad_sch")], rpt)
     with open(rpt) as f:
         data = json.load(f)
     items = []
@@ -32,7 +42,7 @@ def run_drc(pdir, name, parity=True):
     if parity and os.path.exists(os.path.join(pdir, name + ".kicad_sch")):
         args.append("--schematic-parity")
     args.append(os.path.join(pdir, name + ".kicad_pcb"))
-    kienv.run_cli(args, check=False)
+    _report(args, rpt)
     with open(rpt) as f:
         data = json.load(f)
     return data

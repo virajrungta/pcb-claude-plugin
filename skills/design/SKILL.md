@@ -188,7 +188,8 @@ no checklist is needed (e.g. a quick rerun).
 Relay the report briefly (≤12 lines): status, **project location**, board size
 and layers, checks, manufacturing files, then your assumptions and anything the
 user should confirm (current limits, part choices, missing LCSC numbers).
-Mention `open "<project>.kicad_pro"` to edit in KiCad and `/pcb:fab` to order.
+Mention how to open it in KiCad (macOS: `open "<project>.kicad_pro"`; Windows:
+`start "" "<project>.kicad_pro"`, or double-click it) and `/pcb:fab` to order.
 Be honest: autorouted boards work but aren't optimal; recommend a human review
 for switching regulators, RF and high-speed signals.
 

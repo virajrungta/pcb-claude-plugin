@@ -6,6 +6,23 @@ set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPTS="$(cd "$HERE/../scripts" && pwd)"
 
+# Windows: Claude Code runs this through Git Bash; KiCad bundles its own python.exe with pcbnew.
+IS_WINDOWS=0
+case "$(uname -s 2>/dev/null)" in MINGW*|MSYS*|CYGWIN*) IS_WINDOWS=1 ;; esac
+
+win_kicad_pythons() {
+  # KiCad installs per version (…\KiCad\9.0, …\KiCad\9.1): prefer 9.x, newest first
+  local base root
+  [[ -n "${KIPCB_KICAD_ROOT:-}" ]] && echo "$(cygpath -u "$KIPCB_KICAD_ROOT" 2>/dev/null || echo "$KIPCB_KICAD_ROOT")/bin/python.exe"
+  for base in "${ProgramW6432:-}" "${PROGRAMFILES:-}" "${LOCALAPPDATA:+$LOCALAPPDATA/Programs}"; do
+    [[ -z "$base" ]] && continue
+    base="$(cygpath -u "$base" 2>/dev/null || echo "$base")/KiCad"
+    local found=()
+    for root in "$base"/9.*; do [[ -d "$root" ]] && found=("$root" "${found[@]}"); done  # newest first
+    for root in "${found[@]}"; do echo "$root/bin/python.exe"; done
+  done
+}
+
 find_python() {
   if [[ -n "${KIPCB_PYTHON:-}" ]]; then echo "$KIPCB_PYTHON"; return; fi
   local candidates=(
@@ -14,6 +31,9 @@ find_python() {
     "/usr/bin/python3"
     "/usr/local/bin/python3"
   )
+  if [[ $IS_WINDOWS == 1 ]]; then
+    while IFS= read -r py; do candidates=("$py" "${candidates[@]}"); done < <(win_kicad_pythons)
+  fi
   for py in "${candidates[@]}"; do
     if [[ -x "$py" ]] && "$py" -c "import pcbnew" >/dev/null 2>&1; then echo "$py"; return; fi
   done
@@ -21,14 +41,41 @@ find_python() {
   echo ""
 }
 
+why_no_python() {   # say what was tried, so a failure is diagnosable
+  local py
+  if [[ $IS_WINDOWS == 1 ]]; then
+    while IFS= read -r py; do
+      if [[ -f "$py" ]]; then
+        echo "  found $py, but 'import pcbnew' failed:" >&2
+        "$py" -c "import pcbnew" 2>&1 | tail -3 | sed 's/^/    /' >&2
+      fi
+    done < <(win_kicad_pythons)
+    ls -d "${PROGRAMFILES:-C:/Program Files}"/KiCad/* 2>/dev/null | sed 's/^/  KiCad folder: /' >&2
+  fi
+}
+
 PY="$(find_python)"
 if [[ -z "$PY" ]]; then
   echo "kipcb: could not find a Python with KiCad's pcbnew module." >&2
-  echo "Install KiCad 9 (https://www.kicad.org/download/) or set KIPCB_PYTHON." >&2
+  why_no_python
+  echo "Install KiCad 9 (https://www.kicad.org/download/; Windows: winget install KiCad.KiCad)" >&2
+  echo "or set KIPCB_PYTHON to a Python that can import pcbnew." >&2
   exit 2
 fi
 
-export PYTHONPATH="$SCRIPTS${PYTHONPATH:+:$PYTHONPATH}"
+if [[ $IS_WINDOWS == 1 ]]; then
+  # a native Windows python.exe wants C:\... paths and ';' between them
+  export PYTHONPATH="$(cygpath -w "$SCRIPTS")${PYTHONPATH:+;$PYTHONPATH}"
+else
+  export PYTHONPATH="$SCRIPTS${PYTHONPATH:+:$PYTHONPATH}"
+fi
 export PYTHONDONTWRITEBYTECODE=1
+export PYTHONIOENCODING=utf-8
+export PYTHONUTF8=1      # read/write files as UTF-8 (Windows defaults to cp1252; the data has Ω, µ, ²)
+# KiCad's Python on Windows is an embedded build that ignores PYTHONPATH, so put kipcb on
+# sys.path explicitly (harmless elsewhere), then run it as `python -m kipcb` would.
+SCRIPTS_PY="$SCRIPTS"
+[[ $IS_WINDOWS == 1 ]] && SCRIPTS_PY="$(cygpath -w "$SCRIPTS")"
+BOOT="import sys, runpy; sys.path.insert(0, sys.argv.pop(1)); runpy.run_module('kipcb', run_name='__main__', alter_sys=True)"
 # drop harmless noise KiCad's libraries print when used headless
-exec "$PY" -m kipcb "$@" 2> >(grep -v -e 'create wxApp before calling this' -e '^Fontconfig error' -e 'Debug: Adding duplicate image handler' -e 'swig/python detected a memory leak' >&2)
+exec "$PY" -c "$BOOT" "$SCRIPTS_PY" "$@" 2> >(grep -v -e 'create wxApp before calling this' -e '^Fontconfig error' -e 'Adding duplicate image handler' -e 'swig/python detected a memory leak' >&2)

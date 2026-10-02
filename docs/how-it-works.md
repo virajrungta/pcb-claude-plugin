@@ -168,7 +168,8 @@ shrunk by the copper-to-edge rule so no track ends up too close to the edge.
 ## Learning
 
 **From your own runs** (`kipcb learn`): each build and routing attempt is
-appended to `~/.local/share/kipcb/experience.jsonl`. When routing a new
+appended to `experience.jsonl` in kipcb's data folder (`~/.local/share/kipcb` on
+macOS, `%LOCALAPPDATA%\kipcb` on Windows). When routing a new
 board, strategies are ranked by how they performed on past boards of similar
 pad density (a contextual bandit with an exploration bonus). The first run on
 a new kind of board uses the hand-tuned defaults; later runs start with what

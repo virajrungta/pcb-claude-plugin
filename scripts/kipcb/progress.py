@@ -22,8 +22,8 @@ TIME_KEY = {"Placement": "build", "Preflight checks": "preflight", "Routing": "r
 
 
 def _pointer():
-    base = os.environ.get("XDG_DATA_HOME", os.path.expanduser("~/.local/share"))
-    return os.path.join(base, "kipcb", "current_progress.json")
+    from . import kienv
+    return os.path.join(kienv.data_dir(), "current_progress.json")
 
 
 def _path(pdir):
@@ -186,7 +186,11 @@ def install_statusline():
     launcher = os.path.join(os.path.dirname(_pointer()), "statusline.sh")
     if not os.path.exists(launcher):
         return "not changed: start a new Claude Code session first (it creates %s)" % launcher
-    cfg["statusLine"] = {"type": "command", "command": launcher}
+    from . import kienv
+    command = launcher
+    if kienv.WINDOWS:          # Claude Code on Windows runs it through Git Bash: forward slashes
+        command = 'bash "%s"' % launcher.replace("\\", "/")
+    cfg["statusLine"] = {"type": "command", "command": command}
     if os.path.exists(path):
         with open(path) as f:
             backup = f.read()

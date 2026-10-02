@@ -7,10 +7,13 @@ This guide takes you from nothing installed to a board ready to order.
 | Tool | Why | How |
 |---|---|---|
 | **Claude Code** | Runs the plugin | [claude.com/claude-code](https://claude.com/claude-code): the desktop app, terminal CLI or IDE extension |
-| **KiCad 9** | Schematics, boards, checks, exports | [kicad.org/download](https://www.kicad.org/download/). The default install location is fine |
-| **Java 21+** | Runs the Freerouting autorouter | macOS: `brew install --cask temurin`. Linux: your package manager (`openjdk-21-jre`) |
+| **KiCad 9** | Schematics, boards, checks, exports | macOS: `brew install --cask kicad`. Windows: `winget install KiCad.KiCad`. Or [kicad.org/download](https://www.kicad.org/download/). The default install location is fine |
+| **Java 21+** | Runs the Freerouting autorouter | macOS: `brew install --cask temurin`. Windows: `winget install EclipseAdoptium.Temurin.21.JDK`. Linux: your package manager (`openjdk-21-jre`) |
+| **Git for Windows** (Windows only) | Claude Code runs commands in Git Bash | `winget install Git.Git` |
 
-macOS and Linux are supported. On Linux, install KiCad from the official PPA or
+macOS, Windows 10/11 and Linux are supported, and everything after this step
+is identical on all of them. The plugin runs on KiCad's bundled Python, so
+nothing else is needed. On Linux, install KiCad from the official PPA or
 Flatpak so that `python3 -c "import pcbnew"` works.
 
 ## 2. Install the plugin
@@ -33,20 +36,13 @@ Start a new session. The plugin welcomes you and checks your toolchain.
 
 ## 3. Check the toolchain
 
-```bash
-kipcb doctor
-```
-
-You should see KiCad, `pcbnew` and Java reported as OK. If Freerouting
-shows as not installed, run:
-
-```bash
-kipcb setup-router
-```
-
-It downloads the Freerouting autorouter (~65 MB) from its official GitHub
-releases into `~/.cache/kipcb`. (When you use `/pcb:design`, Claude asks
-before downloading it.)
+In a Claude Code session, ask Claude to *"run kipcb doctor"* (`kipcb` is
+available inside Claude Code sessions). You should see KiCad, `pcbnew` and
+Java reported as OK. If Freerouting shows as not installed, ask Claude to run
+`kipcb setup-router`: it downloads the Freerouting autorouter (~65 MB) from its
+official GitHub releases into kipcb's cache folder (`~/.cache/kipcb` on macOS,
+`%LOCALAPPDATA%\kipcb\cache` on Windows). When you use `/pcb:design`, Claude
+asks before downloading it.
 
 ## 4. Design a board
 

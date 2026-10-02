@@ -44,8 +44,8 @@ def find_jar():
 def setup(version=None):
     jv = java_version()
     if not jv:
-        ui.say("Java not found. Install a JRE (Java 21+; Java 25 for the newest Freerouting), "
-              "e.g. `brew install --cask temurin`.")
+        ui.say("Java not found. Install a JRE (Java 21+; Java 25 for the newest Freerouting), e.g. %s." % (
+            "`winget install EclipseAdoptium.Temurin.21.JDK`" if kienv.WINDOWS else "`brew install --cask temurin`"))
         return 1
     if version is None:
         for need, v in LATEST_FOR_JAVA:

@@ -179,14 +179,31 @@ def _spread(design, parts, W, H):
     return delta, 100 * before, 100 * after
 
 
+def _dependents(design):
+    """How many parts asked to sit next to each part ("near": "U1.VI" -> U1)."""
+    n = {}
+    for c in design.components:
+        near = (c.place or {}).get("near") if isinstance(c.place, dict) else None
+        if near:
+            ref = near.split(".", 1)[0]
+            n[ref] = n.get(ref, 0) + 1
+    return n
+
+
 def compute_placement(design, sch_builder, W, H, holes, quiet=False, step=None, refine=2):
     parts = []
     net_sizes = {n: len(p) for n, p in design.nets.items()}
+    deps = _dependents(design)
     for c in design.components:
         pads = [(p["number"], p["x"], p["y"], design.pin_net.get((c.ref, p["number"])))
                 for p in c.fp.pads]
+        # a part with capacitors/resistors pinned next to it keeps other parts further away,
+        # so those helpers find room at its pins (a regulator hugging a connector left its
+        # input capacitor nowhere to go). The pinned parts themselves still sit close: their
+        # gap to it is 2x their own small margin (place.Placer._pair_gap).
+        margin = part_margin(design, c) + min(1.6, 0.6 * deps.get(c.ref, 0))
         parts.append(place.Part(c.ref, c.fp.courtyard, pads, _resolve_near(design, c.place),
-                                len(c.fp.pads), part_margin(design, c), c.fp.court_rects))
+                                len(c.fp.pads), margin, c.fp.court_rects))
     obstacles = []
     for (x, y), r in holes:
         obstacles.append((x - r, y - r, x + r, y + r))

@@ -9,7 +9,7 @@ these commands for you, but they also work on their own.
 | Command | What it does |
 |---|---|
 | `kipcb doctor` | Checks KiCad, `pcbnew`, Java and Freerouting, plus the knowledge base and learning status |
-| `kipcb setup-router [--version X]` | Downloads Freerouting into `~/.cache/kipcb` (picks the newest version your Java can run) |
+| `kipcb setup-router [--version X]` | Downloads Freerouting into kipcb's cache folder (picks the newest version your Java can run) |
 
 ## Parts
 
@@ -83,7 +83,9 @@ my_board/
 | `KIPCB_PYTHON` | Python with `pcbnew` (if KiCad isn't in the default location) |
 | `KIPCB_KICAD_CLI` | Path to `kicad-cli` |
 | `KIPCB_FREEROUTING_JAR` | Use a specific Freerouting jar |
-| `KIPCB_KNOWLEDGE` | Path to a `knowledge.json` (default: `~/.local/share/kipcb/knowledge.json` if you built one, else the copy in the plugin's `data/`) |
+| `KIPCB_KNOWLEDGE` | Path to a `knowledge.json` (default: `knowledge.json` in the data folder if you built one, else the copy in the plugin's `data/`) |
 | `KIPCB_EXPERIENCE` | Path to the experience log |
 | `KIPCB_LEARN=0` | Disable learning |
-| `KIPCB_CACHE` | Library index and Freerouting cache (default `~/.cache/kipcb`) |
+| `KIPCB_CACHE` | Library index and Freerouting cache (default `~/.cache/kipcb`; Windows `%LOCALAPPDATA%\kipcb\cache`) |
+| `KIPCB_KICAD_ROOT` | Windows: KiCad's install folder, if not `C:\Program Files\KiCad\9.0` |
+| `XDG_DATA_HOME` | Data folder base (default `~/.local/share`; Windows `%LOCALAPPDATA%`) for settings, learning and progress |

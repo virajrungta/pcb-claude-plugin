@@ -1,0 +1,11 @@
+# Scripts run under bash (Git Bash on Windows): a CRLF checkout breaks them
+# ("\r: command not found"), so keep LF everywhere they live.
+*.sh        text eol=lf
+bin/kipcb   text eol=lf
+*.py        text eol=lf
+*.json      text eol=lf
+*.md        text eol=lf
+*.kicad_*   text eol=lf
+*.png       binary
+*.jpg       binary
+*.webp      binary

@@ -11,7 +11,9 @@ Requirements → parts → schematic → placement → autorouting → checks �
 
 <a href="https://github.com/virajrungta/pcb-claude-plugin/releases"><img src="https://img.shields.io/github/v/release/virajrungta/pcb-claude-plugin?label=release&color=2ea44f" alt="Latest release"></a>
 <a href="https://github.com/virajrungta/pcb-claude-plugin/actions/workflows/ci.yml"><img src="https://github.com/virajrungta/pcb-claude-plugin/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+<a href="https://github.com/virajrungta/pcb-claude-plugin/actions/workflows/windows.yml"><img src="https://github.com/virajrungta/pcb-claude-plugin/actions/workflows/windows.yml/badge.svg" alt="Windows"></a>
 <img src="https://img.shields.io/badge/KiCad-9-314cb0" alt="KiCad 9">
+<img src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows-555" alt="macOS and Windows">
 <img src="https://img.shields.io/badge/Claude%20Code-plugin-d97757" alt="Claude Code plugin">
 <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
 
@@ -94,17 +96,56 @@ Every design is a normal **KiCad 9 project** (`.kicad_pro`, `.kicad_sch`, `.kica
 
 ## Installation
 
+Works the same on **macOS** and **Windows 10/11**. Only step 1 differs; every
+step after it is the same command on both. Run them in **Terminal** (macOS) or
+**PowerShell** (Windows).
+
 ### 1. Requirements
 
-[Claude Code](https://claude.com/claude-code), [KiCad 9](https://www.kicad.org/download/) and Java 21+ (for the autorouter). On macOS with Homebrew:
+You need [Claude Code](https://claude.com/claude-code), [KiCad 9](https://www.kicad.org/download/) and Java 21+ (for the autorouter).
+
+<table>
+<tr><th>macOS (Terminal, with <a href="https://brew.sh">Homebrew</a>)</th><th>Windows (PowerShell)</th></tr>
+<tr><td valign="top">
+
+KiCad 9:
 
 ```bash
 brew install --cask kicad
 ```
 
+Java:
+
 ```bash
 brew install --cask temurin
 ```
+
+</td><td valign="top">
+
+Git for Windows (Claude Code on Windows runs commands in Git Bash):
+
+```powershell
+winget install Git.Git
+```
+
+KiCad 9:
+
+```powershell
+winget install KiCad.KiCad
+```
+
+Java:
+
+```powershell
+winget install EclipseAdoptium.Temurin.21.JDK
+```
+
+</td></tr>
+</table>
+
+Install [Claude Code](https://claude.com/claude-code) the usual way for your
+system (desktop app or terminal). Nothing else is needed: the plugin runs on
+the Python that comes with KiCad.
 
 ### 2. Add the marketplace
 
@@ -138,15 +179,15 @@ claude plugin install pcb@pcb-claude-plugin --config fab_house=JLCPCB --config l
 
 ### 5. Check the setup
 
-Start a new Claude Code session. The plugin welcomes you and checks KiCad, Java and the autorouter, and only speaks up again if something is missing. You can also check by hand:
+Start a new Claude Code session. The plugin welcomes you and checks KiCad, Java and the autorouter, and only speaks up again if something is missing. To confirm it's installed:
 
 ```bash
 claude plugin list
 ```
 
-```bash
-kipcb doctor
-```
+For a full toolchain check, ask Claude in that session: *"run kipcb doctor"*
+(the `kipcb` tool is available inside Claude Code sessions, not in a plain
+terminal).
 
 ### 6. Design your first board
 
@@ -210,7 +251,17 @@ Then restart Claude Code; the next session tells you which version you're on and
 claude plugin uninstall pcb@pcb-claude-plugin
 ```
 
-Your designs and local learning data stay on disk.
+Your designs and local learning data stay on disk (see below).
+
+### Where files live
+
+| | macOS | Windows |
+|---|---|---|
+| Your boards | the folder you design in (`hardware/<name>/`) | the folder you design in (`hardware\<name>\`) |
+| Settings, learning, progress | `~/.local/share/kipcb` | `%LOCALAPPDATA%\kipcb` |
+| Downloads and indexes (Freerouting, library index) | `~/.cache/kipcb` | `%LOCALAPPDATA%\kipcb\cache` |
+| KiCad (found automatically) | `/Applications/KiCad` | `C:\Program Files\KiCad\9.0` |
+| Open a board in KiCad | `open hardware/<name>/<name>.kicad_pro` | `start "" hardware\<name>\<name>.kicad_pro` |
 
 ## Examples
 
@@ -266,7 +317,7 @@ Every project folder has the same layout: the KiCad files, `fab/` (send these to
   <tr><td><b>Claude Code</b></td><td>Desktop app, CLI or IDE extension</td></tr>
   <tr><td><b>KiCad 9</b></td><td>Provides <code>kicad-cli</code>, <code>pcbnew</code> and the part libraries</td></tr>
   <tr><td><b>Java 21+</b></td><td>For the <a href="https://github.com/freerouting/freerouting">Freerouting</a> autorouter (downloaded with <code>kipcb setup-router</code>)</td></tr>
-  <tr><td><b>OS</b></td><td>macOS or Linux</td></tr>
+  <tr><td><b>OS</b></td><td>macOS, Windows 10/11 or Linux</td></tr>
 </table>
 
 ## Limits

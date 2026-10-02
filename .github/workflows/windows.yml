@@ -1,0 +1,103 @@
+name: Windows
+
+# Full pipeline on a real Windows machine: KiCad 9 + Java + Freerouting, then design the
+# example boards end to end (check -> build -> preflight -> route -> manufacturing files).
+# Steps run in Git Bash, which is how Claude Code runs the plugin on Windows.
+
+on:
+  push:
+    branches: [main, windows, v2-windows]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Line endings stay LF (bash scripts break with CRLF)
+        run: |
+          for f in bin/kipcb scripts/*.sh; do
+            if grep -q $'\r' "$f"; then echo "CRLF in $f"; exit 1; fi
+          done
+
+      - name: Install KiCad 9
+        shell: pwsh
+        run: |
+          # pin to KiCad 9 (the latest package may be a newer major version)
+          $v = (choco search kicad --exact --all-versions --limit-output | ForEach-Object { ($_ -split '\|')[1] } |
+                Where-Object { $_ -like '9.*' } | Sort-Object { [version]$_ } -Descending | Select-Object -First 1)
+          Write-Host "Installing KiCad $v"
+          for ($i = 1; $i -le 3; $i++) {          # downloads occasionally fail on CI: retry
+            choco install kicad --version $v -y --no-progress
+            if ($LASTEXITCODE -eq 0) { break }
+            Write-Host "attempt $i failed, retrying"; Start-Sleep -Seconds 20
+          }
+          if (-not (Test-Path "C:\Program Files\KiCad\9.0\bin\kicad-cli.exe")) { exit 1 }
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: kipcb finds KiCad
+        run: |
+          test -s bin/kipcb
+          bash .github/ci/run.sh "kipcb doctor" bin/kipcb doctor || true
+          bash .github/ci/run.sh "kipcb sym-search" bin/kipcb sym-search "AMS1117"
+          grep -q "AMS1117" .ci-last.log
+
+      - name: Unit tests (KiCad's bundled Python)
+        run: |
+          PY="/c/Program Files/KiCad/9.0/bin/python.exe"
+          # KiCad's embedded Python ignores PYTHONPATH: add scripts/ to sys.path in code
+          PYTHONIOENCODING=utf-8 PYTHONUTF8=1 bash .github/ci/run.sh "unit tests" "$PY" -c \
+            "import sys, unittest; sys.path[:0] = [r'$(cygpath -w scripts)', '.']; unittest.main(module=None, argv=['unittest', 'discover', '-s', 'tests', '-v'])"
+
+      - name: Freerouting
+        run: bash .github/ci/run.sh "setup-router" bin/kipcb setup-router
+
+      - name: Design the examples end to end
+        id: examples
+        run: |
+          mkdir -p ci-out
+          for ex in usb_blinker c3_sensor c3_blocks; do
+            cp "examples/$ex.json" ci-out/
+            echo "::group::$ex"
+            bash .github/ci/run.sh "$ex" bin/kipcb run "ci-out/$ex.json"
+            cp .ci-last.log "ci-out/$ex.log"
+            echo "::endgroup::"
+            grep -q "READY TO ORDER" "ci-out/$ex.log" || { echo "$ex is not ready to order"; exit 1; }
+          done
+
+      - name: Diagnose kicad-cli (only when the examples failed)
+        if: failure() && steps.examples.outcome == 'failure'
+        run: |
+          bash .github/ci/show.sh "build replay" "/c/Program Files/KiCad/9.0/bin/python.exe" .github/ci/diag_build.py examples/usb_blinker.json
+          bash .github/ci/show.sh "kipcb erc on the built project" bin/kipcb erc ci-out/usb_blinker
+
+      - name: Previews, progress and status line work
+        run: |
+          bash .github/ci/run.sh "schematic preview" test -s ci-out/c3_blocks/previews/schematic.png
+          bash .github/ci/run.sh "board preview" test -s ci-out/c3_blocks/previews/review.png
+          bash .github/ci/run.sh "board pdf is a file" test -f ci-out/c3_blocks/previews/board.pdf
+          bash .github/ci/run.sh "progress" bin/kipcb progress
+          bash .github/ci/run.sh "status line" bash scripts/statusline.sh </dev/null
+
+      - name: Session-start hook
+        run: |
+          CLAUDE_PLUGIN_ROOT="$PWD" CLAUDE_PLUGIN_DATA="$RUNNER_TEMP/pcb" bash scripts/session-start.sh </dev/null
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-boards
+          path: |
+            ci-out/**/previews/*.png
+            ci-out/**/reports/REPORT.md
+            ci-out/*.log

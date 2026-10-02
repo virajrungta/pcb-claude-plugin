@@ -331,8 +331,7 @@ def cmd_ref(a):
 
 
 def _prefs_path():
-    base = os.environ.get("XDG_DATA_HOME", os.path.expanduser("~/.local/share"))
-    return os.path.join(base, "kipcb", "prefs.json")
+    return os.path.join(kienv.data_dir(), "prefs.json")
 
 
 def cmd_settings(a):

@@ -8,7 +8,7 @@ can print it again at any time. Also saved as reports/REPORT.md.
 import json
 import os
 
-from . import paths
+from . import kienv, paths
 
 
 def _load(pdir, fname):
@@ -158,7 +158,7 @@ def markdown(r):
     if r["attention"]:
         md += ["", "## Worth checking", ""] + ["- " + x for x in r["attention"]]
     md += ["", "## Next", "",
-           "- Open in KiCad: `open \"%s\"`" % r["project"],
+           "- Open in KiCad: `%s \"%s\"`" % ("start \"\"" if kienv.WINDOWS else "open", r["project"]),
            "- Order boards: upload `fab/%s-gerbers.zip`; for assembly also the BOM and CPL files" % r["name"],
            ""]
     return "\n".join(md)

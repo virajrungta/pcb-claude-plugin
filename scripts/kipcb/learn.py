@@ -28,10 +28,8 @@ PRIOR = {(False, 3.0): 0.60, (True, 3.0): 0.55, (False, None): 0.50, (True, None
 
 
 def data_dir():
-    base = os.environ.get("XDG_DATA_HOME", os.path.expanduser("~/.local/share"))
-    d = os.path.join(base, "kipcb")
-    os.makedirs(d, exist_ok=True)
-    return d
+    from . import kienv
+    return kienv.data_dir()
 
 
 def log_path():

@@ -18,8 +18,8 @@ def kb_path():
     env = os.environ.get("KIPCB_KNOWLEDGE")
     if env:
         return env
-    base = os.environ.get("XDG_DATA_HOME", os.path.expanduser("~/.local/share"))
-    local = os.path.join(base, "kipcb", "knowledge.json")
+    from . import kienv
+    local = os.path.join(kienv.data_dir(), "knowledge.json")
     return local if os.path.exists(local) else BUNDLED
 
 
