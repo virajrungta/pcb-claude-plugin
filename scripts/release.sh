@@ -37,6 +37,19 @@ if not notes or notes == "_Nothing yet._":
 s = s.replace(m.group(0), "## Unreleased\n\n_Nothing yet._\n\n## V%s - %s\n\n%s\n" % (v, today, notes), 1)
 open(p, "w").write(s)
 
+# one row per version in the README's Releases table and RELEASES.md: the notes' bold
+# headline, else the first bullet's bold lead
+head = re.search(r"^\*\*(.+?)\*\*", notes, re.M) or re.search(r"^- \*\*(.+?)\*\*", notes, re.M)
+summary = head.group(1).strip().rstrip(":") if head else notes.splitlines()[0].lstrip("- ")
+row = "| [V%s](https://github.com/virajrungta/pcb-claude-plugin/releases/tag/v%s) | %s | %s |" % (v, v, today, summary)
+for p in ("README.md", "RELEASES.md"):
+    t = open(p).read()
+    i = t.find("| Version | Date | What's new |\n|---|---|---|\n")
+    if i < 0:
+        sys.exit("%s has no Releases table" % p)
+    j = i + len("| Version | Date | What's new |\n|---|---|---|\n")
+    open(p, "w").write(t[:j] + row + "\n" + t[j:])
+
 p = ".claude-plugin/plugin.json"
 d = json.load(open(p)); d["version"] = v
 open(p, "w").write(json.dumps(d, indent=2) + "\n")
