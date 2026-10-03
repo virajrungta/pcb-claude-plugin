@@ -9,6 +9,43 @@ release and publishes it on GitHub.
 
 _Nothing yet._
 
+## V2.2 - 2026-10-03
+
+**Board sizing learned from real routed boards.**
+
+V2.2 sizes boards from what similar real boards look like, finds the smallest
+board that keeps every part at full spacing, and rebuilds a step larger by
+itself if a board doesn't route.
+
+### Update
+
+```bash
+claude plugin marketplace update pcb-claude-plugin
+claude plugin update pcb@pcb-claude-plugin
+```
+
+### What changed
+
+- Auto-sizing and preflight now compare your design with the most similar of
+  about 500 fully routed open-source boards (same layer count, similar pads,
+  parts, connections and fine-pitch share). A board isn't shrunk tighter than
+  most of them, and preflight warns when parts cover more of the board than
+  90% of them. Before, a single density figure per layer count was used, which
+  was about 1.8x off for a typical board; the new measure is about 1.35x off.
+- Your own boards' placement quality (fill, crowding, R/C orientation, layout
+  score) is now recorded with their routing results, so learning sees both.
+- Auto-shrink finds the smallest board where every part keeps its full
+  spacing (a search between the estimate and the floor) instead of stepping
+  down until the first squeeze, and no longer stops early on a fixed
+  "routing room" rule. Spacing is never reduced to make a board smaller.
+- Safety net: if an auto-sized board doesn't route completely, `kipcb run`
+  rebuilds it about 6% larger and routes again (up to twice). The failure is
+  remembered, so similar boards start larger next time. Your spec is not
+  changed.
+- The plugin always uses the newest knowledge base: a fresh one from
+  pcb-knowledge is picked up immediately, and a plugin update is never
+  shadowed by an older local copy.
+
 ## V2.1 - 2026-10-02
 
 **Better placement, faster builds and a much larger knowledge base.**

@@ -237,6 +237,15 @@ def check(pdir, name, design, board=None):
     if kb and dens > kb["p90"] * 1.5:
         level = WARN
         msg += "; denser than 90%% of real %d-layer boards that route (%.1f)" % (layers, kb["p90"])
+    # how full the board is against the most similar real routed boards (sizing model)
+    from . import sizemodel
+    sf = sizemodel.features(design)
+    similar = sizemodel.fill(sf, layers)
+    court_fill = sf["court_area"] / max(w * h, 1.0)
+    if similar and court_fill > similar["p90"] * 1.15:
+        level = WARN
+        msg += "; parts cover %.0f%% of the board, fuller than 90%% of similar real boards (%.0f%%)" % (
+            100 * court_fill, 100 * similar["p90"])
     if pred and pred["n"] >= 3 and pred["p_ok"] < 0.34:
         level = WARN
         msg += "; only %d of %d similar past boards routed completely" % (pred["ok"], pred["n"])
@@ -254,7 +263,12 @@ def check(pdir, name, design, board=None):
                 None if lscore >= 60 else "see the weakest items; place hints or spacing usually fix them")
 
     features = {"layers": layers, "conn_density": dens, "connections": conns,
-                "finest_pitch": round(pitch, 3) if pitch else None, "layout_score": lscore}
+                "finest_pitch": round(pitch, 3) if pitch else None, "layout_score": lscore,
+                # placement quality alongside routing results, so learning sees both
+                "court_fill": round(court_fill, 3), "fine": sf["fine"],
+                "similar_fill_p50": similar["p50"] if similar else None}
+    if pm:
+        features.update({k: pm.get(k) for k in ("fill", "density_peak", "rc_orientation_share")})
     learn.record("preflight", features=features, fails=sorted({i["check"] for i in res.items if i["level"] == FAIL}),
                  warns=sorted({i["check"] for i in res.items if i["level"] == WARN}))
     return res, features

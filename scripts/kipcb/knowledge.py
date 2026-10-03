@@ -7,20 +7,36 @@ boards also seed kipcb's local learning.
 
 import json
 import os
+import re
 
 
 BUNDLED = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
                        "data", "knowledge.json")
 
 
+def _built(path):
+    """The build time a knowledge base records (first lines of the file), or "" if unreadable."""
+    try:
+        with open(path) as f:
+            head = f.read(400)
+    except OSError:
+        return ""
+    m = re.search(r'"built":\s*"([^"]+)"', head)
+    return m.group(1) if m else ""
+
+
 def kb_path():
-    """KIPCB_KNOWLEDGE, else a locally built/installed base, else the copy shipped with the plugin."""
+    """KIPCB_KNOWLEDGE, else the newest of the locally built/installed base and the copy
+    shipped with the plugin, so a plugin update never runs on an older local copy and a
+    fresh `pkb build` is used straight away."""
     env = os.environ.get("KIPCB_KNOWLEDGE")
     if env:
         return env
     from . import kienv
     local = os.path.join(kienv.data_dir(), "knowledge.json")
-    return local if os.path.exists(local) else BUNDLED
+    if not os.path.exists(local):
+        return BUNDLED
+    return local if _built(local) >= _built(BUNDLED) else BUNDLED
 
 
 _cache = {}

@@ -8,6 +8,7 @@ To update: `claude plugin marketplace update pcb-claude-plugin`, then
 
 | Version | Date | What's new |
 |---|---|---|
+| [V2.2](https://github.com/virajrungta/pcb-claude-plugin/releases/tag/v2.2) | 2026-10-03 | Board sizing learned from real routed boards. |
 | [V2.1](https://github.com/virajrungta/pcb-claude-plugin/releases/tag/v2.1) | 2026-10-02 | Better placement: layout rules from application notes checked before routing, a layout score against real boards, smarter placement of decoupling, ESD, sensors and regulator parts; builds 3-5x faster; knowledge base grown to 666 open-source projects. |
 | [V2.0](https://github.com/virajrungta/pcb-claude-plugin/releases/tag/v2.0) | 2026-10-02 | Windows 10/11 support: same plugin and commands as macOS, only the KiCad and Java install differs. |
 | [V1.11](https://github.com/virajrungta/pcb-claude-plugin/releases/tag/v1.11) | 2026-10-01 | Status bar progress built in: an install option sets up Claude Code's status bar automatically. |

@@ -7,6 +7,7 @@ last successful run, it skips straight to the report.
 
 import hashlib
 import json
+import math
 import os
 import time
 
@@ -43,6 +44,11 @@ def _checkpoint(done, summary, d, nxt):
         lo, hi = est.get(nxt, (0, 0))
         line += "; next: %s %s" % ({"fab": "manufacturing files"}.get(nxt, nxt), estimate.span(lo, hi))
     ui.always(line)
+
+
+def _auto_sized(d):
+    b = d.raw.get("board", {}) if isinstance(d.raw.get("board"), dict) else {}
+    return not (b.get("width") and b.get("height")) and b.get("auto_shrink", True)
 
 
 def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600, until=None, resume=False):
@@ -184,6 +190,28 @@ def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600, 
         _checkpoint("routing + DRC + noise checks", "%s, DRC %s" % (
             "all connections routed" if not rj.get("unconnected") else "%d connection(s) left" % rj["unconnected"],
             "clean" if not errs else "%d error(s)" % errs), d, "fab" if do_fab else None)
+        # safety net for auto-sizing: a board shrunk too far is rebuilt a step larger and
+        # routed again (the failure is in the experience log, so similar boards start larger)
+        b = report._load(pdir, "build.json") or {}
+        grown, auto = 0, _auto_sized(d)
+        while rj.get("unconnected") and auto and grown < 2:
+            grown += 1
+            W, H = math.ceil(b.get("width", 0) * 1.06), math.ceil(b.get("height", 0) * 1.06)
+            ui.always("route  %d connection(s) left on %.0f x %.0f mm; rebuilding at %d x %d mm and routing again"
+                      % (rj["unconnected"], b.get("width", 0), b.get("height", 0), W, H))
+            d.board["width"], d.board["height"] = W, H
+            from . import build as buildmod, preflight
+            t = time.time()
+            if buildmod.build(spec_path, out, render=True, design=d) == 2 or preflight.run(pdir, d.name, d):
+                break
+            routemod.route(pdir, d.name, passes=passes, timeout=timeout)
+            timings["route"] += round(time.time() - t)
+            rj = report._load(pdir, "route.json") or {}
+            b = report._load(pdir, "build.json") or {}
+            drc = report._load(pdir, "drc.json") or {}
+            errs = sum(1 for v in drc.get("violations", []) if v.get("severity") == "error")
+            ui.always("route  %s on %d x %d mm" % ("complete" if not rj.get("unconnected") else
+                                                   "%d unconnected" % rj["unconnected"], W, H))
         left = rj.get("unconnected") or errs
         mark("route", not left, ("%d unrouted" % rj["unconnected"]) if rj.get("unconnected") else
              ("%d DRC error(s)" % errs if errs else ""))

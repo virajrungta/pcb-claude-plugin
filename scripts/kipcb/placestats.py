@@ -4,6 +4,8 @@ real boards), so generated layouts are measured exactly the way real ones were.
     metrics(board) -> {"fill", "peak_ratio", "rc_orientation_share", "connector_edge_mm",
                        "decoupling_mm", "parts", "layers", ...}
     pairs(board)   -> {"crystal_ic": [mm], "crystal_cap", "esd_connector", "inductor_sw", "bootstrap"}
+    design_features(parts) -> {"pads", "parts", "conns", "court_area", "fine"}: what a board
+                      needs, known before placement (kipcb: from the spec; pkb: from real boards)
     score(metrics, knowledge) -> (0-100, [per-metric notes])
 """
 
@@ -128,7 +130,71 @@ def metrics(board):
         "peak_ratio": round(peak / max(fill, 1e-6), 2),
         "passive_nn_gap": nn, "rc_orientation_share": orient,
         "connector_edge": conn_edge[:MAX_SAMPLES], "decoupling": decoup[:MAX_SAMPLES],
+        "design": board_design_features(fps),
     }
+
+
+# ------------------------------------------------------------------ design features
+
+FINE_PITCH = 0.55       # mm: pads closer than this (centre to centre) need fine tracks
+
+
+def fine_pitch(centres):
+    """True if a footprint's pads (>= 3, as (x, y) centres) sit closer than FINE_PITCH."""
+    if len(centres) < 3:
+        return False
+    for i, (x, y) in enumerate(centres):
+        for u, v in centres[i + 1:]:
+            if (x - u) ** 2 + (y - v) ** 2 < FINE_PITCH ** 2 and (x, y) != (u, v):
+                return True
+    return False
+
+
+def design_features(parts):
+    """parts: [(courtyard_w, courtyard_h, [(x, y, net), ...])] -> what the board has to fit
+    and route, independent of where things end up: pads, parts, connections (pads - 1 per
+    net), total courtyard area (mm²) and the share of pads on fine-pitch footprints."""
+    per_net, pads, fine, area = {}, 0, 0, 0.0
+    for w, h, ps in parts:
+        area += w * h
+        pads += len(ps)
+        if fine_pitch([(x, y) for x, y, _ in ps]):
+            fine += len(ps)
+        for _, _, net in ps:
+            if net:
+                per_net[net] = per_net.get(net, 0) + 1
+    return {"pads": pads, "parts": len(parts), "conns": sum(n - 1 for n in per_net.values() if n > 1),
+            "court_area": round(area, 1), "fine": round(fine / float(max(pads, 1)), 3)}
+
+
+def _court_box(fp):
+    """Courtyard bounding box (mm) of a pcbnew footprint, else body + pads grown by 0.25 mm
+    (the same fallback size as a typical courtyard)."""
+    pn_layers = []
+    try:
+        import pcbnew
+        pn_layers = [pcbnew.F_CrtYd, pcbnew.B_CrtYd]
+    except ImportError:
+        pass
+    for layer in pn_layers:
+        try:
+            poly = fp.GetCourtyard(layer)
+            if poly.OutlineCount():
+                b = poly.BBox()
+                return (_mm(b.GetX()), _mm(b.GetY()), _mm(b.GetRight()), _mm(b.GetBottom()))
+        except Exception:
+            pass
+    x0, y0, x1, y1 = _box(fp)
+    return (x0 - 0.25, y0 - 0.25, x1 + 0.25, y1 + 0.25)
+
+
+def board_design_features(fps):
+    parts = []
+    for f in fps:
+        b = _court_box(f)
+        parts.append((b[2] - b[0], b[3] - b[1],
+                      [(_mm(p.GetPosition().x), _mm(p.GetPosition().y), p.GetNetname()) for p in f.Pads()]))
+    return design_features(parts)
 
 
 # ------------------------------------------------------------------ "must be close" pairs

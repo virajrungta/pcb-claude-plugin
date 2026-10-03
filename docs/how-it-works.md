@@ -91,8 +91,12 @@ without changing connectivity.
    closest to connected pads, followed by refinement passes.
 
 Auto-sized boards start from an estimate (part area, plus what has routed
-before), then shrink step by step while every part still fits at full
-spacing, never below the room needed for routing or a size that failed before.
+before), then shrink to the smallest size where every part still fits at full
+spacing (found by search, so spacing is never reduced), never below the room needed for routing or a size that failed before,
+and never fuller than most similar real routed boards (the most similar boards
+in the knowledge base by pads, parts, connections and fine-pitch share). If a
+shrunk board still doesn't route completely, `kipcb run` rebuilds it a step
+larger and routes again, and remembers the failure for similar boards.
 
 Placement uses each footprint's real courtyard shape (a module's wide antenna
 section doesn't block the pins beside it), spacing presets with extra

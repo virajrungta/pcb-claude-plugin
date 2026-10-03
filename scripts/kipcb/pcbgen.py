@@ -349,47 +349,75 @@ def _holes(design, W, H):
     return hole_size, hole_pos, holes
 
 
-def shrink_to_fit(design, sch_builder, W, H, step=0.92, max_steps=6):
+def shrink_to_fit(design, sch_builder, W, H, max_steps=8):
     """Shrink an auto-sized board while every part still fits at full spacing.
 
-    Stops above two floors: enough free area left for routing (1.45x the
-    parts' footprint including spacing), and the area per pad at which
-    similar boards failed to route before (learned)."""
+    The judge is a placement trial at each size (a bisection between the
+    estimate and the floor): a size where any part is squeezed or left over is
+    too small, so the spacing never gets tighter. Floors keep it honest: the parts with their spacing plus some
+    routing room, the area per pad at which similar boards failed to route
+    before (learned), and how full similar real routed boards get (knowledge
+    base). If a shrunk board still fails to route, `kipcb run` rebuilds it a
+    step larger (run.py), and the failure raises the learned floor."""
     from . import learn
     layers = int(design.board.get("layers", 2))
     pads = sum(len(c.fp.pads) for c in design.components)
-    floor = 1.45 * _courtyard_area(design)
+    floor = 1.15 * _courtyard_area(design)
     if design.board.get("mounting_holes"):
         floor += 4 * 7.0 * 7.0
     learned_floor = learn.min_area_per_pad(layers, pads)
     if learned_floor:
         floor = max(floor, learned_floor * pads)
-    # no denser than most real boards that routed completely at this layer count (knowledge base)
-    from . import knowledge
-    real = knowledge.routed_density(layers)
-    conns = sum(len(p) - 1 for p in design.nets.values() if len(p) > 1)
-    if real and real.get("p75"):
-        floor = max(floor, conns / real["p75"] * 100.0)
-    best = None
-    for _ in range(max_steps):
-        W2, H2 = float(math.floor(W * step)), float(math.floor(H * step))
-        if W2 * H2 < floor:
-            break
+    # no fuller than most real routed boards that look like this one (sizing model, knowledge
+    # base); without it, no denser than most real boards at this layer count
+    from . import knowledge, sizemodel
+    f = sizemodel.features(design)
+    similar = sizemodel.fill(f, layers)
+    if similar:
+        floor = max(floor, f["court_area"] / similar["p75"])
+    else:
+        real = knowledge.routed_density(layers)
+        if real and real.get("p75"):
+            floor = max(floor, f["conns"] / real["p75"] * 100.0)
+    def fits(W2, H2, grid=1.0):
+        """A clean placement at full spacing (nothing squeezed or left over), or None, on the
+        fast coarse grid; the chosen size then gets a fine placement below."""
         _, _, holes = _holes(design, W2, H2)
-        # coarse grid for the trials (fast); the final size gets a fine placement below
         placement, failed, log = compute_placement(design, sch_builder, W2, H2, holes, quiet=True,
-                                                   step=1.0, refine=0)
-        if failed or log:        # anything stranded or squeezed means it's too tight
+                                                   step=grid, refine=0 if grid else 2)
+        return placement if not failed and not log else None
+
+    def size(scale):
+        return float(math.floor(W * scale)), float(math.floor(H * scale))
+
+    # bisect the scale between "fits" (1.0, the estimate) and the floor
+    lo = math.sqrt(min(1.0, floor / (W * H)))
+    hi, best = 1.0, None
+    W_best, H_best = W, H
+    for _ in range(max_steps):
+        if hi - lo < 0.01:
             break
-        W, H, best = W2, H2, placement
+        mid = (lo + hi) / 2
+        W2, H2 = size(mid)
+        if (W2, H2) == (W_best, H_best) or W2 * H2 < floor:
+            lo = mid
+            continue
+        placement = fits(W2, H2)
+        if placement is not None:
+            hi, best, W_best, H_best = mid, placement, W2, H2
+        else:
+            lo = mid
+    # (not squeezing out the last millimetre with the fine grid: on the example boards it
+    # saved 1 mm and cost the ESD array its spot at the USB connector)
+    W, H = W_best, H_best
     if best is not None:
         _, _, holes = _holes(design, W, H)
         fine, failed, log = compute_placement(design, sch_builder, W, H, holes, quiet=True)
         if not failed and not log:
             best = fine
         else:
-            # the fine grid squeezed something the coarse trial didn't: polish the trial
-            # instead (refinement only moves a part where it's better off)
+            # the fine grid squeezed something the trial didn't: polish the trial instead
+            # (refinement only moves a part where it's better off)
             fine, failed, log = compute_placement(design, sch_builder, W, H, holes, quiet=True, seed=best)
             if not failed and not log:
                 best = fine
