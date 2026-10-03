@@ -419,7 +419,6 @@ class BlockExpansionTests(unittest.TestCase):
             {"ref": "C1", "part": "C0603", "value": "1uF", "footprint": "Capacitor_SMD:C_0805_2012Metric"}))
 
     def test_catalog_lcsc_numbers_are_well_formed(self):
-        import re
         from kipcb import blocks
         for name, e in blocks.builtin_parts().items():
             codes = [e["lcsc"]] if isinstance(e.get("lcsc"), str) else list((e.get("lcsc") or {}).values())

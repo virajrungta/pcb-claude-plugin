@@ -1,7 +1,7 @@
 """Generate a placed (unrouted) KiCad board from a Design."""
 
 import math
-import os
+import re
 
 from . import place
 from . import ui
@@ -190,10 +190,43 @@ def _dependents(design):
     return n
 
 
-def compute_placement(design, sch_builder, W, H, holes, quiet=False, step=None, refine=2):
+def _auto_hints(design):
+    """Placement knowledge applied without the user asking (layout.py rules TH-03, SW-08):
+    temperature/humidity sensors keep away from heat (MCUs, modules, regulators, inductors),
+    crystals keep away from switching inductors. A spec's own away_from wins."""
+    from . import layout
+    # TH-03: 10 mm from MCUs/modules, 15 mm from regulators and inductors (+1 mm slack)
+    heat, inductors = {}, []
+    for c in design.components:
+        ref = c.ref
+        kind = re.match(r"^[A-Za-z]+", ref).group(0).upper()
+        if kind in ("U", "IC") and "Regulator_" in c.symbol_id:
+            heat[ref] = 16.0
+        elif kind in ("U", "IC") and (len(c.sym.pins) >= 24 or "RF_Module" in c.symbol_id):
+            heat[ref] = 11.0
+        if kind == "L":
+            inductors.append(ref)
+            heat[ref] = 16.0
+    hints = {}
+    for c in design.components:
+        place = c.place if isinstance(c.place, dict) else {}
+        if "away_from" in place or "x" in place:
+            continue
+        kind = re.match(r"^[A-Za-z]+", c.ref).group(0).upper()
+        if kind in ("U", "IC") and layout.TEMP_SENSOR.search("%s %s" % (c.value, c.symbol_id)):
+            far = {r: d for r, d in heat.items() if r != c.ref}
+            if far:
+                hints[c.ref] = {"away_from": far}
+        elif kind == "Y" and inductors:
+            hints[c.ref] = {"away_from": {r: 11.0 for r in inductors}}
+    return hints
+
+
+def compute_placement(design, sch_builder, W, H, holes, quiet=False, step=None, refine=2, seed=None):
     parts = []
     net_sizes = {n: len(p) for n, p in design.nets.items()}
     deps = _dependents(design)
+    auto = _auto_hints(design)
     for c in design.components:
         pads = [(p["number"], p["x"], p["y"], design.pin_net.get((c.ref, p["number"])))
                 for p in c.fp.pads]
@@ -201,15 +234,22 @@ def compute_placement(design, sch_builder, W, H, holes, quiet=False, step=None, 
         # so those helpers find room at its pins (a regulator hugging a connector left its
         # input capacitor nowhere to go). The pinned parts themselves still sit close: their
         # gap to it is 2x their own small margin (place.Placer._pair_gap).
-        margin = part_margin(design, c) + min(1.6, 0.6 * deps.get(c.ref, 0))
-        parts.append(place.Part(c.ref, c.fp.courtyard, pads, _resolve_near(design, c.place),
+        # (not for 2-pad passives: a decoupling cap with its bulk cap "near" it must still
+        # squeeze into the slot at its IC's pin)
+        bonus = min(1.6, 0.6 * deps.get(c.ref, 0)) if len(c.fp.pads) > 2 else 0.0
+        margin = part_margin(design, c) + bonus
+        hint = _resolve_near(design, c.place)
+        if c.ref in auto:
+            hint = dict(hint or {}, **auto[c.ref])
+        parts.append(place.Part(c.ref, c.fp.courtyard, pads, hint,
                                 len(c.fp.pads), margin, c.fp.court_rects))
+        parts[-1].bonus = bonus
     obstacles = []
     for (x, y), r in holes:
         obstacles.append((x - r, y - r, x + r, y + r))
     spread = _spread(design, parts, W, H)
     pl = place.Placer(W, H, parts, net_sizes, design.rules["edge_clearance"], obstacles)
-    failed = pl.run(step=step or (0.5 if max(W, H) < 120 else 1.0), refine_passes=refine)
+    failed = pl.run(step=step or (0.5 if max(W, H) < 120 else 1.0), refine_passes=refine, seed=seed)
     if not quiet:
         if spread:    # informational; not in pl.log, which auto-shrink reads as "too tight"
             ui.say("note: spread parts by +%.1f mm per side to use the board (%.0f%% -> %.0f%% filled)" % spread)
@@ -347,6 +387,12 @@ def shrink_to_fit(design, sch_builder, W, H, step=0.92, max_steps=6):
         fine, failed, log = compute_placement(design, sch_builder, W, H, holes, quiet=True)
         if not failed and not log:
             best = fine
+        else:
+            # the fine grid squeezed something the coarse trial didn't: polish the trial
+            # instead (refinement only moves a part where it's better off)
+            fine, failed, log = compute_placement(design, sch_builder, W, H, holes, quiet=True, seed=best)
+            if not failed and not log:
+                best = fine
     return W, H, best
 
 
@@ -463,6 +509,9 @@ def build(design, sch_builder, pcb_path, placement=None):
     if hole_pos:
         fpname, dia = HOLES.get(hole_size, HOLES["M3"])
         for i, (x, y) in enumerate(hole_pos):
+            if "MountingHole" not in design.fp_libs:
+                raise RuntimeError("KiCad's MountingHole footprint library wasn't found; "
+                                   "check KiCad's footprint libraries (kipcb doctor)")
             fp = pn.FootprintLoad(design.fp_libs["MountingHole"], fpname)
             fp.SetReference("H%d" % (i + 1))
             fp.SetValue(hole_size)
@@ -481,14 +530,3 @@ def build(design, sch_builder, pcb_path, placement=None):
     pn.SaveBoard(pcb_path, board)
     return {"width": W, "height": H, "placement": placement, "failed": failed, "notes": notes}
 
-
-def read_placement(pcb_path):
-    """Current footprint positions (board-relative mm) from an existing board."""
-    pn = pcbnew()
-    board = pn.LoadBoard(pcb_path)
-    ox, oy = ORIGIN
-    out = {}
-    for fp in board.GetFootprints():
-        p = fp.GetPosition()
-        out[fp.GetReference()] = (p.x / 1e6 - ox, p.y / 1e6 - oy, fp.GetOrientationDegrees())
-    return out

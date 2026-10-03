@@ -49,8 +49,8 @@ def build_index(libs):
             d["lib"] = nick
             out.append(d)
     if changed:
-        with open(cache_path, "w") as f:
-            json.dump(cache, f)
+        from . import paths
+        paths.save_json(cache_path, cache, indent=None)
     return out
 
 
@@ -102,47 +102,55 @@ class Footprint(object):
     def smd(self):
         return "smd" in self.attrs
 
+    def row_pairs(self):
+        """Neighbouring copper pads in the same row, computed once per footprint:
+        [(a, b, axis, distance)] with axis "x" (same y) or "y" (same x), skipping stacked or
+        overlapping pads of one number. Shared by pitch(), track_limits() and preflight."""
+        if getattr(self, "_row_pairs", None) is None:
+            cu = [p for p in self.pads if p["number"] and any(l.endswith(".Cu") for l in p["layers"])]
+            pairs = []
+            for i, a in enumerate(cu):
+                for b in cu[i + 1:]:
+                    if a["number"] == b["number"]:
+                        continue
+                    dx, dy = abs(a["x"] - b["x"]), abs(a["y"] - b["y"])
+                    if dy < 0.01 and dx > (a["w"] + b["w"]) / 2:
+                        pairs.append((a, b, "x", dx))
+                    elif dx < 0.01 and dy > (a["h"] + b["h"]) / 2:
+                        pairs.append((a, b, "y", dy))
+            self._row_pairs = pairs
+        return self._row_pairs
+
     def track_limits(self, clearance, margin=0.01, clr_of=None):
         """{pad number: widest track that can reach that pad without breaking clearance to the
         next pad in its row}, for pads where the pitch is a constraint (QFN, LQFP, TSSOP...).
         clr_of maps pad number -> its net's clearance; the larger of the two neighbours' counts."""
-        cu = [p for p in self.pads if p["number"] and any(l.endswith(".Cu") for l in p["layers"])]
+        key = (clearance, margin) if clr_of is None else None
+        cache = self.__dict__.setdefault("_limits", {})
+        if key is not None and key in cache:
+            return dict(cache[key])
         out = {}
-        for a in cu:
-            for b in cu:
-                if a is b or a["number"] == b["number"]:
-                    continue
-                dx, dy = abs(a["x"] - b["x"]), abs(a["y"] - b["y"])
-                clr = clearance
-                if clr_of:
-                    clr = max(clr_of.get(a["number"], clearance), clr_of.get(b["number"], clearance))
-                if dy < 0.01 and (a["w"] + b["w"]) / 2 < dx < 1.5:
-                    room = dx - b["w"] / 2 - clr - margin
-                elif dx < 0.01 and (a["h"] + b["h"]) / 2 < dy < 1.5:
-                    room = dy - b["h"] / 2 - clr - margin
-                else:
-                    continue                     # overlapping (stacked) or far-apart pads
-                out[a["number"]] = min(out.get(a["number"], 9.0), 2 * room)
+        for a, b, axis, d in self.row_pairs():
+            if d >= 1.5:
+                continue
+            clr = clearance
+            if clr_of:
+                clr = max(clr_of.get(a["number"], clearance), clr_of.get(b["number"], clearance))
+            half_a = (a["w"] if axis == "x" else a["h"]) / 2
+            half_b = (b["w"] if axis == "x" else b["h"]) / 2
+            # a track entering pad a must clear pad b, and the other way round
+            out[a["number"]] = min(out.get(a["number"], 9.0), 2 * (d - half_b - clr - margin))
+            out[b["number"]] = min(out.get(b["number"], 9.0), 2 * (d - half_a - clr - margin))
+        if key is not None:
+            cache[key] = dict(out)
         return out
 
     def pitch(self):
         """Smallest centre distance between neighbouring pads in a row (None for 2-pad parts)."""
-        cu = [p for p in self.pads if p["number"] and any(l.endswith(".Cu") for l in p["layers"])]
-        best = None
-        for i, a in enumerate(cu):
-            for b in cu[i + 1:]:
-                if a["number"] == b["number"]:
-                    continue
-                dx, dy = abs(a["x"] - b["x"]), abs(a["y"] - b["y"])
-                if dy < 0.01 and dx > (a["w"] + b["w"]) / 2:
-                    d = dx
-                elif dx < 0.01 and dy > (a["h"] + b["h"]) / 2:
-                    d = dy
-                else:
-                    continue
-                if best is None or d < best:
-                    best = d
-        return best
+        if "_pitch" not in self.__dict__:
+            ds = [d for _, _, _, d in self.row_pairs()]
+            self._pitch = min(ds) if ds else None
+        return self._pitch
 
     def pad_numbers(self):
         return sorted({p["number"] for p in self.pads if p["number"]}, key=_natkey)

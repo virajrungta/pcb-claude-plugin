@@ -25,7 +25,6 @@ def _project_paths(target):
 
 
 def cmd_doctor(a):
-    import subprocess
     ok = True
     print("kipcb %s" % __version__)
     try:
@@ -255,7 +254,7 @@ def cmd_estimate(a):
 
 
 def cmd_progress(a):
-    """Show the design progress checklist; --hook renders it for Claude Code (PostToolUse)."""
+    """Show the design progress checklist (also: start one, status-bar line, status-bar setup)."""
     from . import progress
     if a.start:
         name = re.sub(r"[^A-Za-z0-9_\-]+", "_", a.start).strip("_") or "board"
@@ -269,10 +268,8 @@ def cmd_progress(a):
     if a.install_statusline:
         print(progress.install_statusline())
         return 0
-    if a.hook:
-        out = progress.hook(sys.stdin.read())
-        if out:
-            print(out)
+    if a.uninstall_statusline:
+        print(progress.uninstall_statusline())
         return 0
     state = progress.load()
     print(progress.render(state) if state else "no design in progress")
@@ -330,31 +327,14 @@ def cmd_ref(a):
     return knowledge.print_part(" ".join(a.part))
 
 
-def _prefs_path():
-    return os.path.join(kienv.data_dir(), "prefs.json")
-
-
 def cmd_settings(a):
-    import json
     from . import learn, progress
-    try:
-        with open(_prefs_path()) as f:
-            prefs = json.load(f)
-    except (OSError, ValueError):
-        prefs = {}
-    if a.set:
-        key, _, val = a.set.partition("=")
-        prefs[key.strip()] = val.strip()
-        os.makedirs(os.path.dirname(_prefs_path()), exist_ok=True)
-        with open(_prefs_path(), "w") as f:
-            json.dump(prefs, f)
     s = learn.settings()
     print("manufacturer:  %s" % s.get("fab_house", "JLCPCB (default)"))
     print("build method:  %s" % s.get("build_method", "Assembled by the manufacturer (default)"))
     print("layers:        %s" % s.get("layers", "2 (default)"))
     print("learning:      %s" % ("on" if learn.enabled() else "off"))
-    print("statusline:    %s" % ("PCB progress" if progress.statusline_installed() else
-                                 "declined" if prefs.get("statusline_offer") == "no" else "not set"))
+    print("status bar:    %s" % ("PCB progress" if progress.statusline_installed() else "not set"))
     print("change with:   /plugin configure pcb@pcb-claude-plugin")
     return 0
 
@@ -398,7 +378,7 @@ def cmd_parts(a):
         fp = p.get("footprint", "(symbol default)").split(":")[-1]
         rows.append("%s: %s | %s%s%s" % (name, p["symbol"], fp, lcs, (" | " + p["pins"]) if p.get("pins") else ""))
     mem = sorted(blocks.remembered().values(), key=lambda e: -e.get("uses", 0))
-    mine = [e for e in mem if not q or q in json_dumps(e).lower()][:15]
+    mine = [e for e in mem if not q or q in __import__('json').dumps(e).lower()][:15]
     for line in rows:
         print(line)
     if mine:
@@ -410,9 +390,6 @@ def cmd_parts(a):
     return 0
 
 
-def json_dumps(o):
-    import json
-    return json.dumps(o)
 
 
 def cmd_blocks(a):
@@ -551,7 +528,8 @@ def main(argv=None):
     p = sp.add_parser("ref", help="how open-source designs wire a part (needs the knowledge base)")
     p.add_argument("part", nargs="+"); p.set_defaults(fn=cmd_ref)
     p = sp.add_parser("progress", help="show the current design's progress checklist")
-    p.add_argument("--hook", action="store_true", help=argparse.SUPPRESS)
+    p.add_argument("--uninstall-statusline", action="store_true",
+                   help="remove kipcb's status line from ~/.claude/settings.json (only if it's kipcb's)")
     p.add_argument("--install-statusline", action="store_true",
                    help="show design progress in Claude Code's status bar (edits ~/.claude/settings.json; "
                         "only when no status line is set yet)")
@@ -581,8 +559,7 @@ def main(argv=None):
     p.add_argument("topic", nargs="*"); p.set_defaults(fn=cmd_guide)
     p = sp.add_parser("fmt", help="rewrite specs in the compact one-line-per-part layout")
     p.add_argument("spec", nargs="+"); p.set_defaults(fn=cmd_fmt)
-    p = sp.add_parser("settings", help="show your defaults from the install dialog")
-    p.add_argument("--set", metavar="KEY=VALUE", help=argparse.SUPPRESS); p.set_defaults(fn=cmd_settings)
+    sp.add_parser("settings", help="show your defaults from the install dialog").set_defaults(fn=cmd_settings)
     p = sp.add_parser("learn", help="show or reset what kipcb has learned from past runs")
     p.add_argument("action", nargs="?", default="status", choices=["status", "reset"])
     p.set_defaults(fn=cmd_learn)
@@ -596,8 +573,17 @@ def main(argv=None):
     if not getattr(a, "fn", None):
         ap.print_help()
         return 1
+    from .spec import SpecError
     try:
         return a.fn(a) or 0
-    except (KeyError, RuntimeError) as e:
-        print("kipcb: error: %s" % (e.args[0] if e.args else e), file=sys.stderr)
+    except (OSError, KeyError, RuntimeError, SpecError) as e:
+        if os.environ.get("KIPCB_DEBUG"):
+            raise
+        if isinstance(e, OSError):             # missing file, permission... : say which
+            msg = "%s%s" % (e.strerror or e, (": " + e.filename) if e.filename else "")
+        elif isinstance(e, KeyError):          # a bare KeyError only names the key
+            msg = "unknown name %r (set KIPCB_DEBUG=1 for the traceback)" % (e.args[0] if e.args else "")
+        else:
+            msg = e.args[0] if e.args else str(e)
+        print("kipcb: error: %s" % msg, file=sys.stderr)
         return 1

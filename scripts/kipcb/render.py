@@ -25,11 +25,15 @@ def _pdf_to_png(pdf, png, width=SCHEMATIC_PX):
     if not os.path.exists(pdf) or os.environ.get("KIPCB_FORCE_SVG_RASTER"):
         return None
     if platform.system() == "Darwin" and shutil.which("sips"):
-        subprocess.run(["sips", "-s", "format", "png", "-Z", str(width), pdf, "--out", png],
-                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        cmd = ["sips", "-s", "format", "png", "-Z", str(width), pdf, "--out", png]
     elif shutil.which("pdftoppm"):
-        subprocess.run(["pdftoppm", "-png", "-singlefile", "-scale-to", str(width), pdf, png[:-4]],
-                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        cmd = ["pdftoppm", "-png", "-singlefile", "-scale-to", str(width), pdf, png[:-4]]
+    else:
+        return None
+    try:
+        subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120)
+    except subprocess.TimeoutExpired:
+        return None
     return png if os.path.exists(png) else None
 
 
@@ -57,9 +61,12 @@ def _svg_to_png(svg, png, width=SCHEMATIC_PX):
     previews are made on Windows, where there's no sips or pdftoppm). Runs in its own process:
     wx must own the main thread, and previews are rendered in worker threads."""
     import sys
-    p = subprocess.run([sys.executable, "-c", _WX_RASTER, svg, png, str(int(width))],
-                       stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True,
-                       encoding="utf-8", errors="replace", timeout=120)
+    try:
+        p = subprocess.run([sys.executable, "-c", _WX_RASTER, svg, png, str(int(width))],
+                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True,
+                           encoding="utf-8", errors="replace", timeout=120)
+    except subprocess.TimeoutExpired:
+        return None
     if not os.path.exists(png):
         from . import ui
         ui.say("schematic preview: rasterising the SVG failed:\n" + (p.stdout or "")[-800:])

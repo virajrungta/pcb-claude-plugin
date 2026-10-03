@@ -26,6 +26,3 @@ def pcbnew():
 def mm(v):
     return int(round(v * 1e6))
 
-
-def to_mm(v):
-    return v / 1e6

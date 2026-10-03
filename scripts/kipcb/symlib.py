@@ -52,8 +52,8 @@ def build_index(libs):
             d["lib"] = nick
             out.append(d)
     if changed:
-        with open(cache_path, "w") as f:
-            json.dump(cache, f)
+        from . import paths
+        paths.save_json(cache_path, cache, indent=None)
     return out
 
 
@@ -161,12 +161,6 @@ class Symbol(object):
 
     def pins_for_unit(self, unit):
         return [p for p in self.pins if p["unit"] in (0, unit)]
-
-    def unit_of_pin(self, number):
-        for p in self.pins:
-            if p["number"] == number:
-                return p["unit"] or min(self.units)
-        return None
 
     def bbox(self, unit):
         """Bounding box (xmin, ymin, xmax, ymax) in library coords (Y up) for a unit."""

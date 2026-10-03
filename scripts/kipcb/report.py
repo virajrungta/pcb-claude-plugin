@@ -7,6 +7,7 @@ can print it again at any time. Also saved as reports/REPORT.md.
 
 import json
 import os
+import sys
 
 from . import kienv, paths
 
@@ -78,6 +79,8 @@ def collect(pdir, name, timings=None):
         "noise": {k: len(v) for k, v in nz.items()},
         "power": [n for n in build.get("spec_notes", []) if n.startswith(("power:", "rail "))],
         "blockers": blockers, "attention": attention, "timings": timings or {},
+        "layout_score": (pre.get("features") or {}).get("layout_score"),
+        "layout_notes": [i["message"] for i in pre.get("items", []) if i["check"] == "layout score"],
     }
 
 
@@ -105,6 +108,8 @@ def text(r, max_attention=8):
     if sum(n.values()):
         checks.append("noise %d pass / %d warn / %d fail" % (n["PASS"], n["WARN"], n["FAIL"]))
     lines.append("Checks    " + ", ".join(checks))
+    if r.get("layout_score") is not None:
+        lines.append("Layout    %d/100 compared with real routed boards" % r["layout_score"])
     for p in r["power"][:3]:
         lines.append("Power     " + p.replace("power: ", ""))
     if r["fab"]:
@@ -141,6 +146,8 @@ def markdown(r):
     if r["route"]:
         md.append("| Routing | %s; %d vias; %s mm of signal on the bottom layer |" % (
             r["route"].get("chosen", "-"), r["route"].get("vias", 0), r["route"].get("bottom_mm", "-")))
+    if r.get("layout_score") is not None:
+        md.append("| Layout score | %s |" % (r["layout_notes"][0] if r["layout_notes"] else "%d/100" % r["layout_score"]))
     md.append("| ERC | %s |" % ("no errors" if not r["erc_errors"] else "%d errors" % r["erc_errors"]))
     if r["route"] is not None:
         md.append("| DRC | %d errors, %d unconnected |" % (r["drc_errors"], r["unconnected"] or 0))
@@ -158,7 +165,7 @@ def markdown(r):
     if r["attention"]:
         md += ["", "## Worth checking", ""] + ["- " + x for x in r["attention"]]
     md += ["", "## Next", "",
-           "- Open in KiCad: `%s \"%s\"`" % ("start \"\"" if kienv.WINDOWS else "open", r["project"]),
+           "- Open in KiCad: `%s \"%s\"`" % ("start \"\"" if kienv.WINDOWS else "open" if sys.platform == "darwin" else "xdg-open", r["project"]),
            "- Order boards: upload `fab/%s-gerbers.zip`; for assembly also the BOM and CPL files" % r["name"],
            ""]
     return "\n".join(md)

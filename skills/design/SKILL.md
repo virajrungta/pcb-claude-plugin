@@ -21,7 +21,7 @@ of truth: change the spec and rerun, never hand-edit generated `.kicad_*` files.
   ATmega328P, sensors (BME280, SHT31, MPU-6050, INA219, ADS1115, DS3231),
   microSD, RS-485, CAN, motor driver, relay, buzzer, level shifter, LEDs,
   buttons, headers. `kipcb parts` lists part names (`R0603`, `C0805`,
-  `LED0805` with a colour, `AO3401A`, `SS34`…) with JLCPCB numbers for 265
+  `LED0805` with a colour, `AO3401A`, `SS34`…) with JLCPCB numbers for over 250
   R/C values and ~80 parts. A block or `part` name needs no search, pin lookup
   or datasheet: it is already checked against KiCad's libraries and the
   reference circuit.
@@ -174,7 +174,9 @@ no checklist is needed (e.g. a quick rerun).
 
 - **Spec errors**: fix them with Edit and rerun.
 - **Preflight failures**: apply the printed fix (spacing, place hints, board
-  size, rules) and rerun; it costs seconds, routing costs minutes.
+  size, rules) and rerun; it costs seconds, routing costs minutes. `layout`
+  warnings cite a rule (USB-02, SW-01, TH-03…) and its source; fix them with
+  the suggested hint when cheap, otherwise tell the user what the trade-off is.
 - **Read `previews/review.png`**: connectors on edges facing out, decoupling
   caps at their pins, crystal by the MCU, regulator near power entry, antenna
   at an edge, readable spacing. Fix with `place` hints or `board.spacing`.

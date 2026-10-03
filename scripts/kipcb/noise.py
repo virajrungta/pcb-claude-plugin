@@ -57,14 +57,13 @@ def _pad_gap(p, q):
 
 
 def _spec(pdir, name):
-    for cand in (os.path.join(os.path.dirname(pdir), name + ".json"), os.path.join(pdir, name + ".json")):
-        if os.path.exists(cand):
-            try:
-                with open(cand) as f:
-                    return json.load(f)
-            except ValueError:
-                return {}
-    return {}
+    from . import paths
+    return paths.project_spec(pdir, name)
+
+
+def _built(pdir):
+    from . import report
+    return report._load(pdir, "build.json") or {}
 
 
 def check(pdir, name, board=None):
@@ -99,7 +98,13 @@ def check(pdir, name, board=None):
             roles[n] = "noisy"
         elif SENSITIVE_NET.search(base) or any(SENSITIVE_PIN.match(f or "") for f in funcs):
             roles[n] = "sensitive"
-    power_nets = set(_n(x) for x in spec.get("power_nets", []))
+    # the expanded design's power nets (blocks add some; compact specs store them as a string)
+    built = _built(pdir)
+    pn_list = built.get("power_nets")
+    if pn_list is None:
+        pn_list = spec.get("power_nets", [])
+        pn_list = pn_list.split() if isinstance(pn_list, str) else pn_list
+    power_nets = set(_n(x) for x in pn_list)
 
     board_box = board.GetBoardEdgesBoundingBox()
 
@@ -313,8 +318,9 @@ def check(pdir, name, board=None):
     return rep
 
 
-def run(pdir, name, board=None, quiet=False, save=True):
-    rep = check(pdir, name, board)
+def run(pdir, name, board=None, quiet=False, save=True, rep=None):
+    """Print (and save) the noise checks; pass rep= to reuse a check already done."""
+    rep = rep if rep is not None else check(pdir, name, board)
     if save:
         from . import paths
         out = paths.reports(pdir)

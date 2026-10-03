@@ -46,7 +46,7 @@ parts have short **part names** (`R0603`, `AMS1117-3.3`, `HEADER_1x04`) that fil
 in symbol, footprint and, for common values, an LCSC number. Every block and part
 is tested against KiCad's libraries before each release.
 
-The part catalog carries JLCPCB part numbers for 265 resistor and capacitor
+The part catalog carries JLCPCB part numbers for over 250 resistor and capacitor
 values (the JLCPCB basic library, which has no extra assembly fee; capacitors
 get the highest voltage rating stocked) and for about 80 named parts. `kipcb
 lcsc` checks live stock and searches JLCPCB's library, and exporting
@@ -96,7 +96,21 @@ spacing, never below the room needed for routing or a size that failed before.
 
 Placement uses each footprint's real courtyard shape (a module's wide antenna
 section doesn't block the pins beside it), spacing presets with extra
-fan-out room around ICs, and `away_from` to separate noisy and sensitive parts.
+fan-out room around ICs, and `away_from` to separate noisy and sensitive parts
+(`{"away_from": ["L1", "U5"], "min_dist": 8}`, or per part:
+`{"away_from": {"L1": 15, "U5": 10}}`).
+
+Some placement knowledge applies without being asked:
+
+- A `near` hint on a part (not a pin) aims at the pads the two parts share: an
+  ESD array `near` a USB connector sits at the data pins, not beside the
+  middle of the receptacle.
+- Temperature and humidity sensors keep 15 mm from regulators and inductors
+  and 10 mm from MCUs and modules. Crystals keep away from switching inductors.
+- Switching-regulator inductors and decoupling capacitors claim their spot
+  before pull-ups and other helpers.
+- Resistors and capacitors are turned to one orientation where it costs
+  nothing (easier assembly and inspection; most real boards do this).
 
 ## Placement spacing
 
@@ -130,6 +144,15 @@ the placed board. `kipcb preflight` (run automatically before routing) checks:
 - **Crowding**: one area packed far denser than the board as a whole.
 - **Density**: connections per cm² compared with real routed boards and with
   how your own boards of similar density routed.
+- **Layout rules**: placement guidance from manufacturer application notes,
+  checked on the placed board: USB ESD protection at the connector, crystal
+  load capacitors close and symmetric, buck input loop, bootstrap and
+  feedback parts tight, temperature sensors away from heat, RF modules at the
+  edge, support parts next to the part they serve, nothing in a mounting
+  hole's screw-head area. Each finding names the rule, its source and the fix.
+- **Layout score** (informational): how typical the layout is of real routed
+  boards with the same layer count, for crowding, R/C orientation, connector
+  distance to the edge and decoupling distance.
 
 A failure stops the run before routing, with the fix.
 

@@ -31,13 +31,16 @@ def _load_cache():
 
 
 def _save_cache(cache):
-    with open(_cache_path(), "w") as f:
-        json.dump(cache, f)
+    from . import paths
+    paths.save_json(_cache_path(), cache, indent=None)
 
 
 def _curl(args):
-    p = subprocess.run(["curl", "-s", "-m", "20"] + args, stdout=subprocess.PIPE,
-                       stderr=subprocess.DEVNULL, universal_newlines=True)
+    try:
+        p = subprocess.run(["curl", "-s", "-m", "20"] + args, stdout=subprocess.PIPE,
+                           stderr=subprocess.DEVNULL, universal_newlines=True, timeout=30)
+    except (subprocess.TimeoutExpired, OSError):
+        return None
     try:
         return json.loads(p.stdout)
     except ValueError:

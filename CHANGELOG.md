@@ -9,6 +9,76 @@ release and publishes it on GitHub.
 
 _Nothing yet._
 
+## V2.1 - 2026-10-02
+
+**Better placement, faster builds and a much larger knowledge base.**
+
+V2.1 makes the boards the plugin lays out look more like ones an experienced
+designer would place: parts that must sit together (decoupling capacitors,
+ESD protection, crystals, regulator parts) end up where application notes and
+hundreds of real routed boards say they belong, and anything that doesn't is
+flagged before routing with the rule, its source and the fix. Builds are also
+several times faster.
+
+### Update
+
+```bash
+claude plugin marketplace update pcb-claude-plugin
+claude plugin update pcb@pcb-claude-plugin
+```
+
+Nothing changes in how you use it, on macOS or Windows. Existing design specs
+build as before.
+
+### Placement
+
+- Layout rules from manufacturer application notes now run on every placed
+  board before routing: USB ESD protection at the connector, crystal load
+  capacitors, the buck input loop, bootstrap and feedback parts, temperature
+  sensors away from heat, RF modules at the edge, stray support parts and
+  mounting-hole clearance. Each finding names its source and the fix.
+- New layout score in the report: how typical your layout is of real routed
+  boards (crowding, R/C orientation, connectors at the edge, decoupling
+  distance). It is informational; the rules above are the hard checks.
+- Temperature sensors automatically keep their distance from regulators,
+  inductors and MCUs, and crystals from switching inductors.
+- `away_from` takes per-part distances: `{"away_from": {"L1": 15, "U5": 10}}`.
+- A `near` hint on a part now aims at the pins the two parts share, so ESD
+  arrays and similar parts sit at the right pins.
+- Decoupling capacitors with their own bulk capacitor no longer get pushed
+  out of the slot beside their pin.
+- Switching-regulator inductors are placed before other helpers.
+- Resistors and capacitors are turned to one orientation where it costs
+  nothing.
+- When the board auto-shrinks, the final layout is polished on the fine grid
+  instead of falling back to the coarse trial layout.
+
+### Speed
+
+- Builds are about 3-5x faster (placement does far less repeated geometry
+  work): the ESP32-C3 examples build in 6-8 s instead of about 30 s.
+- Experience, block and part files are read once per run.
+
+### Knowledge
+
+- The knowledge base now covers 666 open-source projects from 264
+  repositories (587 routed boards), including about 120 curated designs from
+  established open-hardware makers.
+- Placement statistics from those boards (fill, crowding, orientation,
+  connector and decoupling distances) drive the layout score, and layout
+  warnings say how close real designs put the same parts (crystals, ESD
+  arrays, inductors, bootstrap capacitors).
+
+### Reliability
+
+- Settings, specs and caches are written atomically, so an interrupted run
+  can't leave a half-written file.
+- Clearer error messages; `KIPCB_DEBUG=1` shows the full traceback.
+- Router download has a timeout and cleans up after a failed download.
+- Ground stitching vias keep real clearance from other nets' tracks (one could
+  land too close to a diagonal track and fail DRC).
+- All environment variables are documented in docs/cli.md.
+
 ## V2.0 - 2026-10-02
 
 **The PCB Design plugin now runs on Windows.** Describe a board in Claude Code

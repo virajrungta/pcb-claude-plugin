@@ -8,7 +8,7 @@ Placement hints per component (spec "place"):
   {"edge": "left", "at": 8, "rot"}  flush against a board edge (at = mm along edge)
   {"near": "U1"} / {"near": "U1.8"} pull strongly toward a part or pin
   {"rot": 0}                        restrict rotation only
-  {"away_from": ["L1", "U5"], "min_dist": 8}
+  {"away_from": ["L1", "U5"], "min_dist": 8}   or per part: {"away_from": {"L1": 15, "U5": 10}}
                                     keep this part at least min_dist mm (edge
                                     to edge) from noisy/sensitive parts
 
@@ -22,9 +22,15 @@ GAP = 0.3          # legacy default gap, used for board-size estimates
 BIG_NET = 6        # nets with more pins than this (GND, rails) get lower weight
 
 
+_CS = {0: (1.0, 0.0), 90: (0.0, 1.0), 180: (-1.0, 0.0), 270: (0.0, -1.0)}   # exact cos/sin
+
+
 def rot_pt(x, y, deg):
-    a = math.radians(deg)
-    c, s = round(math.cos(a), 9), round(math.sin(a), 9)
+    cs = _CS.get(deg)
+    if cs is None:
+        a = math.radians(deg)
+        cs = (round(math.cos(a), 9), round(math.sin(a), 9))
+    c, s = cs
     return (x * c + y * s, -x * s + y * c)
 
 
@@ -40,6 +46,7 @@ class Part(object):
         self.ref = ref
         self.margin = margin
         self.spread = 0.0                # extra room on a roomy board, only between spread parts
+        self.bonus = 0.0                 # part of margin kept for this part's own helpers
         self.squeezed = False
         self.rects = rects or [courtyard]
         self.court = courtyard           # (x0,y0,x1,y1) rel. to origin, rot 0
@@ -49,23 +56,28 @@ class Part(object):
         self.x = self.y = None
         self.rot = 0
         self.fixed = False
+        self._rot_cache = {}             # rot -> (rotated courtyard box, rotated rects)
+        near = self.hint.get("near")
+        self.near_ref = near.split(".", 1)[0] if near else None
+
+    def _rotated(self, rot):
+        r = self._rot_cache.get(rot)
+        if r is None:
+            r = (rot_box(self.court, rot), [rot_box(b, rot) for b in self.rects])
+            self._rot_cache[rot] = r
+        return r
 
     def box(self, x=None, y=None, rot=None):
         x = self.x if x is None else x
         y = self.y if y is None else y
-        rot = self.rot if rot is None else rot
-        b = rot_box(self.court, rot)
+        b = self._rotated(self.rot if rot is None else rot)[0]
         return (x + b[0], y + b[1], x + b[2], y + b[3])
 
     def rect_boxes(self, x=None, y=None, rot=None):
         x = self.x if x is None else x
         y = self.y if y is None else y
-        rot = self.rot if rot is None else rot
-        out = []
-        for r in self.rects:
-            b = rot_box(r, rot)
-            out.append((x + b[0], y + b[1], x + b[2], y + b[3]))
-        return out
+        return [(x + b[0], y + b[1], x + b[2], y + b[3])
+                for b in self._rotated(self.rot if rot is None else rot)[1]]
 
     def pad_abs(self, x, y, rot):
         out = []
@@ -105,21 +117,34 @@ class Placer(object):
         if _near_ref(p) == q.ref or _near_ref(q) == p.ref or p.squeezed or q.squeezed:
             return 2 * min(p.margin, q.margin)
         extra = p.spread + q.spread if (p.spread and q.spread) else 0.0
-        return p.margin + q.margin + extra
+        # a part's bonus (room kept at its pins for its own helpers) doesn't apply against
+        # another part's helper: that one sits at its own target, not in this part's pin area
+        mp = p.margin - (p.bonus if q.near_ref else 0.0)
+        mq = q.margin - (q.bonus if p.near_ref else 0.0)
+        return mp + mq + extra
 
-    def _overlaps(self, box, skip, rects=None):
+    def _blockers(self, part):
+        """Everything already on the board, computed once per placement search (nothing moves
+        while one part looks for its spot): [(inflated box, gap, rects)], the box grown by
+        the gap so the common case (far apart) is four comparisons."""
+        out = []
+        for b in self.obstacles:
+            g = part.margin
+            out.append(((b[0] - g, b[1] - g, b[2] + g, b[3] + g), g, [b]))
+        for q in self.parts:
+            if q is part or q.x is None:
+                continue
+            b, g = q.box(), self._pair_gap(part, q)
+            out.append(((b[0] - g, b[1] - g, b[2] + g, b[3] + g), g, q.rect_boxes()))
+        return out
+
+    def _overlaps(self, box, skip, rects=None, blockers=None):
         """box: bounding box of the candidate; rects: its exact courtyard rectangles."""
         rects = rects or [box]
-        for b in self.obstacles:
-            if any(_intersect(r, b, skip.margin) for r in rects):
-                return True
-        for q in self.parts:
-            if q is skip or q.x is None:
-                continue
-            gap = self._pair_gap(skip, q)
-            if not _intersect(box, q.box(), gap):
+        x0, y0, x1, y1 = box
+        for qb, gap, qrects in (self._blockers(skip) if blockers is None else blockers):
+            if x1 <= qb[0] or qb[2] <= x0 or y1 <= qb[1] or qb[3] <= y0:
                 continue   # bounding boxes apart: no need for detail
-            qrects = q.rect_boxes()
             if any(_intersect(r, s_, gap) for r in rects for s_ in qrects):
                 return True
         return False
@@ -144,11 +169,25 @@ class Placer(object):
         q = self.by_ref.get(ref)
         if q is None or q.x is None:
             return None
+        return self._anchor(q, q.x, q.y, q.rot, pin, part)
+
+    def _anchor(self, q, x, y, rot, pin, asker):
+        """Where `asker` (near-hinted to q) should sit, with q at (x, y, rot): q's pin if
+        named, else q's pads that asker connects to (an ESD array near a USB connector
+        belongs at the data pins, not the middle of the receptacle body), else q's centre."""
+        pads = q.pad_abs(x, y, rot)
         if pin:
-            for num, x, y, net in q.pad_abs(q.x, q.y, q.rot):
+            for num, px, py, net in pads:
                 if num == pin:
-                    return (x, y, net)
-        return ((q.box()[0] + q.box()[2]) / 2, (q.box()[1] + q.box()[3]) / 2, None)
+                    return (px, py, net)
+        mine = {n for _, _, _, n in asker.pads if n}
+        shared = [(px, py, n) for _, px, py, n in pads if n in mine]
+        pts = [t for t in shared if self.net_sizes.get(t[2], 0) <= BIG_NET] or shared
+        if pts and len(pts) < len(pads):
+            return (sum(t[0] for t in pts) / len(pts), sum(t[1] for t in pts) / len(pts),
+                    frozenset(t[2] for t in pts))
+        b = q.box(x, y, rot)
+        return ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2, None)
 
     @staticmethod
     def _near_dist(part, x, y, rot, target):
@@ -156,8 +195,9 @@ class Placer(object):
         from this part's pad on the same net (e.g. a cap's supply pad to the IC's
         VDD pin): that is the loop that matters for decoupling."""
         tx, ty, net = target
-        if net:
-            ds = [math.hypot(px - tx, py - ty) for num, px, py, n in part.pad_abs(x, y, rot) if n == net]
+        if net:      # one net (a pin), or the nets this part shares with the target part
+            nets = net if isinstance(net, frozenset) else (net,)
+            ds = [math.hypot(px - tx, py - ty) for num, px, py, n in part.pad_abs(x, y, rot) if n in nets]
             if ds:
                 return min(ds)
         b = part.box(x, y, rot)
@@ -188,35 +228,26 @@ class Placer(object):
             if q is part or q.x is None or _near_ref(q) != part.ref:
                 continue
             _, _, pin = q.hint["near"].partition(".")
-            tgt = None
-            for num, px, py, net in part.pad_abs(x, y, rot):
-                if pin and num == pin:
-                    tgt = (px, py, net)
-            if tgt is None:
-                b = part.box(x, y, rot)
-                tgt = ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2, None)
-            cost += 4.0 * self._near_dist(q, q.x, q.y, q.rot, tgt)
-        away = part.hint.get("away_from")
-        if away:
-            b = part.box(x, y, rot)
-            need = float(part.hint.get("min_dist", 8.0))
-            for ref in ([away] if isinstance(away, str) else away):
-                q = self.by_ref.get(ref)
-                if q is None or q.x is None:
-                    continue
+            # a part with its own near target (a decoupling cap at its pin) follows that
+            # first; its own helpers (the bulk cap "near" it) pull more weakly
+            w = 1.0 if near else 4.0
+            cost += w * self._near_dist(q, q.x, q.y, q.rot, self._anchor(part, x, y, rot, pin, q))
+        b = part.box(x, y, rot)
+        for ref, need in _away(part.hint):
+            q = self.by_ref.get(ref)
+            if q is not None and q.x is not None:
                 d = _box_dist(b, q.box())
                 if d < need:
                     cost += 25.0 * (need - d)
         # the reverse: parts that asked to stay away from this one
         for q in self.parts:
-            if q is part or q.x is None:
+            if q is part or q.x is None or not q.hint.get("away_from"):
                 continue
-            qa = q.hint.get("away_from")
-            if qa and part.ref in ([qa] if isinstance(qa, str) else qa):
-                need = float(q.hint.get("min_dist", 8.0))
-                d = _box_dist(part.box(x, y, rot), q.box())
-                if d < need:
-                    cost += 25.0 * (need - d)
+            for ref, need in _away(q.hint):
+                if ref == part.ref:
+                    d = _box_dist(b, q.box())
+                    if d < need:
+                        cost += 25.0 * (need - d)
         # mild pull toward the board centre keeps the layout compact
         cost += 0.02 * math.hypot(x - self.W / 2, y - self.H / 2)
         return cost
@@ -244,6 +275,16 @@ class Placer(object):
             return [0]
         return [0, 90, 180, 270]
 
+    def _keeps_away(self, part):
+        if getattr(self, "_away_refs", None) is None:
+            self._away_refs = set()
+            for q in self.parts:
+                pairs = _away(q.hint)
+                if pairs:
+                    self._away_refs.add(q.ref)
+                    self._away_refs.update(r for r, _ in pairs)
+        return part.ref in self._away_refs
+
     def _place_free(self, part, step):
         placed_pads = self._placed_pads(part)
         tx, ty = self._target(part, placed_pads)
@@ -257,16 +298,21 @@ class Placer(object):
         cands.sort()
         best = None
         feasible = 0
+        blockers = self._blockers(part)
+        rots = self._rotations(part)
+        # parts that must keep a distance (sensor <-> heat, crystal <-> inductor) usually find
+        # their spot well away from their connections: search the whole board for them
+        limit = None if self._keeps_away(part) else 250
         for _, x, y in cands:
-            for rot in self._rotations(part):
+            for rot in rots:
                 box = part.box(x, y, rot)
-                if not self._inside(box, part) or self._overlaps(box, part, part.rect_boxes(x, y, rot)):
+                if not self._inside(box, part) or self._overlaps(box, part, part.rect_boxes(x, y, rot), blockers):
                     continue
                 feasible += 1
                 c = self._cost(part, x, y, rot, placed_pads, near)
                 if best is None or c < best[0]:
                     best = (c, x, y, rot)
-            if feasible > 250:
+            if limit and feasible > limit:
                 break
         if best is None:
             return False
@@ -285,6 +331,7 @@ class Placer(object):
                 rots = [r for r in rots if _close(rot_pt(md[0], md[1], r), outward)] or rots
         placed_pads = self._placed_pads(part)
         best = None
+        blockers = self._blockers(part)
         for rot in rots:
             b = rot_box(part.court, rot)
             # flush: courtyard face on the board edge
@@ -309,7 +356,7 @@ class Placer(object):
                 x = fixed_x if fixed_x is not None else s
                 y = fixed_y if fixed_y is not None else s
                 box = part.box(x, y, rot)
-                if not self._inside(box, part) or self._overlaps(box, part, part.rect_boxes(x, y, rot)):
+                if not self._inside(box, part) or self._overlaps(box, part, part.rect_boxes(x, y, rot), blockers):
                     continue
                 c = self._cost(part, x, y, rot, placed_pads, self._near_target(part))
                 c += 0.05 * abs(s - along / 2)  # prefer centred on the edge
@@ -338,8 +385,15 @@ class Placer(object):
         part.squeezed = False
         return False
 
-    def run(self, step=0.5, refine_passes=2):
+    def run(self, step=0.5, refine_passes=2, seed=None):
+        """Place every part; returns the refs that didn't fit. `seed` {ref: (x, y, rot)}: start
+        from that placement (e.g. a coarse-grid trial) and only refine it on this grid."""
         failed = []
+        if seed:
+            for p in self.parts:
+                if p.ref in seed:
+                    p.x, p.y, p.rot = seed[p.ref]
+                    p.fixed = "x" in p.hint and "y" in p.hint
         # 1. fixed parts
         for p in self.parts:
             if "x" in p.hint and "y" in p.hint:
@@ -368,7 +422,9 @@ class Placer(object):
                 # decoupling caps (pulled to a supply pin) claim their spot before
                 # pull-ups and other helpers compete for the same corner
                 decoupling = 1 if tgt and tgt[2] and self.net_sizes.get(tgt[2], 0) > BIG_NET else 0
-                return (-blocked, decoupling, near_ready, links, p.npads)
+                # a switching regulator's inductor goes before its helpers: the SW node must be short
+                inductor = 1 if tgt and p.ref[:1] == "L" and p.ref[1:2].isdigit() else 0
+                return (-blocked, inductor, decoupling, near_ready, links, p.npads)
             nxt = max(remaining, key=score)
             remaining.remove(nxt)
             if not self._place_free(nxt, step) and not self._place_tighter(nxt, step):
@@ -388,12 +444,66 @@ class Placer(object):
                 new_cost = self._cost(p, p.x, p.y, p.rot, pp, self._near_target(p))
                 if new_cost > old_cost:
                     p.x, p.y, p.rot = old
+        # 5. align resistors/capacitors to one orientation where it's free (assembly and
+        #    inspection prefer it; real boards: 69% of R/C share one orientation)
+        self.align_passives()
         return failed
+
+    def align_passives(self, tolerance=0.15):
+        """Turn 2-pad R/C parts to the board's dominant orientation family (0/180 or 90/270)
+        when the part still fits and its connection cost grows by at most `tolerance`."""
+        rc = [p for p in self.parts if p.x is not None and not p.fixed and "rot" not in p.hint
+              and not p.hint.get("edge") and p.npads == 2 and p.ref[:1] in ("R", "C") and p.ref[1:2].isdigit()]
+        if len(rc) < 4:
+            return 0
+        horiz = sum(1 for p in rc if p.rot % 180 == 0)
+        family = 0 if horiz * 2 >= len(rc) else 90
+        turned = 0
+        for p in rc:
+            if p.rot % 180 == family:
+                continue
+            old = (p.x, p.y, p.rot)
+            pp = self._placed_pads(p)
+            near = self._near_target(p)
+            base = self._cost(p, p.x, p.y, p.rot, pp, near)
+            blockers = self._blockers(p)
+            best = None
+            # turning in place usually collides with packed neighbours: nudge up to 1 mm too
+            offsets = sorted(((dx * 0.25, dy * 0.25) for dx in range(-4, 5) for dy in range(-4, 5)),
+                             key=lambda o: o[0] ** 2 + o[1] ** 2)
+            for rot in (family, family + 180):
+                for dx, dy in offsets:
+                    x, y = old[0] + dx, old[1] + dy
+                    box = p.box(x, y, rot)
+                    if not self._inside(box, p) or self._overlaps(box, p, p.rect_boxes(x, y, rot), blockers):
+                        continue
+                    c = self._cost(p, x, y, rot, pp, near)
+                    if c <= base * (1 + tolerance) + 1.5 and (best is None or c < best[0]):
+                        best = (c, rot, x, y)
+            if best is not None:
+                p.rot, p.x, p.y = best[1], best[2], best[3]
+                turned += 1
+            else:
+                p.x, p.y, p.rot = old
+        if turned:
+            self.log_info = getattr(self, "log_info", []) + ["aligned %d resistors/capacitors" % turned]
+        return turned
+
+
+def _away(hint):
+    """[(ref, min_dist)] from an away_from hint: "U1", ["U1", "L1"] (all at min_dist,
+    default 8 mm) or {"U1": 10, "L1": 15} (per part)."""
+    away = hint.get("away_from")
+    if not away:
+        return []
+    if isinstance(away, dict):
+        return [(r, float(d)) for r, d in away.items()]
+    need = float(hint.get("min_dist", 8.0))
+    return [(r, need) for r in ([away] if isinstance(away, str) else away)]
 
 
 def _near_ref(p):
-    near = p.hint.get("near")
-    return near.split(".", 1)[0] if near else None
+    return p.near_ref
 
 
 def _box_dist(a, b):

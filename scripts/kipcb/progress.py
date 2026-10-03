@@ -43,14 +43,11 @@ def load(pdir=None):
 
 
 def _save(pdir, state):
+    from . import paths
     state["updated"] = time.time()
-    os.makedirs(os.path.dirname(_path(pdir)), exist_ok=True)
-    with open(_path(pdir), "w") as f:
-        json.dump(state, f)
+    paths.save_json(_path(pdir), state, indent=None)
     try:
-        os.makedirs(os.path.dirname(_pointer()), exist_ok=True)
-        with open(_pointer(), "w") as f:
-            json.dump({"project": pdir}, f)
+        paths.save_json(_pointer(), {"project": pdir}, indent=None)
     except OSError:
         pass
 
@@ -167,23 +164,45 @@ def statusline():
     return render_line(state)
 
 
+def _claude_settings():
+    """Claude Code's user settings file (honours CLAUDE_CONFIG_DIR)."""
+    base = os.environ.get("CLAUDE_CONFIG_DIR") or os.path.expanduser("~/.claude")
+    return os.path.join(base, "settings.json")
+
+
+def _read_settings(path):
+    """(settings dict, error message or None)."""
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f), None
+    except OSError:
+        return {}, None
+    except ValueError:
+        return None, "not changed: %s isn't valid JSON" % path
+
+
+def _write_settings(path, cfg):
+    """Back up the current file, then write the new one atomically (never half-written)."""
+    from . import paths
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            paths.atomic_write(path + ".bak-kipcb", f.read())
+    paths.save_json(path, cfg, indent=2)
+
+
 def install_statusline():
     """Point Claude Code's status line at kipcb's progress bar (only if none is set)."""
-    path = os.path.expanduser("~/.claude/settings.json")
-    try:
-        with open(path) as f:
-            cfg = json.load(f)
-    except OSError:
-        cfg = {}
-    except ValueError:
-        return "not changed: %s isn't valid JSON" % path
+    path = _claude_settings()
+    cfg, err = _read_settings(path)
+    if err:
+        return err
     cur = (cfg.get("statusLine") or {}).get("command", "")
+    launcher = os.path.join(os.path.dirname(_pointer()), "statusline.sh")
     if "kipcb" in cur:
         return "already set: the status bar shows PCB progress"
     if cur:
         return ("not changed: you already have a status line (%s). To show PCB progress there, "
-                "add the output of ~/.local/share/kipcb/statusline.sh to it." % cur)
-    launcher = os.path.join(os.path.dirname(_pointer()), "statusline.sh")
+                "add the output of %s to it." % (cur, launcher))
     if not os.path.exists(launcher):
         return "not changed: start a new Claude Code session first (it creates %s)" % launcher
     from . import kienv
@@ -191,36 +210,24 @@ def install_statusline():
     if kienv.WINDOWS:          # Claude Code on Windows runs it through Git Bash: forward slashes
         command = 'bash "%s"' % launcher.replace("\\", "/")
     cfg["statusLine"] = {"type": "command", "command": command}
-    if os.path.exists(path):
-        with open(path) as f:
-            backup = f.read()
-        with open(path + ".bak-kipcb", "w") as f:
-            f.write(backup)
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w") as f:
-        json.dump(cfg, f, indent=2)
+    _write_settings(path, cfg)
     return "done: the status bar now shows PCB progress while a design is running (backup: %s.bak-kipcb)" % path
 
 
 def uninstall_statusline():
     """Remove kipcb's status line again (only if it's the one in place)."""
-    path = os.path.expanduser("~/.claude/settings.json")
-    try:
-        with open(path) as f:
-            cfg = json.load(f)
-    except (OSError, ValueError):
-        return "nothing to remove"
-    if "kipcb" not in (cfg.get("statusLine") or {}).get("command", ""):
+    path = _claude_settings()
+    cfg, err = _read_settings(path)
+    if err or not cfg or "kipcb" not in (cfg.get("statusLine") or {}).get("command", ""):
         return "nothing to remove"
     cfg.pop("statusLine", None)
-    with open(path, "w") as f:
-        json.dump(cfg, f, indent=2)
+    _write_settings(path, cfg)
     return "removed the PCB progress status line"
 
 
 def statusline_installed():
     try:
-        with open(os.path.expanduser("~/.claude/settings.json")) as f:
+        with open(_claude_settings(), encoding="utf-8") as f:
             return "kipcb" in (json.load(f).get("statusLine") or {}).get("command", "")
     except (OSError, ValueError):
         return False

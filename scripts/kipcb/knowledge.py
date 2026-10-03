@@ -112,3 +112,10 @@ def pitch_rules(pitch):
             r = rules.get(b)
             return r if r and r.get("footprints", 0) >= 5 else None
     return None
+
+
+def placement():
+    """Placement statistics of real routed boards (pcb-knowledge `pkb placement`), or None."""
+    kb = load()
+    pl = (kb or {}).get("placement")
+    return pl if pl and pl.get("boards", 0) >= 30 else None

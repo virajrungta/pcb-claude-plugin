@@ -58,7 +58,7 @@ shows ports, optional ports, defaults and parameters.
 ## Prebuilt parts
 
 `"part": "<name>"` fills `symbol`, `footprint`, a default `value` and
-`current_ma`, and a JLCPCB/LCSC number (265 R/C values; LED colours like
+`current_ma`, and a JLCPCB/LCSC number (over 250 R/C values; LED colours like
 `"value": "green"`; ~80 named parts) (e.g. `R0603` + `10k` →
 C25804). `kipcb parts` lists them: `R0402/R0603/R0805`, `C0402/C0603/C0805/C1206`,
 `LED0603/LED0805`, `SCHOTTKY_SOD123`, `BUTTON`, `CRYSTAL_3225`,
@@ -124,14 +124,17 @@ Coordinates are mm from the board's **top-left** corner, with X right and Y down
 - `{"edge": "left|right|top|bottom"}`: flush against that board edge. For
   connectors the mating side is turned to face outward automatically. Add
   `"at": 12` for the position along the edge (mm) and `"rot"` to force a rotation.
-- `{"near": "U1"}` or `{"near": "U1.VDD"}`: pull strongly toward a part or a
-  specific pin. Use this for decoupling caps, crystals, pull-ups and ESD parts.
+- `{"near": "U1"}` or `{"near": "U1.VDD"}`: pull strongly toward a part (its
+  pins this part connects to) or a specific pin. Use this for decoupling caps,
+  crystals, pull-ups and ESD parts.
 - `{"x": 10, "y": 5, "rot": 90}`: fixed position of the footprint origin (mm), rotation CCW in degrees.
 - `{"rot": 0}`: constrain rotation only.
 - `{"away_from": ["L1", "U5"], "min_dist": 8}`: keep at least `min_dist` mm
   (edge to edge) from those parts. Use it to separate noisy parts (switching
   regulators, inductors, clocks, motor drivers) from sensitive ones (analog
-  front-ends, ADC inputs, antennas). Can be combined with `near`.
+  front-ends, ADC inputs, antennas). Can be combined with `near`. Per-part
+  distances: `{"away_from": {"L1": 15, "U5": 10}}`. Temperature/humidity
+  sensors and crystals get sensible `away_from` automatically.
 - `{"side": "bottom"}`: with fixed x/y, put the part on the back.
 
 Anything without hints is placed by connectivity, with the biggest parts first.

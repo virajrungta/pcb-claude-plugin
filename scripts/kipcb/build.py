@@ -70,7 +70,7 @@ def build(spec_path, out=None, render=True, placement=None, design=None):
     from . import learn, noise
     ui.say("\nPlacement noise checks (decoupling, crystals, switch nodes):")
     rep = noise.check(pdir, d.name)
-    noise.run(pdir, d.name, quiet=True, save=False)
+    noise.run(pdir, d.name, quiet=True, save=False, rep=rep)
     pads = sum(len(c.fp.pads) for c in d.components)
     area = info["width"] * info["height"]
     learn.record("build", features={"pads": pads, "parts": len(d.components), "nets": len(d.nets),
@@ -84,6 +84,7 @@ def build(spec_path, out=None, render=True, placement=None, design=None):
         "parts": len(d.components), "nets": len(d.nets), "pads": pads,
         "placement_failed": info["failed"], "notes": info.get("notes", []),
         "spec_warnings": d.warnings, "spec_notes": getattr(d, "notes", []),
+        "power_nets": list(d.power_nets), "ground": d.board.get("ground_pour", "GND"),
         "erc": rc, "parity": len(parity), "placement_issues": len(placement_issues)})
     if render:
         for p in rendermod.render(pdir, d.name):

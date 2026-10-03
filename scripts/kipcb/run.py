@@ -211,6 +211,11 @@ def run(spec_path, out=None, do_fab=True, force=False, passes=100, timeout=600, 
     r = report.write(pdir, d.name, timings)
     ready = not r["blockers"]
     if ready:
+        try:
+            progress.finish(pdir)
+        except (OSError, ValueError):
+            pass
+    if ready:
         from . import blocks, learn
         if learn.enabled():
             blocks.remember(d)          # its parts become instant `part` names next time

@@ -9,8 +9,6 @@ import re
 
 from . import fplib, kienv, symlib
 
-POWER_OUT_TYPES = ("power_out",)
-DRIVER_TYPES = ("output", "power_out", "bidirectional", "tri_state", "open_collector", "open_emitter")
 
 DEFAULT_RULES = {
     "clearance": 0.2,
@@ -421,13 +419,6 @@ class Design(object):
             if p["number"] == key[1]:
                 return p["type"]
         return "unspecified"
-
-    def pin_name(self, key):
-        c = self.by_ref[key[0]]
-        for p in c.sym.pins:
-            if p["number"] == key[1]:
-                return strip_markup(p["name"])
-        return ""
 
     def net_needs_flag(self, net):
         """Power nets without a power_out pin need a PWR_FLAG for ERC."""

@@ -44,6 +44,6 @@ def fmt_file(path):
         raw = json.load(f, object_pairs_hook=OrderedDict)
     before = len(json.dumps(raw, indent=2))
     text = format_spec(raw)
-    with open(path, "w") as f:
-        f.write(text)
+    from . import paths
+    paths.atomic_write(path, text)      # the spec is the source of truth: never half-written
     return before, len(text)

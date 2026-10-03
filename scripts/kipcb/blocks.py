@@ -25,6 +25,22 @@ class BlockError(Exception):
     pass
 
 
+_JSON_CACHE = {}
+
+
+def _load_json_cached(path):
+    """parts.json / blocks.json / the parts memory, parsed once per process (re-read if changed)."""
+    try:
+        key = os.stat(path).st_mtime
+    except OSError:
+        return {}
+    hit = _JSON_CACHE.get(path)
+    if hit is None or hit[0] != key:
+        hit = (key, _load_json(path))
+        _JSON_CACHE[path] = hit
+    return hit[1]
+
+
 def _load_json(path):
     try:
         with open(path) as f:
@@ -34,11 +50,11 @@ def _load_json(path):
 
 
 def builtin_parts():
-    return {k: v for k, v in _load_json(os.path.join(DATA, "parts.json")).items() if not k.startswith("_")}
+    return {k: v for k, v in _load_json_cached(os.path.join(DATA, "parts.json")).items() if not k.startswith("_")}
 
 
 def builtin_blocks():
-    return {k: v for k, v in _load_json(os.path.join(DATA, "blocks.json")).items() if not k.startswith("_")}
+    return {k: v for k, v in _load_json_cached(os.path.join(DATA, "blocks.json")).items() if not k.startswith("_")}
 
 
 def memory_path():
@@ -47,7 +63,7 @@ def memory_path():
 
 
 def remembered():
-    return _load_json(memory_path())
+    return _load_json_cached(memory_path())
 
 
 def si_value(v):
@@ -275,6 +291,5 @@ def remember(design):
         e["uses"] = e.get("uses", 0) + 1
         e["last"] = time.strftime("%Y-%m-%d")
         mem[key] = e
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w") as f:
-        json.dump(mem, f, indent=1)
+    from . import paths
+    paths.save_json(path, mem)

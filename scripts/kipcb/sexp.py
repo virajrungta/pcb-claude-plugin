@@ -141,7 +141,7 @@ def extract_toplevel(text, head, name):
         m = pat.search(text)
         if not m:
             return None
-    start = m.start() + text[m.start():].index("(")
+    start = text.index("(", m.start())
     depth = 0
     i = start
     in_str = False

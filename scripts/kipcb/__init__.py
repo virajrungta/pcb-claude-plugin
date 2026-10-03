@@ -1,3 +1,3 @@
 """kipcb: turn a JSON circuit spec into a manufacturable KiCad project."""
 
-__version__ = "2.0"
+__version__ = "2.1"

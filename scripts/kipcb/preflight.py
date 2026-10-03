@@ -198,9 +198,17 @@ def check(pdir, name, design, board=None):
     for it in nrep.items:
         if it["check"] in ("decoupling", "crystal", "switcher loop") and it["level"] != PASS:
             res.add("placement", it["level"], it["message"],
-                    "put it next to the pin: {\"place\": {\"near\": \"U1.<pin>\"}}, or spacing \"tight\"")
+                    "put it next to the pin: {\"place\": {\"near\": \"U1.<pin>\"}}, or spacing \"compact\"")
     if not any(i["check"] == "placement" for i in res.items):
         res.add("placement", PASS, "no overlaps; decoupling and crystal parts close to their pins")
+
+    # ---- layout rules from application notes (USB ESD, crystals, buck loops, sensors, RF...)
+    from . import layout
+    findings = layout.check(design, board)
+    for rule, level, msg, fix in findings:
+        res.add("layout", level, "[%s] %s" % (rule, msg), fix)
+    if not findings:
+        res.add("layout", PASS, "USB, crystal, regulator, sensor and RF placement rules all met")
 
     # ---- crowding: most parts packed into a small corner of a roomy board
     crowd = _crowding(board)
@@ -235,8 +243,18 @@ def check(pdir, name, design, board=None):
     res.add("density", level, msg, "enlarge the board (\"auto_shrink\": false or a fixed size) or use 4 layers"
             if level != PASS else None)
 
+    # ---- layout score: how typical this layout is of real routed boards (knowledge base)
+    from . import placestats
+    pm = placestats.metrics(board)
+    lscore, lnotes = placestats.score(pm, knowledge.placement(), layers)
+    if lscore is not None:
+        res.add("layout score", PASS if lscore >= 60 else WARN,
+                "%d/100 compared with real %d-layer boards%s" % (
+                    lscore, layers, ("; weakest: " + "; ".join(lnotes[:2])) if lnotes else ""),
+                None if lscore >= 60 else "see the weakest items; place hints or spacing usually fix them")
+
     features = {"layers": layers, "conn_density": dens, "connections": conns,
-                "finest_pitch": round(pitch, 3) if pitch else None}
+                "finest_pitch": round(pitch, 3) if pitch else None, "layout_score": lscore}
     learn.record("preflight", features=features, fails=sorted({i["check"] for i in res.items if i["level"] == FAIL}),
                  warns=sorted({i["check"] for i in res.items if i["level"] == WARN}))
     return res, features

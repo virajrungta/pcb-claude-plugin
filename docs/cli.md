@@ -88,4 +88,12 @@ my_board/
 | `KIPCB_LEARN=0` | Disable learning |
 | `KIPCB_CACHE` | Library index and Freerouting cache (default `~/.cache/kipcb`; Windows `%LOCALAPPDATA%\kipcb\cache`) |
 | `KIPCB_KICAD_ROOT` | Windows: KiCad's install folder, if not `C:\Program Files\KiCad\9.0` |
+| `KIPCB_ATTEMPT_SECONDS` | Time cap for the first routing attempt, in seconds (default 20; later attempts get longer) |
+| `KIPCB_ROUTE_PARALLEL` | Routing attempts to run at once (default 1: parallel Freerouting processes slow each other down) |
+| `KIPCB_CLI_TIMEOUT` | Seconds before a `kicad-cli` call is abandoned (default 300) |
+| `KIPCB_CLI_NO_MIRROR` | Windows: run `kicad-cli` on the project in place instead of on a temporary copy |
+| `KIPCB_BROWSER` | Chromium-based browser used to render previews when no PDF rasterizer is available (default: Edge or Chrome) |
+| `KIPCB_FORCE_SVG_RASTER` | Render previews through the browser even when a PDF rasterizer exists |
+| `KIPCB_OFFLINE=1` | Skip the online JLCPCB stock check when exporting |
+| `KIPCB_DEBUG=1` | Show the full Python traceback instead of a one-line error |
 | `XDG_DATA_HOME` | Data folder base (default `~/.local/share`; Windows `%LOCALAPPDATA%`) for settings, learning and progress |

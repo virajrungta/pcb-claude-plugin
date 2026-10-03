@@ -67,10 +67,14 @@ def setup(version=None):
         with urlopen(url, timeout=60) as r, open(tmp, "wb") as f:
             shutil.copyfileobj(r, f)
     except Exception as e:
-        if shutil.which("curl"):
-            subprocess.run(["curl", "-fsSL", "-o", tmp, url], check=True)
-        else:
+        if not shutil.which("curl"):
             raise RuntimeError("download failed: %s" % e)
+        try:
+            subprocess.run(["curl", "-fsSL", "--max-time", "600", "-o", tmp, url], check=True, timeout=660)
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as e2:
+            if os.path.exists(tmp):
+                os.remove(tmp)            # never leave a half-downloaded jar behind
+            raise RuntimeError("download failed: %s" % e2)
     os.replace(tmp, dest)
     ui.say("installed: %s (%.1f MB)" % (dest, os.path.getsize(dest) / 1e6))
     return 0
@@ -165,6 +169,23 @@ def add_stitching_vias(board, net_name, pitch=5.0, drill=0.3, dia=0.6):
         return 0
     bb = board.GetBoardEdgesBoundingBox()
     r = mm(dia / 2 + 0.6)   # needs this much solid copper around it on both layers
+    # the pour test samples a few points, so a diagonal track can slip between them:
+    # also keep real clearance (+ margin) from every other net's copper
+    keep = mm(dia / 2) + board.GetDesignSettings().m_MinClearance + mm(0.25)
+    code = net.GetNetCode()
+    foreign = [t for t in board.GetTracks() if t.GetNetCode() != code]
+    foreign += [p for f in board.GetFootprints() for p in f.Pads() if p.GetNetCode() != code]
+
+    def clear_of_others(x, y):
+        q = pn.VECTOR2I(x, y)
+        for o in foreign:
+            b = o.GetBoundingBox()
+            if b.GetRight() < x - keep or b.GetX() > x + keep or b.GetBottom() < y - keep or b.GetY() > y + keep:
+                continue
+            if o.HitTest(q, keep):
+                return False
+        return True
+
     added = 0
     y = bb.GetTop() + mm(pitch / 2)
     while y < bb.GetBottom():
@@ -179,7 +200,7 @@ def add_stitching_vias(board, net_name, pitch=5.0, drill=0.3, dia=0.6):
                         break
                 if not ok:
                     break
-            if ok:
+            if ok and clear_of_others(x, y):
                 v = pn.PCB_VIA(board)
                 v.SetPosition(pn.VECTOR2I(x, y))
                 v.SetDrill(mm(drill)); v.SetWidth(mm(dia))
@@ -196,7 +217,6 @@ def add_stitching_vias(board, net_name, pitch=5.0, drill=0.3, dia=0.6):
 def _rules_file(board, path, bottom_cost, fanout=False):
     """Freerouting autoroute settings. Making the bottom layer expensive keeps
     signals on top so the bottom stays an unbroken ground plane (less noise)."""
-    pn = pcbnew()
     names = [board.GetLayerName(l) for l in board.GetEnabledLayers().CuStack()]
     lines = ["(rules PCB board", "  (snap_angle fortyfive_degree)", "  (autoroute_settings",
              "    (fanout %s) (autoroute on) (postroute on) (vias on)" % ("on" if fanout else "off"),
@@ -286,7 +306,11 @@ def _prepare(pn, board, jar, dsn, ses, passes, timeout, bottom_cost=None, fanout
 
 def _launch(cmd, log_path, cwd):
     log = open(log_path, "w")
-    proc = subprocess.Popen(cmd, stdout=log, stderr=subprocess.STDOUT, cwd=cwd)
+    try:
+        proc = subprocess.Popen(cmd, stdout=log, stderr=subprocess.STDOUT, cwd=cwd)
+    except OSError:
+        log.close()
+        raise
     proc._kipcb_log = log
     return proc
 
@@ -324,7 +348,6 @@ def parallel_attempts():
     return 1
 
 
-BOTTOM_COST = 3.0
 
 
 def bottom_signal_length(board, ground=None):
@@ -345,16 +368,24 @@ def heal_dangling(board, max_gap=1.5):
     vias = [t for t in board.GetTracks() if t.GetClass() == "PCB_VIA"]
     pads = [p for fp in board.GetFootprints() for p in fp.Pads()]
     tol = mm(0.001)
+    # group by net once: touches() only ever looks at same-net items
+    pads_by_net, vias_by_net, tracks_by_net = {}, {}, {}
+    for p in pads:
+        pads_by_net.setdefault(p.GetNetCode(), []).append(p)
+    for v in vias:
+        vias_by_net.setdefault(v.GetNetCode(), []).append(v)
+    for t in tracks:
+        tracks_by_net.setdefault(t.GetNetCode(), []).append(t)
 
     def touches(pt, net, layer, skip):
-        for p in pads:
-            if p.GetNetCode() == net and p.IsOnLayer(layer) and p.HitTest(pt):
+        for p in pads_by_net.get(net, ()):
+            if p.IsOnLayer(layer) and p.HitTest(pt):
                 return True
-        for v in vias:
-            if v.GetNetCode() == net and v.HitTest(pt):
+        for v in vias_by_net.get(net, ()):
+            if v.HitTest(pt):
                 return True
-        for t in tracks:
-            if t is skip or t.GetNetCode() != net or t.GetLayer() != layer:
+        for t in tracks_by_net.get(net, ()):
+            if t is skip or t.GetLayer() != layer:
                 continue
             for q in (t.GetStart(), t.GetEnd()):
                 if abs(q.x - pt.x) <= tol and abs(q.y - pt.y) <= tol:
@@ -374,19 +405,25 @@ def heal_dangling(board, max_gap=1.5):
         q = pn.VECTOR2I(int(x), int(y))
         return q if p.HitTest(q) else p.GetPosition()
 
+    def near(item, x0, y0, x1, y1):
+        bb = item.GetBoundingBox()
+        return not (bb.GetRight() < x0 or bb.GetX() > x1 or bb.GetBottom() < y0 or bb.GetY() > y1)
+
     def collides(a, b, net, layer, width):
         steps = max(2, int(((b.x - a.x) ** 2 + (b.y - a.y) ** 2) ** 0.5 / mm(0.05)))
         reach = int(clearance + width / 2)
+        # only items whose box comes within reach of the segment can collide with it
+        x0, x1 = min(a.x, b.x) - reach, max(a.x, b.x) + reach
+        y0, y1 = min(a.y, b.y) - reach, max(a.y, b.y) + reach
+        others = [p for p in pads if p.GetNetCode() != net and p.IsOnLayer(layer) and near(p, x0, y0, x1, y1)]
+        others += [o for o in tracks if o.GetNetCode() != net and o.GetLayer() == layer and near(o, x0, y0, x1, y1)]
+        others += [v for v in vias if v.GetNetCode() != net and near(v, x0, y0, x1, y1)]
+        if not others:
+            return False
         for i in range(steps + 1):
             q = pn.VECTOR2I(int(a.x + (b.x - a.x) * i / steps), int(a.y + (b.y - a.y) * i / steps))
-            for p in pads:
-                if p.GetNetCode() != net and p.IsOnLayer(layer) and p.HitTest(q, reach):
-                    return True
-            for o in tracks:
-                if o.GetNetCode() != net and o.GetLayer() == layer and o.HitTest(q, reach):
-                    return True
-            for v in vias:
-                if v.GetNetCode() != net and v.HitTest(q, reach):
+            for o in others:
+                if o.HitTest(q, reach):
                     return True
         return False
 
@@ -396,8 +433,8 @@ def heal_dangling(board, max_gap=1.5):
             if touches(pt, t.GetNetCode(), t.GetLayer(), t):
                 continue
             cands = []
-            for p in pads:
-                if p.GetNetCode() != t.GetNetCode() or not p.IsOnLayer(t.GetLayer()):
+            for p in pads_by_net.get(t.GetNetCode(), ()):
+                if not p.IsOnLayer(t.GetLayer()):
                     continue
                 q = nearest_on_pad(p, pt)
                 d = ((q.x - pt.x) ** 2 + (q.y - pt.y) ** 2) ** 0.5
@@ -415,6 +452,7 @@ def heal_dangling(board, max_gap=1.5):
                 seg.SetNet(t.GetNet())
                 board.Add(seg)
                 tracks.append(seg)
+                tracks_by_net.setdefault(seg.GetNetCode(), []).append(seg)
                 healed += 1
                 break
     return healed
@@ -424,7 +462,12 @@ def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=4):
     pn = pcbnew()
     jar = find_jar()
     if not jar:
-        ui.always("Freerouting is not installed. Run `kipcb setup-router` (downloads ~60 MB from GitHub).")
+        ui.always("Freerouting is not installed. Run `kipcb setup-router` (downloads ~65 MB from GitHub).")
+        return 2
+    if not java_version():
+        ui.always("Java isn't installed (or isn't on PATH), and the autorouter needs Java 21+. Install it: %s" % (
+            "winget install EclipseAdoptium.Temurin.21.JDK" if kienv.WINDOWS else
+            "brew install --cask temurin (macOS) or openjdk-21-jre (Linux)"))
         return 2
     pcb = os.path.join(pdir, name + ".kicad_pcb")
     from . import paths
@@ -582,7 +625,7 @@ def route(pdir, name, passes=100, timeout=600, pour=True, attempts_max=4):
     rc = checks.drc(pdir, name)
     from . import noise
     ui.say()
-    noise.run(pdir, name, quiet=True)
+    noise.run(pdir, name, board=board, quiet=True)
     _record_final(pdir, name, board, features, best[3])
     board.BuildConnectivity()
     _write_route_json(pdir, {
@@ -652,14 +695,8 @@ def _record_final(pdir, name, board, features, arm):
 
 
 def _spec(pdir, name):
-    for cand in (os.path.join(os.path.dirname(pdir), name + ".json"), os.path.join(pdir, name + ".json")):
-        if os.path.exists(cand):
-            try:
-                with open(cand) as f:
-                    return json.load(f)
-            except ValueError:
-                return {}
-    return {}
+    from . import paths
+    return paths.project_spec(pdir, name)
 
 
 def _guess_ground(board):
@@ -671,22 +708,16 @@ def _guess_ground(board):
 
 
 def _spec_pour_net(pdir, name, board):
-    """Honour board.ground_pour from the spec if the spec sits next to the project."""
-    import json
-    for cand in (os.path.join(os.path.dirname(pdir), name + ".json"), os.path.join(pdir, name + ".json")):
-        if os.path.exists(cand):
-            try:
-                with open(cand) as f:
-                    b = json.load(f).get("board", {})
-            except ValueError:
-                return None
-            if "ground_pour" not in b:
-                return None
-            gp = b["ground_pour"]
-            if not gp:
-                return ""
-            names = [str(n) for n in board.GetNetsByName().keys()]
-            return gp if gp in names else ("/" + gp if "/" + gp in names else None)
+    """Honour board.ground_pour from the project's spec."""
+    b = _spec(pdir, name).get("board", {})
+    if b:
+        if "ground_pour" not in b:
+            return None
+        gp = b["ground_pour"]
+        if not gp:
+            return ""
+        names = [str(n) for n in board.GetNetsByName().keys()]
+        return gp if gp in names else ("/" + gp if "/" + gp in names else None)
     return None
 
 
@@ -752,6 +783,9 @@ def fanout(board, stub=0.6, max_pitch=0.52, min_pads=24):
     pn = pcbnew()
     ns = board.GetDesignSettings().m_NetSettings
     all_pads = [p for fp in board.GetFootprints() for p in fp.Pads()]
+    net_count = {}
+    for p in all_pads:
+        net_count[p.GetNetCode()] = net_count.get(p.GetNetCode(), 0) + 1
     stubs = bridges = 0
     added = []
     board._kipcb_fanout = []
@@ -828,7 +862,7 @@ def fanout(board, stub=0.6, max_pitch=0.52, min_pads=24):
             net = p.GetNetname()
             if not net or net.startswith("unconnected-") or p.GetNumber() in bridged:
                 continue
-            if sum(1 for q in all_pads if q.GetNetCode() == p.GetNetCode()) < 2:
+            if net_count.get(p.GetNetCode(), 0) < 2:
                 continue
             w, clr = width_of(p)
             w = min(w, across)

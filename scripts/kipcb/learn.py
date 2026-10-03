@@ -62,6 +62,9 @@ def _current_failure(r):
     return r.get("gen", 1) >= ROUTER_GEN
 
 
+_CACHE = {}        # parsed experience log per path, refreshed when the file changes
+
+
 def record(kind, **data):
     if not enabled():
         return
@@ -71,14 +74,34 @@ def record(kind, **data):
             f.write(json.dumps(data) + "\n")
     except OSError:
         pass
+    _CACHE.pop(log_path(), None)
 
 
 def _load():
+    """Rows of the experience log. Parsed once per process (it's read many times per
+    build: per component for footprint margins, for sizing, strategies, estimates)."""
+    path = log_path()
     try:
-        with open(log_path()) as f:
-            return [json.loads(l) for l in f if l.strip()]
-    except (OSError, ValueError):
+        st = os.stat(path)
+    except OSError:
         return []
+    key = (st.st_mtime, st.st_size)
+    hit = _CACHE.get(path)
+    if hit and hit[0] == key:
+        return [dict(r) for r in hit[1]]
+    rows = []
+    try:
+        with open(path) as f:
+            for line in f:
+                if line.strip():
+                    try:
+                        rows.append(json.loads(line))
+                    except ValueError:
+                        continue          # one bad line shouldn't hide all experience
+    except OSError:
+        return []
+    _CACHE[path] = (key, rows)
+    return [dict(r) for r in rows]
 
 
 def _mark_tainted(rows):
