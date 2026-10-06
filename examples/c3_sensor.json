@@ -22,7 +22,7 @@
     {"ref": "R4", "symbol": "Device:R", "footprint": "Resistor_SMD:R_0402_1005Metric", "value": "10k", "group": "mcu", "place": {"near": "U2.IO9"}},
     {"ref": "D1", "symbol": "LED:WS2812B-2020", "value": "WS2812B-2020", "group": "io", "current_ma": 12},
     {"ref": "C6", "symbol": "Device:C", "footprint": "Capacitor_SMD:C_0402_1005Metric", "value": "100nF", "group": "io", "place": {"near": "D1"}},
-    {"ref": "U4", "symbol": "Amplifier_Operational:LM358", "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", "value": "LM358", "group": "analog", "current_ma": 1},
+    {"ref": "U4", "symbol": "Amplifier_Operational:MCP6002-xSN", "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", "value": "MCP6002", "lcsc": "C116706", "group": "analog", "current_ma": 0.2},
     {"ref": "C7", "symbol": "Device:C", "footprint": "Capacitor_SMD:C_0402_1005Metric", "value": "100nF", "group": "analog", "place": {"near": "U4.8"}},
     {"ref": "J2", "symbol": "Connector_Generic:Conn_01x04", "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical", "value": "SENSOR", "group": "analog", "place": {"edge": "right"}}
   ],

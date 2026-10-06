@@ -68,6 +68,10 @@ and hands you files a fab house can build.
     <td>Reviews <i>any</i> KiCad project: ERC, DRC, noise checks, a netlist checklist and renders, as a prioritized list of fixes</td>
   </tr>
   <tr>
+    <td><code>/pcb:inquiry [question or design]</code></td>
+    <td>Ask anything about PCB design, parts or the plugin, or share a design (KiCad project, spec, schematic image or PDF, Gerbers) for quick feedback, compared with real routed boards</td>
+  </tr>
+  <tr>
     <td><code>/pcb:fab [project]</code></td>
     <td>Gerbers and drill zip, JLCPCB-format BOM and pick-and-place file, plus an ordering checklist</td>
   </tr>
@@ -270,6 +274,7 @@ Every version, newest first (also in [RELEASES.md](RELEASES.md)). Full notes for
 
 | Version | Date | What's new |
 |---|---|---|
+| [V2.3](https://github.com/virajrungta/pcb-claude-plugin/releases/tag/v2.3) | 2026-10-05 | Ask questions and get feedback on any design: `/pcb:inquiry`. |
 | [V2.2](https://github.com/virajrungta/pcb-claude-plugin/releases/tag/v2.2) | 2026-10-03 | Board sizing learned from real routed boards. |
 | [V2.1](https://github.com/virajrungta/pcb-claude-plugin/releases/tag/v2.1) | 2026-10-02 | Better placement: layout rules from application notes checked before routing, a layout score against real boards, smarter placement of decoupling, ESD, sensors and regulator parts; builds 3-5x faster; knowledge base grown to 666 open-source projects. |
 | [V2.0](https://github.com/virajrungta/pcb-claude-plugin/releases/tag/v2.0) | 2026-10-02 | Windows 10/11 support: same plugin and commands as macOS, only the KiCad and Java install differs. |

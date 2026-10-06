@@ -9,6 +9,43 @@ release and publishes it on GitHub.
 
 _Nothing yet._
 
+## V2.3 - 2026-10-05
+
+**Ask questions and get feedback on any design: `/pcb:inquiry`.**
+
+V2.3 adds a command for everything that isn't designing a new board: ask about
+circuits, parts, layout, manufacturing or what the plugin can do, or share a
+design for quick feedback.
+
+### Update
+
+```bash
+claude plugin marketplace update pcb-claude-plugin
+claude plugin update pcb@pcb-claude-plugin
+```
+
+### What changed
+
+- **`/pcb:inquiry`**: two modes in one command.
+  - Questions get a direct answer first, grounded in the plugin's design
+    guides and in how real open-source designs wire the same parts, with
+    values, the reason and the source.
+  - Feedback works on a KiCad project, a design spec, a schematic or board
+    image or PDF, or a Gerber zip: a short verdict, then must-fix /
+    should-fix / nice-to-have items with the concrete fix, and what looks good.
+- **`kipcb inspect`**: compares any KiCad board, including hand-drawn ones,
+  with real routed open-source boards: how full it is against the most similar
+  ones, the layout score, and how close crystals, ESD arrays, inductors and
+  bootstrap capacitors sit compared with real designs. Two-sided boards are
+  compared per side.
+- The ESP32-C3 examples now use an MCP6002 op-amp instead of an LM358, which
+  can't reach the upper part of the ADC range on 3.3 V (found by
+  `/pcb:inquiry` on our own example). The MCP6002 is in the parts catalog
+  with its JLCPCB number.
+- Time estimates before a run no longer get stuck high after one unusually
+  slow run (e.g. the computer sleeping mid-build): they use recent runs and
+  ignore outliers.
+
 ## V2.2 - 2026-10-03
 
 **Board sizing learned from real routed boards.**

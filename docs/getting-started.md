@@ -109,6 +109,17 @@ Upload `fab/<name>-gerbers.zip` to your fab (JLCPCB, PCBWay, OSH Park…). For
 assembly, also upload `fab/<name>-bom.csv` and `fab/<name>-cpl.csv`, and check
 part rotations in the fab's preview. Claude never places orders for you.
 
+## Questions and feedback
+
+```
+/pcb:inquiry what pull-ups do I need for I2C at 400 kHz?
+/pcb:inquiry path/to/my_board/
+```
+
+Ask anything about circuits, parts, layout or manufacturing, or point it at a
+design (a KiCad project, a spec, a schematic image or PDF, a Gerber zip) for
+quick feedback. Boards are compared with real routed open-source designs.
+
 ## Try the examples first
 
 ```bash

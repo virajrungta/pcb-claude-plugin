@@ -53,6 +53,10 @@ def _learned(f):
         if abs(math.log(max(g.get("pads", 1), 1) / float(max(f["pads"], 1)))) > 0.35:
             continue
         rows.append(r.get("timings", {}))
+    # the most recent runs (the pipeline gets faster between versions), and an upper bound
+    # from the upper quartile, not the slowest run ever: one run with the computer asleep
+    # mid-build once made every estimate say "build ~11 min" for a 6 s build
+    rows = rows[-12:]
     if len(rows) < 2:
         return {}
     out = {}
@@ -60,7 +64,8 @@ def _learned(f):
         xs = sorted(t[step] for t in rows if step in t)
         if len(xs) >= 2:
             med = xs[len(xs) // 2]
-            out[step] = (med * 0.8, max(med * 1.2, xs[-1]))
+            p75 = xs[min(len(xs) - 1, (3 * len(xs)) // 4)]
+            out[step] = (med * 0.8, max(med * 1.2, p75))
     out["_n"] = len(rows)
     return out
 

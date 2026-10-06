@@ -11,7 +11,7 @@
     {"use": "ws2812b_led", "connect": {"DIN": "LED_DIN"}}
   ],
   "components": [
-    {"ref": "U5", "part": "LM358-SOIC", "group": "analog"},
+    {"ref": "U5", "part": "MCP6002-SOIC", "group": "analog"},
     {"ref": "C20", "part": "C0603", "value": "100nF", "group": "analog", "place": {"near": "U5.8"}},
     {"ref": "J5", "part": "HEADER_1x04", "value": "SENSOR", "group": "analog", "place": {"edge": "right"}}
   ],

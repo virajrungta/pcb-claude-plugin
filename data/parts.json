@@ -27,6 +27,7 @@
   "ATTINY85-SOIC": {"symbol": "MCU_Microchip_ATtiny:ATtiny85-20S", "value": "ATtiny85-20S", "lcsc": "C31540447", "current_ma": 10, "kind": "mcu"},
   "WS2812B-2020": {"symbol": "LED:WS2812B-2020", "value": "WS2812B-2020", "current_ma": 12, "kind": "led", "lcsc": "C52917434"},
   "LM358-SOIC": {"symbol": "Amplifier_Operational:LM358", "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", "value": "LM358", "current_ma": 1, "kind": "opamp", "lcsc": "C7950"},
+  "MCP6002-SOIC": {"symbol": "Amplifier_Operational:MCP6002-xSN", "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", "value": "MCP6002", "current_ma": 0.2, "kind": "opamp", "lcsc": "C116706", "note": "rail-to-rail in/out, 1.8-5.5 V: use at 3.3 V (LM358 stops ~1.5 V below the supply)"},
   "AO3400A": {"symbol": "Transistor_FET:AO3400A", "value": "AO3400A", "kind": "mosfet", "pins": "1=G 2=S 3=D; N-channel 30 V 5.7 A, logic level", "lcsc": "C20917"},
   "BUTTON_SMALL": {"symbol": "Switch:SW_Push", "footprint": "Button_Switch_SMD:SW_SPST_PTS810", "value": "Button", "kind": "switch", "pins": "1, 2; 4.2x3.2 mm"},
   "CRYSTAL_32K": {"symbol": "Device:Crystal", "footprint": "Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm", "value": "32.768kHz", "lcsc": "C32346", "kind": "crystal", "pins": "1, 2; 12.5 pF load", "load_pf": {"32.768kHz": 12.5}},

@@ -237,6 +237,15 @@ def cmd_noise(a):
     return noise.run(pdir, name, quiet=a.quiet)
 
 
+def cmd_inspect(a):
+    from . import inspectboard
+    pdir, name = _project_paths(a.target)
+    pcb = os.path.join(pdir, name + ".kicad_pcb")
+    if not os.path.exists(pcb):
+        raise SystemExit("no board file %s (inspect compares a .kicad_pcb)" % pcb)
+    return inspectboard.run(pcb, as_json=a.json)
+
+
 def cmd_estimate(a):
     """Approximate time per pipeline step, to tell the user before a run."""
     from . import estimate
@@ -523,6 +532,9 @@ def main(argv=None):
     p = sp.add_parser("noise", help="basic noise / signal-integrity checks on the board")
     p.add_argument("target"); p.add_argument("-q", "--quiet", action="store_true", help="only show problems")
     p.set_defaults(fn=cmd_noise)
+    p = sp.add_parser("inspect", help="compare any KiCad board with real routed boards "
+                                      "(fullness, layout score, part-pair distances)")
+    p.add_argument("target"); p.add_argument("--json", action="store_true"); p.set_defaults(fn=cmd_inspect)
     p = sp.add_parser("netlist", help="print components and nets of a schematic (for review)")
     p.add_argument("target"); p.set_defaults(fn=cmd_netlist)
     p = sp.add_parser("ref", help="how open-source designs wire a part (needs the knowledge base)")

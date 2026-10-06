@@ -50,6 +50,22 @@ class SizingModelTests(unittest.TestCase):
         self.assertIsNone(sizemodel.fill(f, 2, rows=self.rows[:5]))
 
 
+class EstimateOutlierTests(unittest.TestCase):
+    def test_one_slow_run_does_not_inflate_estimates(self):
+        from kipcb import estimate, learn
+        f = {"parts": 20, "pads": 120, "connections": 80, "layers": 2, "finest_pitch": None, "fine_parts": []}
+        rows = [{"kind": "run_timings", "features": dict(f), "timings": {"build": 6, "fab": 4}} for _ in range(9)]
+        rows.insert(3, {"kind": "run_timings", "features": dict(f), "timings": {"build": 1322, "fab": 314}})
+        orig = learn.history
+        try:
+            learn.history = lambda kind=None, include_tainted=False: rows
+            got = estimate._learned(f)
+        finally:
+            learn.history = orig
+        self.assertLess(got["build"][1], 20)
+        self.assertLess(got["fab"][1], 20)
+
+
 class KnowledgePathTests(unittest.TestCase):
     def test_newest_copy_wins(self):
         import json
