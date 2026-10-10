@@ -8,6 +8,7 @@ To update: `claude plugin marketplace update pcb-claude-plugin`, then
 
 | Version | Date | What's new |
 |---|---|---|
+| [V2.4](https://github.com/virajrungta/pcb-claude-plugin/releases/tag/v2.4) | 2026-10-09 | Check a schematic you already have against real designs. |
 | [V2.3](https://github.com/virajrungta/pcb-claude-plugin/releases/tag/v2.3) | 2026-10-05 | Ask questions and get feedback on any design: `/pcb:inquiry`. |
 | [V2.2](https://github.com/virajrungta/pcb-claude-plugin/releases/tag/v2.2) | 2026-10-03 | Board sizing learned from real routed boards. |
 | [V2.1](https://github.com/virajrungta/pcb-claude-plugin/releases/tag/v2.1) | 2026-10-02 | Better placement: layout rules from application notes checked before routing, a layout score against real boards, smarter placement of decoupling, ESD, sensors and regulator parts; builds 3-5x faster; knowledge base grown to 666 open-source projects. |

@@ -1,6 +1,6 @@
 ---
 name: inquiry
-description: Answer PCB and electronics questions, or give feedback on a design the user shares (KiCad project, kipcb spec, schematic or board image/PDF, Gerber zip). Use when the user asks a question about circuit design, parts, layout, manufacturing or what the pcb plugin can do, or wants an opinion on a design without a full pre-order review.
+description: Answer PCB and electronics questions, or give feedback on a design the user shares (KiCad project or schematic, kipcb spec, schematic or board image/PDF, Gerber zip). Use when the user asks a question about circuit design, parts, layout, manufacturing or what the pcb plugin can do, or wants an opinion on a design without a full pre-order review.
 argument-hint: "[question, or path to a design: KiCad project, spec .json, schematic image/PDF, Gerbers]"
 ---
 
@@ -44,14 +44,24 @@ Look at what was shared, use the tools that fit it, then report.
 
 **KiCad project** (directory, `.kicad_pro`, `.kicad_pcb`, `.kicad_sch`), in one Bash call where possible:
 - `kipcb erc <dir>; kipcb drc <dir>; kipcb noise -q <dir>`
-- `kipcb inspect <dir>`: compares the board with real routed open-source
-  boards (how full it is against similar boards, layout score, how close
-  crystals, ESD arrays, inductors and bootstrap caps sit compared with real
-  designs). Works on hand-drawn boards too.
+- `kipcb inspect <dir>`: compares the schematic with how real open-source
+  designs wire each chip (a decoupling cap or pull-up most designs have and
+  this one doesn't, a pin left open that designs connect, unusual values), and
+  the board with real routed boards (how full it is against similar boards,
+  layout score, how close crystals, ESD arrays, inductors and bootstrap caps
+  sit). Works on hand-drawn projects too. WARN lines are strong agreement
+  across real designs; notes are weaker hints. Both are common practice, not a
+  spec: check the datasheet before calling something wrong.
 - `kipcb netlist <dir>` for parts and nets; `kipcb render <dir>`, then Read
   `previews/review.png` (and `previews/schematic.png` for circuit feedback).
 - Check ICs with `kipcb ref <part>`; the review checklist in
   `${CLAUDE_PLUGIN_ROOT}/skills/review/SKILL.md` lists what to look for.
+
+**Schematic only** (a `.kicad_sch`, no board yet): `kipcb erc <file>`,
+`kipcb inspect <file>` (the wiring comparison above), and `kipcb netlist <file>`
+plus `kipcb render <file>` for the circuit itself. Then, if they want a board,
+offer `/pcb:design` to turn the schematic into one: read the netlist and write
+a spec with the same parts and nets.
 
 **kipcb spec** (`.json`): `kipcb check <spec>`, then
 `kipcb run <spec> --until preflight -o <scratch dir>` to get placement and

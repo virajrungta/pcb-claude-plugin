@@ -238,12 +238,36 @@ def cmd_noise(a):
 
 
 def cmd_inspect(a):
-    from . import inspectboard
+    """Schematic and/or board, whichever the project has, compared with real designs."""
+    import json
+    from . import inspectboard, schinspect, wiring
     pdir, name = _project_paths(a.target)
-    pcb = os.path.join(pdir, name + ".kicad_pcb")
-    if not os.path.exists(pcb):
-        raise SystemExit("no board file %s (inspect compares a .kicad_pcb)" % pcb)
-    return inspectboard.run(pcb, as_json=a.json)
+    sch, pcb = (os.path.join(pdir, name + ext) for ext in (".kicad_sch", ".kicad_pcb"))
+    if not os.path.exists(sch) and not os.path.exists(pcb):
+        raise SystemExit("no %s.kicad_sch or %s.kicad_pcb in %s" % (name, name, pdir))
+    out = {}
+    if os.path.exists(sch) and not a.board_only:
+        rec = wiring.read_netlist(sch)
+        out["schematic"] = ([("warn", "KiCad couldn't export a netlist from this schematic (a file from a newer "
+                                      "KiCad version, or one with errors); open and save it in KiCad 9, then retry")]
+                            if rec.get("error")
+                            else schinspect.inspect(rec))
+    if os.path.exists(pcb) and not a.schematic_only:
+        from .kicad import pcbnew
+        out["board"] = inspectboard.inspect(pcbnew().LoadBoard(pcb))
+    if a.json:
+        print(json.dumps(out, indent=1))
+        return 0
+    mark = {"ok": "  ok  ", "info": "  note", "warn": "  WARN"}
+    if "schematic" in out:
+        print("%s.kicad_sch: wiring compared with real open-source designs" % name)
+        for level, text in out["schematic"]:
+            print("%s %s" % (mark[level], text))
+    if "board" in out:
+        print("%s.kicad_pcb: %s" % (name, out["board"]["summary"]))
+        for level, text in out["board"]["findings"]:
+            print("%s %s" % (mark[level], text))
+    return 0
 
 
 def cmd_estimate(a):
@@ -532,9 +556,12 @@ def main(argv=None):
     p = sp.add_parser("noise", help="basic noise / signal-integrity checks on the board")
     p.add_argument("target"); p.add_argument("-q", "--quiet", action="store_true", help="only show problems")
     p.set_defaults(fn=cmd_noise)
-    p = sp.add_parser("inspect", help="compare any KiCad board with real routed boards "
-                                      "(fullness, layout score, part-pair distances)")
-    p.add_argument("target"); p.add_argument("--json", action="store_true"); p.set_defaults(fn=cmd_inspect)
+    p = sp.add_parser("inspect", help="compare a KiCad schematic and/or board with real open-source designs "
+                                      "(pin wiring; fullness, layout score, part-pair distances)")
+    p.add_argument("target"); p.add_argument("--json", action="store_true")
+    p.add_argument("--schematic-only", action="store_true", help="only the schematic wiring comparison")
+    p.add_argument("--board-only", action="store_true", help="only the board comparison")
+    p.set_defaults(fn=cmd_inspect)
     p = sp.add_parser("netlist", help="print components and nets of a schematic (for review)")
     p.add_argument("target"); p.set_defaults(fn=cmd_netlist)
     p = sp.add_parser("ref", help="how open-source designs wire a part (needs the knowledge base)")

@@ -16,6 +16,9 @@ hand. `kipcb` is on PATH (fallback `${CLAUDE_PLUGIN_ROOT}/bin/kipcb`).
    - `kipcb erc <dir>; kipcb drc <dir>; kipcb noise -q <dir>` in one Bash call
      (`-q` prints only problems; DRC includes schematic ↔ board parity)
    - `kipcb netlist <dir>` for the parts list and every net with pin functions
+   - `kipcb inspect <dir>`: each chip's wiring against real open-source designs
+     (missing decoupling or pull-ups, unusual values) and the board against
+     real routed boards; check its WARN lines against the datasheet
    - `kipcb render <dir>`, then Read `previews/review.png` and `previews/schematic.png`
      (skip `bottom.png` unless something is placed on the back)
 3. For each IC, check `kipcb ref <part>` first. WebFetch a datasheet only when

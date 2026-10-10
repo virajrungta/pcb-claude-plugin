@@ -52,7 +52,7 @@ these commands for you, but they also work on their own.
 | `kipcb erc <project>` | Schematic electrical rules check |
 | `kipcb drc <project>` | Board design rules check, including schematic parity |
 | `kipcb noise <project> [-q]` | Noise / signal-integrity checks (`-q` shows problems only) |
-| `kipcb inspect <project> [--json]` | Compares any KiCad board, hand-drawn or generated, with real routed open-source boards: how full it is against the most similar ones, the layout score, and how close crystals, ESD arrays, inductors and bootstrap capacitors sit compared with real designs. Two-sided boards are compared per side |
+| `kipcb inspect <project or .kicad_sch> [--schematic-only\|--board-only] [--json]` | Compares a KiCad project, hand-drawn or generated, with real open-source designs. **Schematic**: each chip's pins against how real designs wire them (decoupling caps and pull-ups most designs have, pins left open that designs connect, unusual values); WARN needs strong agreement across 8+ designs, weaker hints are notes. **Board**: how full it is against the most similar routed boards, the layout score, and how close crystals, ESD arrays, inductors and bootstrap capacitors sit. Two-sided boards are compared per side |
 | `kipcb netlist <project>` | Components and nets with pin functions, for review |
 | `kipcb render <project> [--what build\|review\|full]` | Previews into `previews/`: `review.png` (board, top), `schematic.png/.pdf`; `full` adds `bottom.png` and `board.pdf` |
 | `kipcb report <project>` | Prints the summary (status, project location, board, checks, files, what to check); also in `reports/REPORT.md` |

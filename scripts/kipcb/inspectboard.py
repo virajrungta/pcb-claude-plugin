@@ -7,9 +7,6 @@ together sit (crystal, ESD array, inductor, bootstrap capacitor) compared with r
 designs. Everything is measured with kipcb.placestats, as for the knowledge base.
 """
 
-import json
-import os
-
 from . import knowledge, placestats, sizemodel
 
 PAIR_LABELS = {
@@ -104,19 +101,3 @@ def inspect(board):
     out["summary"] = "%.0f x %.0f mm, %d layers, %d parts, %s" % (
         m["w"], m["h"], layers, m["parts"], "routed" if routed else "not routed yet")
     return out
-
-
-def run(pcb_path, as_json=False):
-    from .kicad import pcbnew
-    board = pcbnew().LoadBoard(pcb_path)
-    res = inspect(board)
-    if as_json:
-        print(json.dumps(res, indent=1))
-        return 0
-    print("%s: %s" % (os.path.basename(pcb_path), res["summary"]))
-    mark = {"ok": "  ok  ", "info": "  note", "warn": "  WARN"}
-    for level, text in res["findings"]:
-        print("%s %s" % (mark[level], text))
-    if not knowledge.placement():
-        print("  (no knowledge base found: install the plugin's data/knowledge.json to compare with real boards)")
-    return 0

@@ -9,6 +9,41 @@ release and publishes it on GitHub.
 
 _Nothing yet._
 
+## V2.4 - 2026-10-09
+
+**Check a schematic you already have against real designs.**
+
+V2.4 compares your KiCad schematic, before there's any board, with how real
+open-source designs wire the same chips, pin by pin.
+
+### Update
+
+```bash
+claude plugin marketplace update pcb-claude-plugin
+claude plugin update pcb@pcb-claude-plugin
+```
+
+### What changed
+
+- **`kipcb inspect` reads schematics.** For every chip the knowledge base
+  knows (parts seen in 3+ open-source designs), each pin is compared with
+  what real designs do there: a decoupling capacitor or pull-up most designs
+  have and yours doesn't, a pin left unconnected that designs connect, and
+  values far from the usual one. Works on a schematic alone or a full
+  project; `--schematic-only` / `--board-only` pick one.
+- **`/pcb:inquiry` and `/pcb:review` use it**: share a `.kicad_sch` (no board
+  needed) and the feedback includes the comparison. From a schematic,
+  `/pcb:design` can build the board.
+- Warnings only for strong agreement: 75% of 8+ real designs, and only for
+  capacitors and pull-up/pull-down resistors. Topology choices (series
+  resistors, diodes, ferrites) and weaker patterns are notes. On 40 working
+  open-source schematics it raised no warnings; on our example with the
+  regulator's input capacitor removed, it flagged exactly that.
+- The knowledge base now also records each pin's wiring regardless of value
+  ("a capacitor to GND in 15 of 17 designs"), since real designs agree on
+  whether a part is there far more than on its value, and rebuilds are
+  ordered consistently.
+
 ## V2.3 - 2026-10-05
 
 **Ask questions and get feedback on any design: `/pcb:inquiry`.**
